@@ -4,7 +4,11 @@
 
 package org.first5924.frc2023.robot;
 
+import org.first5924.frc2023.commands.autonomous.DriveOneMeter;
+import org.first5924.frc2023.commands.drive.CurvatureDrive;
+import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.constants.OIConstants;
+import org.first5924.frc2023.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,14 +22,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
+  private final DriveSubsystem mDrive = new DriveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController mDriverController =
       new CommandXboxController(OIConstants.kDriverController);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    mDrive.register();
+
+    mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -40,7 +48,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    mDriverController.a().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
   }
 
   /**
@@ -50,6 +58,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return new DriveOneMeter(mDrive);
   }
 }
