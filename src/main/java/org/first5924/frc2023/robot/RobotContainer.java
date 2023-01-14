@@ -4,6 +4,7 @@
 
 package org.first5924.frc2023.robot;
 
+import org.first5924.frc2023.commands.autonomous.DriveOneMeter;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.constants.OIConstants;
@@ -57,6 +58,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return new DriveOneMeter(mDrive);
   }
 }
