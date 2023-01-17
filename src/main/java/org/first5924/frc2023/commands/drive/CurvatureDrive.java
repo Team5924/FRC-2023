@@ -7,6 +7,7 @@ package org.first5924.frc2023.commands.drive;
 import java.util.function.DoubleSupplier;
 
 import org.first5924.frc2023.subsystems.DriveSubsystem;
+import org.first5924.lib.util.JoystickToOutput;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -31,7 +32,7 @@ public class CurvatureDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.curvatureDrive(mLeftJoystickY.getAsDouble(), mRightJoystickX.getAsDouble());
+    mDrive.curvatureDrive(JoystickToOutput.calculateSquared(mLeftJoystickY.getAsDouble(), 0.02), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), 0.02));
   }
 
   // Called once the command ends or is interrupted.
