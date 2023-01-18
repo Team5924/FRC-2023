@@ -14,8 +14,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,7 +30,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(RobotConstants.kPigeon2Port);
 
-  private final DifferentialDriveOdometry mOdometry;
+  private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, mPigeon2.getRotation2d(), 0, 0, new Pose2d());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -43,13 +43,11 @@ public class DriveSubsystem extends SubsystemBase {
     mRightBackSpark.follow(mRightFrontSpark);
 
     mRightFrontSpark.setInverted(true);
-
-    mOdometry = new DifferentialDriveOdometry(mPigeon2.getRotation2d(), 0, 0);
   }
 
   @Override
   public void periodic() {
-    mOdometry.update(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters());
+    // This method will be called once per scheduler run
   }
 
   public void configDriveSpark(CANSparkMax driveSpark) {
@@ -82,11 +80,19 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return mOdometry.getPoseMeters();
+    return mPoseEstimator.getEstimatedPosition();
   }
 
   public void resetPosition(Pose2d pose) {
-    mOdometry.resetPosition(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters(), pose);
+    mPoseEstimator.resetPosition(pose.getRotation(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters(), pose);
+  }
+
+  public void updatePoseEstimator() {
+    mPoseEstimator.update(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters());
+  }
+
+  public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+    mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
   public void voltageDrive(double leftVolts, double rightVolts) {

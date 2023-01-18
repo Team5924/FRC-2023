@@ -6,6 +6,7 @@ package org.first5924.frc2023.subsystems;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.first5924.frc2023.constants.VisionConstants;
 import org.photonvision.PhotonCamera;
@@ -15,6 +16,7 @@ import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -39,5 +41,9 @@ public class VisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public Optional<Pair<Pose3d, Double>> getPoseEstimatorUpdate() {
+    return mRobotPoseEstimator.update();
   }
 }

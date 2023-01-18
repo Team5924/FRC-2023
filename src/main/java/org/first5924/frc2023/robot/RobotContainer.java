@@ -7,6 +7,7 @@ package org.first5924.frc2023.robot;
 import org.first5924.frc2023.commands.autonomous.DriveOneMeter;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
+import org.first5924.frc2023.commands.vision.UpdatePoseEstimator;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.DriveSubsystem;
 import org.first5924.frc2023.subsystems.VisionSubsystem;
@@ -33,6 +34,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    mVision.setDefaultCommand(new UpdatePoseEstimator(mDrive, mVision));
 
     // Configure the trigger bindings
     configureBindings();
