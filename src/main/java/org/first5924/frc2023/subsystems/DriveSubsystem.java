@@ -4,9 +4,14 @@
 
 package org.first5924.frc2023.subsystems;
 
+import java.util.Optional;
+
 import org.first5924.frc2023.constants.DriveConstants;
 import org.first5924.frc2023.constants.RobotConstants;
+import org.first5924.frc2023.constants.VisionConstants;
 import org.first5924.lib.util.Conversions;
+import org.first5924.lib.util.PhotonCameraWrapper;
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -16,6 +21,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +36,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(RobotConstants.kPigeon2Port);
 
+  private final PhotonCameraWrapper mPhotonCameraWrapper = new PhotonCameraWrapper(VisionConstants.kCameraName, new Transform3d(VisionConstants.kRobotToCamTranslation, VisionConstants.kRobotToCamRotation));
   private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, mPigeon2.getRotation2d(), 0, 0, new Pose2d());
 
   /** Creates a new DriveSubsystem. */
@@ -47,7 +54,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    updatePoseEstimator();
+    Optional<EstimatedRobotPose> estimatedRobotPose = mPhotonCameraWrapper.getEstimatedRobotPose(getEstimatedRobotPose());
+    if (estimatedRobotPose.isPresent()) {
+      addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
+    }
   }
 
   public void configDriveSpark(CANSparkMax driveSpark) {
