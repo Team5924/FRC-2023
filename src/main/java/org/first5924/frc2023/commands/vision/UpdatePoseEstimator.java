@@ -8,9 +8,8 @@ import java.util.Optional;
 
 import org.first5924.frc2023.subsystems.DriveSubsystem;
 import org.first5924.frc2023.subsystems.VisionSubsystem;
+import org.photonvision.EstimatedRobotPose;
 
-import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class UpdatePoseEstimator extends CommandBase {
@@ -32,10 +31,9 @@ public class UpdatePoseEstimator extends CommandBase {
   @Override
   public void execute() {
     mDrive.updatePoseEstimator();
-    Optional<Pair<Pose3d, Double>> optionalPoseEstimatorUpdate = mVision.getPoseEstimatorUpdate();
-    if (optionalPoseEstimatorUpdate.isPresent()) {
-      Pair<Pose3d, Double> poseEstimatorUpdate = optionalPoseEstimatorUpdate.get();
-      mDrive.addVisionMeasurementToPoseEstimator(poseEstimatorUpdate.getFirst().toPose2d(), poseEstimatorUpdate.getSecond());
+    Optional<EstimatedRobotPose> estimatedRobotPose = mVision.getEstimatedRobotPose(mDrive.getEstimatedRobotPose());
+    if (estimatedRobotPose.isPresent()) {
+      mDrive.addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
     }
   }
 

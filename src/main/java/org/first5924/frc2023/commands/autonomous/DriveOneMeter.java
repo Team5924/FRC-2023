@@ -33,7 +33,7 @@ public class DriveOneMeter extends SequentialCommandGroup {
       }),
       new PPRamseteCommand(
         mOneMeter,
-        drive::getPose,
+        drive::getEstimatedRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,

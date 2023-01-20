@@ -79,12 +79,15 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
-  public Pose2d getPose() {
+  public Pose2d getEstimatedRobotPose() {
     return mPoseEstimator.getEstimatedPosition();
   }
 
   public void resetPosition(Pose2d pose) {
-    mPoseEstimator.resetPosition(pose.getRotation(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters(), pose);
+    mPigeon2.setYaw(pose.getRotation().getDegrees());
+    mLeftCANCoder.setPosition(0);
+    mRightCANCoder.setPosition(0);
+    mPoseEstimator.resetPosition(mPigeon2.getRotation2d(), 0, 0, pose);
   }
 
   public void updatePoseEstimator() {
