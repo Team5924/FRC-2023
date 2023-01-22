@@ -4,9 +4,14 @@
 
 package org.first5924.frc2023.subsystems;
 
+import java.util.Optional;
+
 import org.first5924.frc2023.constants.DriveConstants;
 import org.first5924.frc2023.constants.RobotConstants;
+import org.first5924.frc2023.constants.VisionConstants;
 import org.first5924.lib.util.Conversions;
+import org.first5924.lib.util.PhotonCameraWrapper;
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -14,8 +19,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,7 +36,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(RobotConstants.kPigeon2Port);
 
-  private final DifferentialDriveOdometry mOdometry;
+  private final PhotonCameraWrapper mPhotonCameraWrapper = new PhotonCameraWrapper(VisionConstants.kCameraName, new Transform3d(VisionConstants.kRobotToCamTranslation, VisionConstants.kRobotToCamRotation));
+  private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, mPigeon2.getRotation2d(), 0, 0, new Pose2d());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -43,13 +50,15 @@ public class DriveSubsystem extends SubsystemBase {
     mRightBackSpark.follow(mRightFrontSpark);
 
     mRightFrontSpark.setInverted(true);
-
-    mOdometry = new DifferentialDriveOdometry(mPigeon2.getRotation2d(), 0, 0);
   }
 
   @Override
   public void periodic() {
-    mOdometry.update(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters());
+    updatePoseEstimator();
+    Optional<EstimatedRobotPose> estimatedRobotPose = mPhotonCameraWrapper.getEstimatedRobotPose(getEstimatedRobotPose());
+    if (estimatedRobotPose.isPresent()) {
+      addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
+    }
   }
 
   public void configDriveSpark(CANSparkMax driveSpark) {
@@ -81,12 +90,23 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
-  public Pose2d getPose() {
-    return mOdometry.getPoseMeters();
+  public Pose2d getEstimatedRobotPose() {
+    return mPoseEstimator.getEstimatedPosition();
   }
 
   public void resetPosition(Pose2d pose) {
-    mOdometry.resetPosition(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters(), pose);
+    mPigeon2.setYaw(pose.getRotation().getDegrees());
+    mLeftCANCoder.setPosition(0);
+    mRightCANCoder.setPosition(0);
+    mPoseEstimator.resetPosition(mPigeon2.getRotation2d(), 0, 0, pose);
+  }
+
+  public void updatePoseEstimator() {
+    mPoseEstimator.update(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters());
+  }
+
+  public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+    mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
   public void voltageDrive(double leftVolts, double rightVolts) {

@@ -24,24 +24,24 @@ public class DriveOneMeter extends SequentialCommandGroup {
   PathPlannerTrajectory mOneMeter = PathPlanner.loadPath("One Meter", 2.5, 2);
 
   /** Creates a new DriveOneMeter. */
-  public DriveOneMeter(DriveSubsystem driveSubsystem) {
+  public DriveOneMeter(DriveSubsystem drive) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> {
-        driveSubsystem.resetPosition(null);
+        drive.resetPosition(null);
       }),
       new PPRamseteCommand(
         mOneMeter,
-        driveSubsystem::getPose,
+        drive::getEstimatedRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
-        driveSubsystem::getWheelSpeeds,
+        drive::getWheelSpeeds,
         new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
         new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        driveSubsystem::voltageDrive,
-        driveSubsystem)
+        drive::voltageDrive,
+        drive)
     );
   }
 }
