@@ -25,6 +25,7 @@ public class RobotContainer {
   private final DriveSubsystem mDrive = new DriveSubsystem();
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverController);
+  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorController);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
