@@ -6,6 +6,7 @@ package org.first5924.frc2023.commands.drive;
 
 import java.util.function.DoubleSupplier;
 
+import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.DriveSubsystem;
 import org.first5924.lib.util.JoystickToOutput;
 
@@ -32,7 +33,7 @@ public class TurnInPlace extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.turnInPlace(JoystickToOutput.calculateSquared(mLeftJoystickY.getAsDouble(), 0.02), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), 0.02));
+    mDrive.turnInPlace(JoystickToOutput.calculateSquared(mLeftJoystickY.getAsDouble(), OIConstants.kJoystickDeadband), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), OIConstants.kJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.
