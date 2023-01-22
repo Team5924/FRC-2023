@@ -5,10 +5,7 @@
 package org.first5924.frc2023.constants;
 
 /** Add your docs here. */
-public class RobotConstants {
-    public static final int kPigeon2Port = 7;
-
-    public static final int kNominalVoltage = 10;
-
-    public static final int kThroughBoreCPR = 8192;
+public class PivotConstants {
+    public static final int kLeaderSparkPort = 8;
+    public static final int kFollowerSparkPort = 9;
 }
