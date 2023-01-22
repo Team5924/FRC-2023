@@ -15,11 +15,14 @@ public class SparkMaxFactory {
     public static CANSparkMax createDefaultSparkMax(int deviceId, MotorType type) {
         CANSparkMax sparkMax = new CANSparkMax(deviceId, type);
         sparkMax.enableVoltageCompensation(RobotConstants.kNominalVoltage);
+        sparkMax.setIdleMode(IdleMode.kBrake);
+        sparkMax.setSmartCurrentLimit(40);
         return sparkMax;
     }
 
     public static CANSparkMax createSparkMax(int deviceId, MotorType type, IdleMode idleMode, int currentLimit) {
-        CANSparkMax sparkMax = createDefaultSparkMax(deviceId, type);
+        CANSparkMax sparkMax = new CANSparkMax(deviceId, type);
+        sparkMax.enableVoltageCompensation(RobotConstants.kNominalVoltage);
         sparkMax.setIdleMode(idleMode);
         sparkMax.setSmartCurrentLimit(currentLimit);
         return sparkMax;
