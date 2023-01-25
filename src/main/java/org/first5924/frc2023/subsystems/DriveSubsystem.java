@@ -9,14 +9,14 @@ import java.util.Optional;
 import org.first5924.frc2023.constants.DriveConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.constants.VisionConstants;
-import org.first5924.lib.util.Conversions;
 import org.first5924.lib.util.PhotonCameraWrapper;
 import org.first5924.lib.util.SparkMaxFactory;
 import org.photonvision.EstimatedRobotPose;
 
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -32,8 +32,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final CANSparkMax mLeftBackSpark = SparkMaxFactory.createSparkMax(DriveConstants.kLeftBackSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
   private final CANSparkMax mRightBackSpark = SparkMaxFactory.createSparkMax(DriveConstants.kRightBackSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
 
-  private final WPI_CANCoder mLeftCANCoder = new WPI_CANCoder(DriveConstants.kLeftCANCoderPort);
-  private final WPI_CANCoder mRightCANCoder = new WPI_CANCoder(DriveConstants.kRightCANCoderPort);
+  private final RelativeEncoder mLeftThroughBore = mLeftFrontSpark.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, RobotConstants.kThroughBoreCPR);
+  private final RelativeEncoder mRightThroughBore = mRightFrontSpark.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, RobotConstants.kThroughBoreCPR);
 
   private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(RobotConstants.kPigeon2Port);
 
@@ -57,26 +57,26 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  public double getLeftCANCoderPositionMeters() {
-    return Conversions.degreesToMeters(mLeftCANCoder.getPosition(), DriveConstants.kWheelCircumferenceMeters);
+  public double getLeftThroughBorePositionMeters() {
+    return mLeftThroughBore.getPosition() * DriveConstants.kWheelCircumferenceMeters;
   }
 
-  public double getRightCANCoderPositionMeters() {
-    return Conversions.degreesToMeters(mRightCANCoder.getPosition(), DriveConstants.kWheelCircumferenceMeters);
+  public double getRightThroughBorePositionMeters() {
+    return mRightThroughBore.getPosition() * DriveConstants.kWheelCircumferenceMeters;
   }
 
-  public double getLeftCANCoderVelocityMetersPerSecond() {
-    return Conversions.degreesPerSecondToMPS(mLeftCANCoder.getVelocity(), DriveConstants.kWheelCircumferenceMeters);
+  public double getLeftThroughBoreVelocityMetersPerSecond() {
+    return mLeftThroughBore.getVelocity() * DriveConstants.kWheelCircumferenceMeters / 60;
   }
 
-  public double getRightCANCoderVelocityMetersPerSecond() {
-    return Conversions.degreesPerSecondToMPS(mRightCANCoder.getVelocity(), DriveConstants.kWheelCircumferenceMeters);
+  public double getRightThroughBoreVelocityMetersPerSecond() {
+    return mRightThroughBore.getVelocity() * DriveConstants.kWheelCircumferenceMeters / 60;
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      Conversions.degreesPerSecondToMPS(getLeftCANCoderVelocityMetersPerSecond(), DriveConstants.kWheelCircumferenceMeters),
-      Conversions.degreesPerSecondToMPS(getRightCANCoderVelocityMetersPerSecond(), DriveConstants.kWheelCircumferenceMeters)
+      getLeftThroughBoreVelocityMetersPerSecond(),
+      getRightThroughBoreVelocityMetersPerSecond()
     );
   }
 
@@ -86,13 +86,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetPosition(Pose2d pose) {
     mPigeon2.setYaw(pose.getRotation().getDegrees());
-    mLeftCANCoder.setPosition(0);
-    mRightCANCoder.setPosition(0);
+    mLeftThroughBore.setPosition(0);
+    mRightThroughBore.setPosition(0);
     mPoseEstimator.resetPosition(mPigeon2.getRotation2d(), 0, 0, pose);
   }
 
   public void updatePoseEstimator() {
-    mPoseEstimator.update(mPigeon2.getRotation2d(), getLeftCANCoderPositionMeters(), getRightCANCoderPositionMeters());
+    mPoseEstimator.update(mPigeon2.getRotation2d(), getLeftThroughBorePositionMeters(), getRightThroughBorePositionMeters());
   }
 
   public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
