@@ -13,5 +13,8 @@ package org.first5924.frc2023.constants;
  * constants are needed, to reduce verbosity.
  */
 public final class OIConstants {
-  public static final int kDriverController = 0;
+  public static final int kDriverControllerPort = 0;
+  public static final int kOperatorControllerPort = 1;
+
+  public static final double kJoystickDeadband = 0.04;
 }

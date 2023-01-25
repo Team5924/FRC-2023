@@ -11,6 +11,7 @@ import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.constants.VisionConstants;
 import org.first5924.lib.util.Conversions;
 import org.first5924.lib.util.PhotonCameraWrapper;
+import org.first5924.lib.util.SparkMaxFactory;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
@@ -26,10 +27,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  private final CANSparkMax mLeftFrontSpark = new CANSparkMax(DriveConstants.kLeftFrontSparkPort, MotorType.kBrushless);
-  private final CANSparkMax mRightFrontSpark = new CANSparkMax(DriveConstants.kRightFrontSparkPort, MotorType.kBrushless);
-  private final CANSparkMax mLeftBackSpark = new CANSparkMax(DriveConstants.kLeftBackSparkPort, MotorType.kBrushless);
-  private final CANSparkMax mRightBackSpark = new CANSparkMax(DriveConstants.kRightBackSparkPort, MotorType.kBrushless);
+  private final CANSparkMax mLeftFrontSpark = SparkMaxFactory.createSparkMax(DriveConstants.kLeftFrontSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
+  private final CANSparkMax mRightFrontSpark = SparkMaxFactory.createSparkMax(DriveConstants.kRightFrontSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
+  private final CANSparkMax mLeftBackSpark = SparkMaxFactory.createSparkMax(DriveConstants.kLeftBackSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
+  private final CANSparkMax mRightBackSpark = SparkMaxFactory.createSparkMax(DriveConstants.kRightBackSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
 
   private final WPI_CANCoder mLeftCANCoder = new WPI_CANCoder(DriveConstants.kLeftCANCoderPort);
   private final WPI_CANCoder mRightCANCoder = new WPI_CANCoder(DriveConstants.kRightCANCoderPort);
@@ -41,11 +42,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    configDriveSpark(mLeftFrontSpark);
-    configDriveSpark(mRightFrontSpark);
-    configDriveSpark(mLeftBackSpark);
-    configDriveSpark(mRightBackSpark);
-
     mLeftBackSpark.follow(mLeftFrontSpark);
     mRightBackSpark.follow(mRightFrontSpark);
 
@@ -59,12 +55,6 @@ public class DriveSubsystem extends SubsystemBase {
     if (estimatedRobotPose.isPresent()) {
       addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
     }
-  }
-
-  public void configDriveSpark(CANSparkMax driveSpark) {
-    driveSpark.enableVoltageCompensation(RobotConstants.kNominalVoltage);
-    driveSpark.setIdleMode(IdleMode.kBrake);
-    driveSpark.setSmartCurrentLimit(42);
   }
 
   public double getLeftCANCoderPositionMeters() {

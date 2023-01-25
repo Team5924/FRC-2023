@@ -2,28 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.first5924.frc2023.commands.drive;
+package org.first5924.frc2023.commands.pivot;
 
 import java.util.function.DoubleSupplier;
 
 import org.first5924.frc2023.constants.OIConstants;
-import org.first5924.frc2023.subsystems.DriveSubsystem;
-import org.first5924.lib.util.JoystickToOutput;
+import org.first5924.frc2023.subsystems.PivotSubsystem;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TurnInPlace extends CommandBase {
-  private final DriveSubsystem mDrive;
-  private final DoubleSupplier mLeftJoystickY;
-  private final DoubleSupplier mRightJoystickX;
+public class RotatePivot extends CommandBase {
+  private final PivotSubsystem mPivot;
+  private final DoubleSupplier mJoystickY;
 
-  /** Creates a new CurvatureDrive. */
-  public TurnInPlace(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX) {
-    mDrive = drive;
-    mLeftJoystickY = leftJoystickY;
-    mRightJoystickX = rightJoystickX;
+  // Can pick whether to pass in left or right joystick
+  /** Creates a new RotatePivot. */
+  public RotatePivot(PivotSubsystem pivot, DoubleSupplier joystickY) {
+    mPivot = pivot;
+    mJoystickY = joystickY;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(mDrive);
+    addRequirements(mPivot);
   }
 
   // Called when the command is initially scheduled.
@@ -33,7 +32,7 @@ public class TurnInPlace extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.turnInPlace(JoystickToOutput.calculateSquared(mLeftJoystickY.getAsDouble(), OIConstants.kJoystickDeadband), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), OIConstants.kJoystickDeadband));
+    mPivot.setSpeed(MathUtil.applyDeadband(mJoystickY.getAsDouble(), OIConstants.kJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.
