@@ -8,10 +8,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /** Add your docs here. */
 public class DriveConstants {
-    public static final int kLeftFrontSparkPort = 1;
-    public static final int kLeftBackSparkPort = 2;
-    public static final int kRightFrontSparkPort = 3;
-    public static final int kRightBackSparkPort = 4;
+    public static final int kLeftFrontSparkPort = 2;
+    public static final int kLeftBackSparkPort = 3;
+    public static final int kRightFrontSparkPort = 4;
+    public static final int kRightBackSparkPort = 5;
 
     // Values generated from sysid
     public static final double ks = 0;
