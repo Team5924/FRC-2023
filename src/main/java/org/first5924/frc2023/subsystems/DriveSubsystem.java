@@ -24,6 +24,7 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -35,10 +36,10 @@ public class DriveSubsystem extends SubsystemBase {
   private final RelativeEncoder mLeftThroughBore = mLeftBackSpark.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, RobotConstants.kThroughBoreCPR);
   private final RelativeEncoder mRightThroughBore = mRightBackSpark.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, RobotConstants.kThroughBoreCPR);
 
-  private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(RobotConstants.kPigeon2Port);
+  // private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(RobotConstants.kPigeon2Port);
 
-  private final PhotonCameraWrapper mPhotonCameraWrapper = new PhotonCameraWrapper(VisionConstants.kCameraName, new Transform3d(VisionConstants.kRobotToCamTranslation, VisionConstants.kRobotToCamRotation));
-  private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, mPigeon2.getRotation2d(), 0, 0, new Pose2d());
+  // private final PhotonCameraWrapper mPhotonCameraWrapper = new PhotonCameraWrapper(VisionConstants.kCameraName, new Transform3d(VisionConstants.kRobotToCamTranslation, VisionConstants.kRobotToCamRotation));
+  // private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, mPigeon2.getRotation2d(), 0, 0, new Pose2d());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -51,10 +52,10 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     updatePoseEstimator();
-    Optional<EstimatedRobotPose> estimatedRobotPose = mPhotonCameraWrapper.getEstimatedRobotPose(getEstimatedRobotPose());
-    if (estimatedRobotPose.isPresent()) {
-      addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
-    }
+    // Optional<EstimatedRobotPose> estimatedRobotPose = mPhotonCameraWrapper.getEstimatedRobotPose(getEstimatedRobotPose());
+    // if (estimatedRobotPose.isPresent()) {
+    //   addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
+    // }
   }
 
   public double getLeftThroughBorePositionMeters() {
@@ -80,23 +81,23 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
-  public Pose2d getEstimatedRobotPose() {
-    return mPoseEstimator.getEstimatedPosition();
-  }
+  // public Pose2d getEstimatedRobotPose() {
+  //   // return mPoseEstimator.getEstimatedPosition();
+  // }
 
   public void resetPosition(Pose2d pose) {
-    mPigeon2.setYaw(pose.getRotation().getDegrees());
+    // mPigeon2.setYaw(pose.getRotation().getDegrees());
     mLeftThroughBore.setPosition(0);
     mRightThroughBore.setPosition(0);
-    mPoseEstimator.resetPosition(mPigeon2.getRotation2d(), 0, 0, pose);
+    // mPoseEstimator.resetPosition(mPigeon2.getRotation2d(), 0, 0, pose);
   }
 
   public void updatePoseEstimator() {
-    mPoseEstimator.update(mPigeon2.getRotation2d(), getLeftThroughBorePositionMeters(), getRightThroughBorePositionMeters());
+    // mPoseEstimator.update(mPigeon2.getRotation2d(), getLeftThroughBorePositionMeters(), getRightThroughBorePositionMeters());
   }
 
   public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-    mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+    // mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
   public void voltageDrive(double leftVolts, double rightVolts) {
@@ -117,6 +118,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     mLeftFrontSpark.set(leftPercent);
     mRightFrontSpark.set(rightPercent);
+
+    SmartDashboard.putNumber("Left %", leftPercent);
+    SmartDashboard.putNumber("Right %", rightPercent);
   }
 
   public void turnInPlace(double xSpeed, double zRotation) {

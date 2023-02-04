@@ -30,18 +30,19 @@ public class DriveOneMeter extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> {
         drive.resetPosition(null);
-      }),
-      new PPRamseteCommand(
-        mOneMeter,
-        drive::getEstimatedRobotPose,
-        new RamseteController(),
-        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-        DriveConstants.kKinematics,
-        drive::getWheelSpeeds,
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        drive::voltageDrive,
-        drive)
+      })
+      // ,
+      // new PPRamseteCommand(
+      //   mOneMeter,
+      //   drive::getEstimatedRobotPose,
+      //   new RamseteController(),
+      //   new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+      //   DriveConstants.kKinematics,
+      //   drive::getWheelSpeeds,
+      //   new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+      //   new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+      //   drive::voltageDrive,
+      //   drive)
     );
   }
 }

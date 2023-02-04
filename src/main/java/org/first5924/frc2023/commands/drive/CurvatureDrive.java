@@ -10,6 +10,7 @@ import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.DriveSubsystem;
 import org.first5924.lib.util.JoystickToOutput;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class CurvatureDrive extends CommandBase {

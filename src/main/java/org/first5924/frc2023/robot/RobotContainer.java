@@ -25,15 +25,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem mDrive = new DriveSubsystem();
-  private final PivotSubsystem mPivot = new PivotSubsystem();
+  // private final PivotSubsystem mPivot = new PivotSubsystem();
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
+    // mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
 
     // Configure the trigger bindings
     configureBindings();
