@@ -6,6 +6,8 @@ package org.first5924.frc2023.constants;
 
 /** Add your docs here. */
 public class RobotConstants {
+    private RobotConstants() {}
+
     public static final int kPigeon2Port = 7;
 
     public static final int kNominalVoltage = 10;

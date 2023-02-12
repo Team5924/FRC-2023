@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 
 /** Add your docs here. */
 public class VisionConstants {
+    private VisionConstants() {}
+
     public static final String kCameraName = "camera";
     public static final Translation3d kRobotToCamTranslation = new Translation3d(0, 0, 0);
     public static final Rotation3d kRobotToCamRotation = new Rotation3d(0, 0, 0);

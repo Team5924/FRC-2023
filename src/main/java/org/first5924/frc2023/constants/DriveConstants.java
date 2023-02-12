@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /** Add your docs here. */
 public class DriveConstants {
+    private DriveConstants() {}
+
     public static final int kLeftFrontSparkPort = 2;
     public static final int kLeftBackSparkPort = 3;
     public static final int kRightFrontSparkPort = 4;
