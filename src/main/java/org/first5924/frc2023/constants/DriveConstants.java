@@ -5,6 +5,7 @@
 package org.first5924.frc2023.constants;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class DriveConstants {
@@ -26,10 +27,10 @@ public class DriveConstants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double kTrackwidthMeters = 0;
+    public static final double kTrackwidthMeters = Units.inchesToMeters(21.75);
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-    public static final double kWheelCircumferenceMeters = 0;
+    public static final double kWheelCircumferenceMeters = Units.inchesToMeters(5 * Math.PI);
 
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 1;
