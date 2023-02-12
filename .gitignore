@@ -163,3 +163,5 @@ bin/
 
 # VSCode
 .vscode/*
+
+src/main/java/org/first5924/frc2023/constants/BuildConstants.java

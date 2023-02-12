@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2023.3.2"
+    id "com.peterabeles.gversion" version "1.10"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -68,6 +69,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+    def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
+    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
 }
 
 test {
@@ -110,4 +114,14 @@ repositories {
 
 configurations.all {
     exclude group: "edu.wpi.first.wpilibj"
+}
+
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+  srcDir       = "src/main/java/"
+  classPackage = "org.first5924.frc2023.constants"
+  className    = "BuildConstants"
+  dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+  timeZone     = "America/Los_Angeles" // Use preferred time zone
+  indent       = "  "
 }
