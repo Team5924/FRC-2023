@@ -5,7 +5,7 @@
 package org.first5924.frc2023.commands.autonomous;
 
 import org.first5924.frc2023.constants.DriveConstants;
-import org.first5924.frc2023.subsystems.DriveSubsystem;
+import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;

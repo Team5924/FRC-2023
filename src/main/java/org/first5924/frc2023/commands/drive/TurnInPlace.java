@@ -7,7 +7,7 @@ package org.first5924.frc2023.commands.drive;
 import java.util.function.DoubleSupplier;
 
 import org.first5924.frc2023.constants.OIConstants;
-import org.first5924.frc2023.subsystems.DriveSubsystem;
+import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.lib.util.JoystickToOutput;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
