@@ -15,6 +15,8 @@ public class DriveConstants {
     public static final int kRightFrontSparkPort = 4;
     public static final int kRightBackSparkPort = 5;
 
+    public static final int kPigeon2Port = 7;
+
     // Values generated from sysid
     public static final double ks = 0;
     public static final double kv = 0;
