@@ -4,7 +4,7 @@
 
 package org.first5924.frc2023.robot;
 
-import org.first5924.frc2023.commands.autonomous.DriveOneMeter;
+import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
@@ -13,8 +13,10 @@ import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.first5924.frc2023.subsystems.PivotSubsystem;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,6 +34,8 @@ public class RobotContainer {
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+
+  private final LoggedDashboardChooser<Alliance> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,6 +57,9 @@ public class RobotContainer {
         });
         break;
     }
+
+    mAutoChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAutoChooser.addOption("Red", Alliance.Red);
 
     // mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
 
@@ -81,6 +88,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new DriveOneMeter(mDrive);
+    return new ThreePieceAuto(mDrive, mAutoChooser.get());
   }
 }
