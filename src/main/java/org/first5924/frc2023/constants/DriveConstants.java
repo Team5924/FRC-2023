@@ -18,6 +18,11 @@ public class DriveConstants {
 
     public static final int kPigeon2Port = 7;
 
+    public static final int kLeftThroughBoreA = 2;
+    public static final int kLeftThroughBoreB = 3;
+    public static final int kRightThroughBoreA = 0;
+    public static final int kRightThroughBoreB = 1;
+
     // Values generated from sysid
     public static final double ks = 0;
     public static final double kv = 0;

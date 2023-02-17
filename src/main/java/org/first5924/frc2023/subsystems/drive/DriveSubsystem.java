@@ -79,7 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetPosition(Pose2d pose) {
     io.setPigeonYaw(pose.getRotation().getDegrees());
-    io.setThroughBoreRotations(0, 0);
+    io.resetEncoders();
     mPoseEstimator.resetPosition(getRotation2d(), 0, 0, pose);
   }
 

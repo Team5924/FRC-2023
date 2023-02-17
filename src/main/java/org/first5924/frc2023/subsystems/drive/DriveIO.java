@@ -19,7 +19,7 @@ public interface DriveIO {
     public default void setPigeonYaw(double yaw) {
     }
 
-    public default void setThroughBoreRotations(double leftPosition, double rightPosition) {
+    public default void resetEncoders() {
     }
 
     public default void setVoltage(double leftVolts, double rightVolts) {

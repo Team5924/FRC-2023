@@ -5,15 +5,15 @@
 package org.first5924.frc2023.subsystems.drive;
 
 import org.first5924.frc2023.constants.DriveConstants;
-import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.lib.util.SparkMaxFactory;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class DriveIOSparkMax implements DriveIO {
@@ -22,8 +22,8 @@ public class DriveIOSparkMax implements DriveIO {
     private final CANSparkMax mLeftBackSpark = SparkMaxFactory.createSparkMax(DriveConstants.kLeftBackSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
     private final CANSparkMax mRightBackSpark = SparkMaxFactory.createSparkMax(DriveConstants.kRightBackSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
 
-    private final RelativeEncoder mLeftThroughBore = mLeftBackSpark.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, RobotConstants.kThroughBoreCPR);
-    private final RelativeEncoder mRightThroughBore = mRightBackSpark.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, RobotConstants.kThroughBoreCPR);
+    private final Encoder mLeftEncoder = new Encoder(DriveConstants.kLeftThroughBoreA, DriveConstants.kLeftThroughBoreB);
+    private final Encoder mRightEncoder = new Encoder(DriveConstants.kRightThroughBoreA, DriveConstants.kRightThroughBoreB, true);
 
     private final WPI_Pigeon2 mPigeon2 = new WPI_Pigeon2(DriveConstants.kPigeon2Port);
 
@@ -32,16 +32,14 @@ public class DriveIOSparkMax implements DriveIO {
         mRightBackSpark.follow(mRightFrontSpark);
 
         mLeftFrontSpark.setInverted(true);
-
-        mLeftThroughBore.setInverted(true);
     }
 
     @Override
     public void updateInputs(DriveIOInputs inputs) {
-        inputs.leftPositionMeters = mLeftThroughBore.getPosition() * DriveConstants.kWheelCircumferenceMeters;
-        inputs.rightPositionMeters = mRightThroughBore.getPosition() * DriveConstants.kWheelCircumferenceMeters;
-        inputs.leftVelocityMetersPerSec = mLeftThroughBore.getVelocity() * DriveConstants.kWheelCircumferenceMeters / 60;
-        inputs.rightVelocityMetersPerSec = mRightThroughBore.getVelocity() * DriveConstants.kWheelCircumferenceMeters / 60;
+        inputs.leftPositionMeters = mLeftEncoder.getDistance() / 2048 * DriveConstants.kWheelCircumferenceMeters;
+        inputs.rightPositionMeters = mRightEncoder.getDistance() / 2048 * DriveConstants.kWheelCircumferenceMeters;
+        inputs.leftVelocityMetersPerSec = mLeftEncoder.getRate() / 2048 * DriveConstants.kWheelCircumferenceMeters;
+        inputs.rightVelocityMetersPerSec = mRightEncoder.getRate() / 2048 * DriveConstants.kWheelCircumferenceMeters;
         inputs.pigeonRotationDeg = mPigeon2.getRotation2d().getDegrees();
     }
 
@@ -51,9 +49,9 @@ public class DriveIOSparkMax implements DriveIO {
     }
 
     @Override
-    public void setThroughBoreRotations(double leftRotation, double rightRotation) {
-        mLeftThroughBore.setPosition(leftRotation);
-        mRightThroughBore.setPosition(rightRotation);
+    public void resetEncoders() {
+        mLeftEncoder.reset();
+        mRightEncoder.reset();
     }
 
     @Override
