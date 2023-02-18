@@ -6,6 +6,7 @@ package org.first5924.frc2023.commands.autonomous;
 
 import org.first5924.frc2023.constants.DriveConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -23,25 +24,29 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ThreePieceAuto extends SequentialCommandGroup {
-  private final Trajectory mThreeBallA;
-  private final Trajectory mThreeBallB;
-  private final Trajectory mThreeBallC;
-  private final Trajectory mThreeBallD;
+  private final Trajectory mThreePieceA;
+  private final Trajectory mThreePieceB;
+  private final Trajectory mThreePieceC;
+  private final Trajectory mThreePieceD;
 
   /** Creates a new DriveOneMeter. */
   public ThreePieceAuto(DriveSubsystem drive, Alliance alliance) {
-    mThreeBallA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Three Piece A", 3.5, 3), alliance);
-    mThreeBallB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Three Piece B", 3.5, 3, true), alliance);
-    mThreeBallC = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Three Piece C", 3.5, 3), alliance);
-    mThreeBallD = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Three Piece D", 3.5, 3, true), alliance);
+    mThreePieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece A", 3.5, 3), alliance);
+    mThreePieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece B", 3.5, 3, true), alliance);
+    mThreePieceC = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece C", 3.5, 3), alliance);
+    mThreePieceD = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece D", 3.5, 3, true), alliance);
+    Logger.getInstance().recordOutput("Three Piece A", mThreePieceA);
+    Logger.getInstance().recordOutput("Three Piece B", mThreePieceB);
+    Logger.getInstance().recordOutput("Three Piece C", mThreePieceC);
+    Logger.getInstance().recordOutput("Three Piece D", mThreePieceD);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> {
-        drive.resetPosition(mThreeBallA.getInitialPose());
+        drive.resetPosition(mThreePieceA.getInitialPose());
       }),
       new RamseteCommand(
-        mThreeBallA,
+        mThreePieceA,
         drive::getEstimatedRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
@@ -56,7 +61,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         drive.driveVoltage(0, 0);
       }),
       new RamseteCommand(
-        mThreeBallB,
+        mThreePieceB,
         drive::getEstimatedRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
@@ -71,7 +76,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         drive.driveVoltage(0, 0);
       }),
       new RamseteCommand(
-        mThreeBallC,
+        mThreePieceC,
         drive::getEstimatedRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
@@ -86,7 +91,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         drive.driveVoltage(0, 0);
       }),
       new RamseteCommand(
-        mThreeBallD,
+        mThreePieceD,
         drive::getEstimatedRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),

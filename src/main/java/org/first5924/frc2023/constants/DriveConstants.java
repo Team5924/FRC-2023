@@ -24,9 +24,9 @@ public class DriveConstants {
     public static final int kRightThroughBoreB = 1;
 
     // Values generated from sysid
-    public static final double ks = 0;
-    public static final double kv = 0;
-    public static final double ka = 0;
+    public static final double ks = 0.12223;
+    public static final double kv = 2.8236;
+    public static final double ka = 0.10173;
 
     public static final double kP = 0;
     public static final double kI = 0;
@@ -36,7 +36,4 @@ public class DriveConstants {
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
     public static final double kWheelCircumferenceMeters = Units.inchesToMeters(5 * Math.PI);
-
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 }
