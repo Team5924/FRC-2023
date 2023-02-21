@@ -6,9 +6,22 @@ package org.first5924.frc2023.constants;
 
 /** Add your docs here. */
 public class RobotConstants {
-    public static final int kPigeon2Port = 7;
+    private RobotConstants() {}
 
     public static final int kNominalVoltage = 10;
 
     public static final int kThroughBoreCPR = 8192;
+
+    public static final Mode kCurrentMode = Mode.REAL;
+
+    public static enum Mode {
+        /** Running on a real robot. */
+        REAL,
+
+        /** Running a physics simulator. */
+        SIM,
+
+        /** Replaying from a log file. */
+        REPLAY
+    }
 }

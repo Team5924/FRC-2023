@@ -17,6 +17,7 @@ public class SparkMaxFactory {
         sparkMax.enableVoltageCompensation(RobotConstants.kNominalVoltage);
         sparkMax.setIdleMode(IdleMode.kBrake);
         sparkMax.setSmartCurrentLimit(40);
+        sparkMax.burnFlash();
         return sparkMax;
     }
 
@@ -25,6 +26,7 @@ public class SparkMaxFactory {
         sparkMax.enableVoltageCompensation(RobotConstants.kNominalVoltage);
         sparkMax.setIdleMode(idleMode);
         sparkMax.setSmartCurrentLimit(currentLimit);
+        sparkMax.burnFlash();
         return sparkMax;
     }
 }

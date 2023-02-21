@@ -4,14 +4,19 @@
 
 package org.first5924.frc2023.robot;
 
-import org.first5924.frc2023.commands.autonomous.DriveOneMeter;
+import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.constants.OIConstants;
-import org.first5924.frc2023.subsystems.DriveSubsystem;
+import org.first5924.frc2023.constants.RobotConstants;
+import org.first5924.frc2023.subsystems.drive.DriveIO;
+import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
+import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.first5924.frc2023.subsystems.PivotSubsystem;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,16 +29,39 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem mDrive = new DriveSubsystem();
-  private final PivotSubsystem mPivot = new PivotSubsystem();
+  private final DriveSubsystem mDrive;
+  // private final PivotSubsystem mPivot = new PivotSubsystem();
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+
+  private final LoggedDashboardChooser<Alliance> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
+    switch (RobotConstants.kCurrentMode) {
+      // Real robot, instantiate hardware IO implementations
+      case REAL:
+        mDrive = new DriveSubsystem(new DriveIOSparkMax());
+        break;
+
+      // Sim robot, instantiate physics sim IO implementations
+      case SIM:
+        mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        break;
+
+      // Replayed robot, disable IO implementations
+      default:
+        mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        break;
+    }
+
+    mAutoChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAutoChooser.addOption("Red", Alliance.Red);
+
+    // mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
 
     // Configure the trigger bindings
     configureBindings();
@@ -49,6 +77,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
   }
 
@@ -59,6 +88,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new DriveOneMeter(mDrive);
+    return new ThreePieceAuto(mDrive, mAutoChooser.get());
   }
 }
