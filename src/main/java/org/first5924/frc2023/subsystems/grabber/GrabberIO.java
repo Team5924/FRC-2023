@@ -25,6 +25,6 @@ public interface GrabberIO {
     public default void setVoltage(double leftVolts, double rightVolts) {
     }
 
-    public default void setPercent(double leftPercent, double rightPercent) {
+    public default void setPercent(double percent) {
     }
 }
