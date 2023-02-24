@@ -4,10 +4,13 @@
 
 package org.first5924.frc2023.subsystems.grabber;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GrabberSubsystem extends SubsystemBase {
   private final GrabberIO io;
+  private final GrabberIOInputsAutoLogged inputs = new GrabberIOInputsAutoLogged();
 
   /** Creates a new GrabberSubsystem. */
   public GrabberSubsystem(GrabberIO io) {
@@ -17,6 +20,8 @@ public class GrabberSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    io.updateInputs(inputs);
+    Logger.getInstance().processInputs("Grabber", inputs);
   }
 
   public void runGrabber(double percent) {

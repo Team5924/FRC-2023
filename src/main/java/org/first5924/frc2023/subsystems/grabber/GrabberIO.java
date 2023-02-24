@@ -16,15 +16,6 @@ public interface GrabberIO {
     public default void updateInputs(GrabberIOInputs inputs) {
     }
 
-    public default void setPigeonYaw(double yaw) {
-    }
-
-    public default void resetEncoders() {
-    }
-
-    public default void setVoltage(double leftVolts, double rightVolts) {
-    }
-
     public default void setPercent(double percent) {
     }
 }
