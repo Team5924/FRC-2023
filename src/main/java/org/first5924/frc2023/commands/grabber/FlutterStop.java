@@ -34,7 +34,7 @@ public class FlutterStop extends CommandBase {
     timer.start();
     // time has elapsed is in seconds
     if (timer.hasElapsed(0.25)) {
-      mGrabber.stopGrabber();
+      mGrabber.runGrabber(0);
       timer.stop();
       timer.reset();
     }

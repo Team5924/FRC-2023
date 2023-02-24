@@ -27,8 +27,4 @@ public class GrabberSubsystem extends SubsystemBase {
   public void runGrabber(double percent) {
     io.setPercent(percent);
   }
-
-  public void stopGrabber() {
-    io.setPercent(0);
-  }
 }
