@@ -8,5 +8,5 @@ package org.first5924.frc2023.constants;
 public class GrabberConstants {
     private GrabberConstants() {}
 
-    public static final int kSparkMaxPort = 6;
+    public static final int kSparkPort = 6;
 }
