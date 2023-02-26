@@ -4,6 +4,8 @@
 
 package org.first5924.frc2023.subsystems.pivot;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -22,6 +24,8 @@ public class PivotSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    io.updateInputs(inputs);
+    Logger.getInstance().processInputs("Pivot", inputs);
     // This method will be called once per scheduler run
   }
 }

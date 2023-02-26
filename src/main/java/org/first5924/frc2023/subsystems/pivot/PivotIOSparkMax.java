@@ -9,6 +9,7 @@ import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.lib.util.SparkMaxFactory;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -16,7 +17,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class PivotIOSparkMax implements PivotIO {
     private final CANSparkMax mLeaderSpark = SparkMaxFactory.createSparkMax(PivotConstants.kLeaderSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
     private final CANSparkMax mFollowerSpark = SparkMaxFactory.createSparkMax(PivotConstants.kFollowerSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
-
+    private final RelativeEncoder mEncoder1 = mLeaderSpark.getEncoder();
+    
     public PivotIOSparkMax() {
         mFollowerSpark.follow(mLeaderSpark);
     }
@@ -24,5 +26,9 @@ public class PivotIOSparkMax implements PivotIO {
     @Override
     public void setPercent(double percent) {
         mLeaderSpark.set(percent);
+    }
+    
+    public void updateInputs(PivotIOInputs inputs) {
+        inputs.encoderPosition = mEncoder1.getPosition();
     }
 }

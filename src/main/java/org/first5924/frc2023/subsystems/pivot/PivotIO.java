@@ -9,7 +9,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface PivotIO {
     @AutoLog
     public static class PivotIOInputs {
-        public double motorPosition = 0.0;
+        public double encoderPosition = 0.0;
     }
 
     /** Updates the set of loggable inputs */
