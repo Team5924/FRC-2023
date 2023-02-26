@@ -7,19 +7,16 @@ package org.first5924.frc2023.robot;
 import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
-import org.first5924.frc2023.commands.grabber.FlutterStop;
-import org.first5924.frc2023.commands.grabber.Grab;
-import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
-import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
-import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
+import org.first5924.frc2023.subsystems.pivot.PivotIO;
+import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
+import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.first5924.frc2023.subsystems.PivotSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,14 +33,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // * SUBSYSTEMS
   private final DriveSubsystem mDrive;
-  private final GrabberSubsystem mGrabber;
-  // private final PivotSubsystem mPivot = new PivotSubsystem();
+  private final PivotSubsystem mPivot;
 
   private final LoggedDashboardChooser<Alliance> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   // * CONTROLLER & BUTTONS
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -52,26 +48,27 @@ public class RobotContainer {
       // Real robot, instantiate hardware IO implementations
       case REAL:
         mDrive = new DriveSubsystem(new DriveIOSparkMax());
-        mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
+        mPivot = new PivotSubsystem(new PivotIOSparkMax());
         break;
 
       // Sim robot, instantiate physics sim IO implementations
       case SIM:
         mDrive = new DriveSubsystem(new DriveIO() {});
-        mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
+        mPivot = new PivotSubsystem(new PivotIO() {});
         break;
 
       // Replayed robot, disable IO implementations
       default:
         mDrive = new DriveSubsystem(new DriveIO() {});
-        mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
+        mPivot = new PivotSubsystem(new PivotIO() {});
         break;
     }
+    
 
     mAutoChooser.addDefaultOption("Blue", Alliance.Blue);
     mAutoChooser.addOption("Red", Alliance.Red);
 
-    // mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
+    //mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
 
     // Configure the trigger bindings
     configureBindings();
@@ -89,11 +86,7 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    // Default behavior of the grabber is to always flutter stop; holds, if any, the game piece in place
-    mGrabber.setDefaultCommand(new FlutterStop(mGrabber));
-    // ! This needs to be change to mOperatorController after testing
-    mDriverController.rightTrigger().whileTrue(new Grab(mGrabber));
-    mDriverController.leftTrigger().whileTrue(new Release(mGrabber));
+    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
   }
 
   /**
