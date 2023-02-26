@@ -16,18 +16,12 @@ public class PivotSubsystem extends SubsystemBase {
     this.io = io;
   }
 
-  //Daniel was here
-
   public void setMotorPercent(double percent) {
     io.setPercent(percent);
   }
-
-  //Daniel was no longer here
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-
-  // * Declare a method to run the Pivot by a some percent
 }

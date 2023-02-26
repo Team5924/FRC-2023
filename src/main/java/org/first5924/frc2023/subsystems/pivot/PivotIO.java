@@ -15,7 +15,7 @@ public interface PivotIO {
     /** Updates the set of loggable inputs */
     public default void updateInputs(PivotIOInputs inputs) {
     }
- 
+
     public default void setPercent(double percent) {
     }
 }

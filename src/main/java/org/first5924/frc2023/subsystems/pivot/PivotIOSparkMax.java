@@ -20,10 +20,9 @@ public class PivotIOSparkMax implements PivotIO {
     public PivotIOSparkMax() {
         mFollowerSpark.follow(mLeaderSpark);
     }
-    
+
     @Override
     public void setPercent(double percent) {
         mLeaderSpark.set(percent);
     }
-
 }
