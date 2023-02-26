@@ -7,7 +7,6 @@ package org.first5924.frc2023.robot;
 import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
-import org.first5924.frc2023.commands.grabber.FlutterStop;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
@@ -89,8 +88,6 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    // Default behavior of the grabber is to always flutter stop; holds, if any, the game piece in place
-    mGrabber.setDefaultCommand(new FlutterStop(mGrabber));
     // ! This needs to be change to mOperatorController after testing
     mDriverController.rightTrigger().whileTrue(new Grab(mGrabber));
     mDriverController.leftTrigger().whileTrue(new Release(mGrabber));
