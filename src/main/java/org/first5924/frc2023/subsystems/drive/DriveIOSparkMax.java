@@ -39,7 +39,8 @@ public class DriveIOSparkMax implements DriveIO {
         inputs.rightPositionMeters = mRightEncoder.getDistance() / 2048 * DriveConstants.kWheelCircumferenceMeters;
         inputs.leftVelocityMetersPerSec = mLeftEncoder.getRate() / 2048 * DriveConstants.kWheelCircumferenceMeters;
         inputs.rightVelocityMetersPerSec = mRightEncoder.getRate() / 2048 * DriveConstants.kWheelCircumferenceMeters;
-        inputs.pigeonRotationDeg = mPigeon2.getRotation2d().getDegrees();
+        inputs.pigeonYaw = mPigeon2.getYaw();
+        inputs.pigeonPitch = mPigeon2.getPitch();
     }
 
     @Override

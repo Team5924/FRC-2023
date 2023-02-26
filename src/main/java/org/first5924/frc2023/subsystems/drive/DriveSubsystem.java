@@ -71,7 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(inputs.pigeonRotationDeg);
+    return Rotation2d.fromDegrees(inputs.pigeonYaw);
   }
 
   public Pose2d getEstimatedRobotPose() {
