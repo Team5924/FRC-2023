@@ -4,7 +4,9 @@
 
 package org.first5924.frc2023.robot;
 
-import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
+import org.first5924.frc2023.commands.autonomous.AutoRoutines;
+import org.first5924.frc2023.commands.autonomous.routines.StationaryAuto;
+import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.grabber.Grab;
@@ -38,7 +40,8 @@ public class RobotContainer {
   private final GrabberSubsystem mGrabber;
   // private final PivotSubsystem mPivot = new PivotSubsystem();
 
-  private final LoggedDashboardChooser<Alliance> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
+  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
+  private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   // * CONTROLLER & BUTTONS
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -66,8 +69,11 @@ public class RobotContainer {
         break;
     }
 
-    mAutoChooser.addDefaultOption("Blue", Alliance.Blue);
-    mAutoChooser.addOption("Red", Alliance.Red);
+    mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAllianceChooser.addOption("Red", Alliance.Red);
+
+    mAutoChooser.addDefaultOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
+    mAutoChooser.addOption("Stationary", AutoRoutines.stationary);
 
     // mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
 
@@ -98,7 +104,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new ThreePieceAuto(mDrive, mAutoChooser.get());
+    switch (mAutoChooser.get()) {
+      case twoPieceClimb:
+        return new TwoPieceClimbAuto(mDrive, mAllianceChooser.get());
+      case stationary:
+        return new StationaryAuto();
+      default:
+        return new StationaryAuto();
+    }
   }
 }

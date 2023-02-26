@@ -70,8 +70,16 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
+  public double getYaw() {
+    return inputs.pigeonYaw;
+  }
+
   public Rotation2d getRotation2d() {
     return Rotation2d.fromDegrees(inputs.pigeonYaw);
+  }
+
+  public double getPitch() {
+    return inputs.pigeonPitch;
   }
 
   public Pose2d getEstimatedRobotPose() {
@@ -88,8 +96,12 @@ public class DriveSubsystem extends SubsystemBase {
     mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
-  public void driveVoltage(double leftVolts, double rightVolts) {
+  public void setVoltage(double leftVolts, double rightVolts) {
     io.setVoltage(leftVolts, rightVolts);
+  }
+
+  public void setPercent(double leftPercent, double rightPercent) {
+    io.setPercent(leftPercent, rightPercent);
   }
 
   public void curvatureDrive(double xSpeed, double zRotation) {
