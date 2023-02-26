@@ -15,8 +15,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class GrabberIOSparkMax implements GrabberIO {
     private final CANSparkMax mGrabberSpark = SparkMaxFactory.createSparkMax(GrabberConstants.kSparkPort, MotorType.kBrushed, IdleMode.kBrake, 42);
 
-    // ? Encoder
-
     public GrabberIOSparkMax() {
 
     }
