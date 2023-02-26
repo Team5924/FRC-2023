@@ -5,7 +5,6 @@
 package org.first5924.lib.util;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -15,31 +14,31 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /** Add your docs here. */
 public class PhotonCameraWrapper {
     private final PhotonCamera mCamera;
-    private final Transform3d mRobotToCam;
-    private AprilTagFieldLayout mAprilTagFieldLayout;
-    private final PhotonPoseEstimator mRobotPoseEstimator;
+    private PhotonPoseEstimator mPhotonPoseEstimator;
 
     /** Creates a new VisionSubsystem. */
     public PhotonCameraWrapper(String cameraName, Transform3d robotToCam) {
         mCamera = new PhotonCamera(cameraName);
-        mRobotToCam = robotToCam;
-        mRobotPoseEstimator = new PhotonPoseEstimator(mAprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, mCamera, mRobotToCam);
         try {
-            mAprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+            AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+            mPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP, mCamera, robotToCam);
+            mPhotonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         } catch(IOException e) {
-            mAprilTagFieldLayout = new AprilTagFieldLayout(new ArrayList<>(), 0, 0);
-            System.out.println("Couldn't load AprilTag field layout!");
+            DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
+            mPhotonPoseEstimator = null;
         }
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedRobotPose(Pose2d prevEstimatedPose) {
-        mRobotPoseEstimator.setReferencePose(prevEstimatedPose);
-        return mRobotPoseEstimator.update();
+    public Optional<EstimatedRobotPose> getEstimatedRobotPose() {
+        if (mPhotonPoseEstimator == null) {
+            return Optional.empty();
+        }
+        return mPhotonPoseEstimator.update();
     }
 }

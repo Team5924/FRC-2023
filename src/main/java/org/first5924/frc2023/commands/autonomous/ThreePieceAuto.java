@@ -47,7 +47,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mThreePieceA,
-        drive::getEstimatedRobotPose,
+        drive::getPoseEstimatorRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
@@ -62,7 +62,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mThreePieceB,
-        drive::getEstimatedRobotPose,
+        drive::getPoseEstimatorRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
@@ -77,7 +77,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mThreePieceC,
-        drive::getEstimatedRobotPose,
+        drive::getPoseEstimatorRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
@@ -92,7 +92,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mThreePieceD,
-        drive::getEstimatedRobotPose,
+        drive::getPoseEstimatorRobotPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,

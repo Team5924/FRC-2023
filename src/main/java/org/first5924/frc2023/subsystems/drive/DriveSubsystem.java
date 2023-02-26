@@ -7,17 +7,13 @@ package org.first5924.frc2023.subsystems.drive;
 import java.util.Optional;
 
 import org.first5924.frc2023.constants.DriveConstants;
-import org.first5924.frc2023.constants.VisionConstants;
-import org.first5924.lib.util.PhotonCameraWrapper;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -25,7 +21,6 @@ public class DriveSubsystem extends SubsystemBase {
   private final DriveIO io;
   private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
 
-  // private final PhotonCameraWrapper mPhotonCameraWrapper = new PhotonCameraWrapper(VisionConstants.kCameraName, new Transform3d(VisionConstants.kRobotToCamTranslation, VisionConstants.kRobotToCamRotation));
   private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, getRotation2d(), 0, 0, new Pose2d());
 
   /** Creates a new DriveSubsystem. */
@@ -39,12 +34,8 @@ public class DriveSubsystem extends SubsystemBase {
     Logger.getInstance().processInputs("Drive", inputs);
 
     mPoseEstimator.update(getRotation2d(), getLeftPositionMeters(), getRightPositionMeters());
-    // Optional<EstimatedRobotPose> estimatedRobotPose = mPhotonCameraWrapper.getEstimatedRobotPose(getEstimatedRobotPose());
-    // if (estimatedRobotPose.isPresent()) {
-    //   addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
-    // }
 
-    Logger.getInstance().recordOutput("Pose Estimation", getEstimatedRobotPose());
+    Logger.getInstance().recordOutput("Pose Estimator Robot Pose", getPoseEstimatorRobotPose());
   }
 
   public double getLeftPositionMeters() {
@@ -71,21 +62,61 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(inputs.pigeonRotationDeg);
+    return Rotation2d.fromDegrees(inputs.pigeonRotationDegrees);
   }
 
-  public Pose2d getEstimatedRobotPose() {
+  public Pose2d getPoseEstimatorRobotPose() {
     return mPoseEstimator.getEstimatedPosition();
+  }
+
+  private Optional<Pose2d> getFrontCameraEstimatedPose2d () {
+    if (!Double.isNaN(inputs.frontEstimatedRobotPoseTimestampSeconds)) {
+      Pose2d estimatedPose2d = new Pose2d(
+        new Translation2d(inputs.frontEstimatedRobotPoseTranslationX, inputs.frontEstimatedRobotPoseTranslationY),
+        new Rotation2d(inputs.frontEstimatedRobotPoseRotationX, inputs.frontEstimatedRobotPoseRotationY)
+      );
+      return Optional.of(estimatedPose2d);
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  private Optional<Double> getFrontCameraTimestampSeconds() {
+    if (!Double.isNaN(inputs.frontEstimatedRobotPoseTimestampSeconds)) {
+      return Optional.of(inputs.frontEstimatedRobotPoseTimestampSeconds);
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  private Optional<Pose2d> getBackCameraEstimatedPose2d () {
+    if (!Double.isNaN(inputs.backEstimatedRobotPoseTimestampSeconds)) {
+      Pose2d estimatedPose2d = new Pose2d(
+        new Translation2d(inputs.backEstimatedRobotPoseTranslationX, inputs.backEstimatedRobotPoseTranslationY),
+        new Rotation2d(inputs.backEstimatedRobotPoseRotationX, inputs.backEstimatedRobotPoseRotationY)
+      );
+      return Optional.of(estimatedPose2d);
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  private Optional<Double> getBackCameraTimestampSeconds() {
+    if (!Double.isNaN(inputs.backEstimatedRobotPoseTimestampSeconds)) {
+      return Optional.of(inputs.backEstimatedRobotPoseTimestampSeconds);
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+    mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
   public void resetPosition(Pose2d pose) {
     io.setPigeonYaw(pose.getRotation().getDegrees());
     io.resetEncoders();
     mPoseEstimator.resetPosition(getRotation2d(), 0, 0, pose);
-  }
-
-  public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-    mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
   public void driveVoltage(double leftVolts, double rightVolts) {
