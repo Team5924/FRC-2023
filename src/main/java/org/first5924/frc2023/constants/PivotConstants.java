@@ -9,5 +9,5 @@ public class PivotConstants {
     private PivotConstants() {}
 
     public static final int kLeaderSparkPort = 8;
-    public static final int kFollowerSparkPort = 9;
+    public static final int kFollowerSparkPort = 7;
 }
