@@ -24,8 +24,8 @@ public class PivotSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Pivot", inputs);
-    // This method will be called once per scheduler run
   }
 }
