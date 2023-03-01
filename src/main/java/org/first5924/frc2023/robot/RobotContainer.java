@@ -5,6 +5,7 @@
 package org.first5924.frc2023.robot;
 
 import org.first5924.frc2023.commands.autonomous.AutoRoutines;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.StationaryAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
@@ -72,6 +73,7 @@ public class RobotContainer {
     mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
     mAllianceChooser.addOption("Red", Alliance.Red);
 
+    mAutoChooser.addDefaultOption("One Piece Climb", AutoRoutines.onePieceClimb);
     mAutoChooser.addDefaultOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
     mAutoChooser.addOption("Stationary", AutoRoutines.stationary);
 
@@ -105,6 +107,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     switch (mAutoChooser.get()) {
+      case onePieceClimb:
+        return new OnePieceClimbAuto(mDrive, mAllianceChooser.get());
       case twoPieceClimb:
         return new TwoPieceClimbAuto(mDrive, mAllianceChooser.get());
       case stationary:
