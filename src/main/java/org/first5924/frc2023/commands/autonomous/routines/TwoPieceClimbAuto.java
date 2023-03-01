@@ -31,9 +31,9 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
 
   /** Creates a new DriveOneMeter. */
   public TwoPieceClimbAuto(DriveSubsystem drive, Alliance alliance) {
-    mTwoPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece A", 3.5, 3), alliance);
-    mTwoPieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece B", 3.5, 3, true), alliance);
-    mTwoPieceC = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece C", 3.5, 3), alliance);
+    mTwoPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece Climb A", 3.5, 3), alliance);
+    mTwoPieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece Climb B", 3.5, 3, true), alliance);
+    mTwoPieceC = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece Climb C", 3.5, 3), alliance);
     Logger.getInstance().recordOutput("Three Piece A", mTwoPieceA);
     Logger.getInstance().recordOutput("Three Piece B", mTwoPieceB);
     Logger.getInstance().recordOutput("Three Piece C", mTwoPieceC);
