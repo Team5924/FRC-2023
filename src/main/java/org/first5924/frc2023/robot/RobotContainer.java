@@ -4,10 +4,15 @@
 
 package org.first5924.frc2023.robot;
 
-import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
+import org.first5924.frc2023.commands.autonomous.AutoRoutines;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceClimbAuto;
+import org.first5924.frc2023.commands.autonomous.routines.StationaryAuto;
+import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
+import org.first5924.frc2023.commands.grabber.Grab;
+import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
@@ -35,12 +40,14 @@ public class RobotContainer {
   private final DriveSubsystem mDrive;
   private final PivotSubsystem mPivot;
 
-  private final LoggedDashboardChooser<Alliance> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
+  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
+  private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   // * CONTROLLER & BUTTONS
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
+  // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -64,8 +71,12 @@ public class RobotContainer {
         break;
     }
 
-    mAutoChooser.addDefaultOption("Blue", Alliance.Blue);
-    mAutoChooser.addOption("Red", Alliance.Red);
+    mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAllianceChooser.addOption("Red", Alliance.Red);
+
+    mAutoChooser.addDefaultOption("One Piece Climb", AutoRoutines.onePieceClimb);
+    mAutoChooser.addDefaultOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
+    mAutoChooser.addOption("Stationary", AutoRoutines.stationary);
 
     //mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
 
@@ -86,6 +97,9 @@ public class RobotContainer {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
+    // ! This needs to be change to mOperatorController after testing
+    mDriverController.rightTrigger().whileTrue(new Grab(mGrabber));
+    mDriverController.leftTrigger().whileTrue(new Release(mGrabber));
   }
 
   /**
@@ -94,7 +108,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new ThreePieceAuto(mDrive, mAutoChooser.get());
+    switch (mAutoChooser.get()) {
+      case onePieceClimb:
+        return new OnePieceClimbAuto(mDrive, mAllianceChooser.get());
+      case twoPieceClimb:
+        return new TwoPieceClimbAuto(mDrive, mAllianceChooser.get());
+      case stationary:
+        return new StationaryAuto();
+      default:
+        return new StationaryAuto();
+    }
   }
 }
