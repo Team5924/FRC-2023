@@ -30,7 +30,7 @@ public class OnePieceClimbAuto extends SequentialCommandGroup {
   /** Creates a new DriveOneMeter. */
   public OnePieceClimbAuto(DriveSubsystem drive, Alliance alliance) {
     mOnePieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("1 Piece Climb A", 2.5, 2), alliance);
-    Logger.getInstance().recordOutput("One Piece A", mOnePieceA);
+    Logger.getInstance().recordOutput("One Piece Climb A", mOnePieceA);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

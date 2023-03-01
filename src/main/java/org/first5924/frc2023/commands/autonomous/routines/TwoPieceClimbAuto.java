@@ -34,9 +34,9 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
     mTwoPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece Climb A", 3.5, 3), alliance);
     mTwoPieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece Climb B", 3.5, 3, true), alliance);
     mTwoPieceC = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("3 Piece Climb C", 3.5, 3), alliance);
-    Logger.getInstance().recordOutput("Three Piece A", mTwoPieceA);
-    Logger.getInstance().recordOutput("Three Piece B", mTwoPieceB);
-    Logger.getInstance().recordOutput("Three Piece C", mTwoPieceC);
+    Logger.getInstance().recordOutput("Two Piece Climb A", mTwoPieceA);
+    Logger.getInstance().recordOutput("Two Piece Climb B", mTwoPieceB);
+    Logger.getInstance().recordOutput("Two Piece Climb C", mTwoPieceC);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
