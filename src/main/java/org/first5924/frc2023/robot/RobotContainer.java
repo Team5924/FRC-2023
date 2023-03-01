@@ -18,6 +18,9 @@ import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.first5924.frc2023.subsystems.grabber.GrabberIO;
+import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
+import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
@@ -26,7 +29,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -39,6 +41,7 @@ public class RobotContainer {
   // * SUBSYSTEMS
   private final DriveSubsystem mDrive;
   private final PivotSubsystem mPivot;
+  private final GrabberSubsystem mGrabber;
 
   private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
   private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
@@ -47,8 +50,6 @@ public class RobotContainer {
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (RobotConstants.kCurrentMode) {
@@ -56,18 +57,21 @@ public class RobotContainer {
       case REAL:
         mDrive = new DriveSubsystem(new DriveIOSparkMax());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
+        mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
         break;
 
       // Sim robot, instantiate physics sim IO implementations
       case SIM:
         mDrive = new DriveSubsystem(new DriveIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
+        mGrabber = new GrabberSubsystem(new GrabberIO() {});
         break;
 
       // Replayed robot, disable IO implementations
       default:
         mDrive = new DriveSubsystem(new DriveIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
+        mGrabber = new GrabberSubsystem(new GrabberIO() {});
         break;
     }
 
@@ -96,10 +100,10 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
-    // ! This needs to be change to mOperatorController after testing
-    mDriverController.rightTrigger().whileTrue(new Grab(mGrabber));
-    mDriverController.leftTrigger().whileTrue(new Release(mGrabber));
+    mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
+    mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
   }
 
   /**
