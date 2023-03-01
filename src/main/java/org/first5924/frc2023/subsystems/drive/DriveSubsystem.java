@@ -4,20 +4,13 @@
 
 package org.first5924.frc2023.subsystems.drive;
 
-import java.util.Optional;
-
 import org.first5924.frc2023.constants.DriveConstants;
-import org.first5924.frc2023.constants.VisionConstants;
-import org.first5924.lib.util.PhotonCameraWrapper;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -39,16 +32,9 @@ public class DriveSubsystem extends SubsystemBase {
     Logger.getInstance().processInputs("Drive", inputs);
 
     mPoseEstimator.update(getRotation2d(), getLeftPositionMeters(), getRightPositionMeters());
-    // Optional<EstimatedRobotPose> estimatedRobotPose = mPhotonCameraWrapper.getEstimatedRobotPose(getEstimatedRobotPose());
-    // if (estimatedRobotPose.isPresent()) {
-    //   addVisionMeasurementToPoseEstimator(estimatedRobotPose.get().estimatedPose.toPose2d(), estimatedRobotPose.get().timestampSeconds);
-    // }
 
     Logger.getInstance().recordOutput("Pose Estimation", getEstimatedRobotPose());
   }
-
-
-  
 
   public double getLeftPositionMeters() {
     return inputs.leftPositionMeters;
