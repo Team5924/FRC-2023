@@ -4,12 +4,11 @@
 
 package org.first5924.frc2023.subsystems.drive;
 
-import org.first5924.frc2023.constants.DriveConstants;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,8 +17,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final DriveIO io;
   private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
 
-  // private final PhotonCameraWrapper mPhotonCameraWrapper = new PhotonCameraWrapper(VisionConstants.kCameraName, new Transform3d(VisionConstants.kRobotToCamTranslation, VisionConstants.kRobotToCamRotation));
-  private final DifferentialDrivePoseEstimator mPoseEstimator = new DifferentialDrivePoseEstimator(DriveConstants.kKinematics, getRotation2d(), 0, 0, new Pose2d());
+  private final DifferentialDriveOdometry mOdometry = new DifferentialDriveOdometry(getRotation2d(), 0, 0);
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(DriveIO io) {
@@ -31,9 +29,9 @@ public class DriveSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Drive", inputs);
 
-    mPoseEstimator.update(getRotation2d(), getLeftPositionMeters(), getRightPositionMeters());
+    mOdometry.update(getRotation2d(), getLeftPositionMeters(), getRightPositionMeters());
 
-    Logger.getInstance().recordOutput("Pose Estimation", getEstimatedRobotPose());
+    Logger.getInstance().recordOutput("Odometry", getPoseMeters());
   }
 
   public double getLeftPositionMeters() {
@@ -71,18 +69,14 @@ public class DriveSubsystem extends SubsystemBase {
     return inputs.pigeonPitch;
   }
 
-  public Pose2d getEstimatedRobotPose() {
-    return mPoseEstimator.getEstimatedPosition();
+  public Pose2d getPoseMeters() {
+    return mOdometry.getPoseMeters();
   }
 
   public void resetPosition(Pose2d pose) {
     io.setPigeonYaw(pose.getRotation().getDegrees());
     io.resetEncoders();
-    mPoseEstimator.resetPosition(getRotation2d(), 0, 0, pose);
-  }
-
-  public void addVisionMeasurementToPoseEstimator(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-    mPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+    mOdometry.resetPosition(getRotation2d(), 0, 0, pose);
   }
 
   public void setVoltage(double leftVolts, double rightVolts) {

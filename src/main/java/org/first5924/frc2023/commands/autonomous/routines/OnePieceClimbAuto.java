@@ -39,7 +39,7 @@ public class OnePieceClimbAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mOnePieceA,
-        drive::getEstimatedRobotPose,
+        drive::getPoseMeters,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
