@@ -52,7 +52,7 @@ public class OnePieceAroundClimbAuto extends SequentialCommandGroup {
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
       }),
-      new AutoEngageChargeStation(drive)
+      new AutoEngageChargeStation(drive, true)
     );
   }
 }

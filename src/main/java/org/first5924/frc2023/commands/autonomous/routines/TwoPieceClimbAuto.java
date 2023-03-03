@@ -85,7 +85,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
         drive::setVoltage,
         drive
       ),
-      new AutoEngageChargeStation(drive)
+      new AutoEngageChargeStation(drive, true)
     );
   }
 }

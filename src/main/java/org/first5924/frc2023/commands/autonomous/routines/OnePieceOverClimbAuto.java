@@ -37,7 +37,7 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
           drive.setPercent(0.3, 0.3);
         })
       ),
-      new AutoEngageChargeStation(drive)
+      new AutoEngageChargeStation(drive, false)
     );
   }
 }
