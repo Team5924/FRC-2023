@@ -45,7 +45,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mTwoPieceA,
-        drive::getEstimatedRobotPose,
+        drive::getPoseMeters,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
@@ -60,7 +60,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mTwoPieceB,
-        drive::getEstimatedRobotPose,
+        drive::getPoseMeters,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
@@ -75,7 +75,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
       }),
       new RamseteCommand(
         mTwoPieceC,
-        drive::getEstimatedRobotPose,
+        drive::getPoseMeters,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kKinematics,
