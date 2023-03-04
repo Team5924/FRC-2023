@@ -26,6 +26,7 @@ public class PivotIOSparkMax implements PivotIO {
     @Override
     public void updateInputs(PivotIOInputs inputs) {
         inputs.pivotPositionDegrees = mEncoder.getPosition() * 360 / PivotConstants.kGearRatio;
+        inputs.pivotVelocityDegreesPerSecond = mEncoder.getVelocity() / 60 * 360 / PivotConstants.kGearRatio;
     }
 
     @Override
