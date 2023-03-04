@@ -103,9 +103,10 @@ public class RobotContainer {
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
 
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
+    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 0));
+
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
-    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY));
   }
 
   /**

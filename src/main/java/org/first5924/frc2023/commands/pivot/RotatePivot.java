@@ -5,6 +5,7 @@
 package org.first5924.frc2023.commands.pivot;
 import java.util.function.DoubleSupplier;
 
+import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 
 import edu.wpi.first.math.MathUtil;
@@ -34,7 +35,7 @@ public class RotatePivot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mPivot.setMotorPercent(MathUtil.applyDeadband(mJoystickY.getAsDouble(), 0.05));
+    mPivot.setPercent(MathUtil.applyDeadband(mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.

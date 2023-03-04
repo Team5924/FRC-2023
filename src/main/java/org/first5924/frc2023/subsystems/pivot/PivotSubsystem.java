@@ -22,15 +22,15 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public double getEncoderPosition() {
-    return inputs.encoderPosition;
+    return inputs.pivotPositionDegrees;
   }
 
-  public void setMotorPercent(double percent) {
+  public void setPercent(double percent) {
     io.setPercent(percent);
   }
 
-  public void setPIDPosition(double position) {
-    mPID.setSetpoint(position);
+  public void setPosition(double position) {
+    io.setVoltage(mPID.calculate(getEncoderPosition(), position));
   }
 
   @Override
