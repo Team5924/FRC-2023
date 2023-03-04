@@ -19,5 +19,5 @@ public final class OIConstants {
   public static final int kOperatorControllerPort = 1;
 
   public static final double kDriverJoystickDeadband = 0.04;
-  public static final double kOperatorJoystickDeadband = 0.05;
+  public static final double kOperatorJoystickDeadband = 0.1;
 }

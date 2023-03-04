@@ -14,7 +14,7 @@ public class PivotSubsystem extends SubsystemBase {
   /** Creates a new PivotSubsystem. */
   private final PivotIO io;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
-  private final PIDController mPID = new PIDController(0.1, 0, 0);
+  private final PIDController mPID = new PIDController(1.5, 0, 0);
 
 
   public PivotSubsystem(PivotIO io) {
