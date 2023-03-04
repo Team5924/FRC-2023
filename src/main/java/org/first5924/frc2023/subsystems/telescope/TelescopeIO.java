@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface TelescopeIO {
     @AutoLog
     public static class TelescopeIOInputs {
-        public double rotations = 0.0;
+        public double encoderRotations = 0.0;
     }
 
     /** Updates the set of loggable inputs. */
@@ -18,5 +18,11 @@ public interface TelescopeIO {
     }
 
     public default void setPercent(double percent) {
+    }
+
+    public default void setVoltage(double volts) {
+    }
+
+    public default void setEncoderPosition(double position) {
     }
 }

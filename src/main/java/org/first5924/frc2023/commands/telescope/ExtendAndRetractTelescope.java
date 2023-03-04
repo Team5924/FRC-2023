@@ -8,16 +8,16 @@ import java.util.function.DoubleSupplier;
 
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-import org.first5924.lib.util.JoystickToOutput;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ExtendAndRetract extends CommandBase {
+public class ExtendAndRetractTelescope extends CommandBase {
   private final TelescopeSubsystem mTelescope;
   private final DoubleSupplier mRightJoystickY;
 
   /** Creates a new Extend. */
-  public ExtendAndRetract(TelescopeSubsystem telescope, DoubleSupplier rightJoystickY) {
+  public ExtendAndRetractTelescope(TelescopeSubsystem telescope, DoubleSupplier rightJoystickY) {
     mTelescope = telescope;
     mRightJoystickY = rightJoystickY;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,17 +31,12 @@ public class ExtendAndRetract extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // ! Experimental: Requires testing
-    // * mRightJoystickY may need to be negative based on observations in @CurvatureDrive; find out why
-    mTelescope.runTelescope(JoystickToOutput.calculateSquared(mRightJoystickY.getAsDouble(), OIConstants.kJoystickDeadband));
+    mTelescope.setPercent(MathUtil.applyDeadband(mRightJoystickY.getAsDouble(), OIConstants.kJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    // TODO: Verify if this is necessary
-    mTelescope.runTelescope(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

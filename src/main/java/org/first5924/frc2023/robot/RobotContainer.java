@@ -8,11 +8,15 @@ import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
+import org.first5924.frc2023.commands.telescope.ExtendAndRetract;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
+import org.first5924.frc2023.subsystems.telescope.TelescopeIOSparkMax;
+import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.first5924.frc2023.subsystems.PivotSubsystem;
 
@@ -30,10 +34,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem mDrive;
+  private final TelescopeSubsystem mTelescope;
   // private final PivotSubsystem mPivot = new PivotSubsystem();
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  // private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   private final LoggedDashboardChooser<Alliance> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
@@ -43,17 +48,22 @@ public class RobotContainer {
       // Real robot, instantiate hardware IO implementations
       case REAL:
         mDrive = new DriveSubsystem(new DriveIOSparkMax());
+        mTelescope = new TelescopeSubsystem(new TelescopeIOSparkMax());
         break;
 
       // Sim robot, instantiate physics sim IO implementations
       case SIM:
         mDrive = new DriveSubsystem(new DriveIO() {
         });
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
+        });
         break;
 
       // Replayed robot, disable IO implementations
       default:
         mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
         });
         break;
     }
@@ -79,6 +89,8 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    mTelescope.setDefaultCommand(new ExtendAndRetract(mTelescope, mOperatorController::getRightY));
+    
   }
 
   /**
