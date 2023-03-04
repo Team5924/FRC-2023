@@ -16,7 +16,7 @@ public class DriveConstants {
     public static final int kRightFrontSparkPort = 4;
     public static final int kRightBackSparkPort = 5;
 
-    public static final int kPigeon2Port = 7;
+    public static final int kPigeon2Port = 6;
 
     public static final int kLeftThroughBoreA = 2;
     public static final int kLeftThroughBoreB = 3;

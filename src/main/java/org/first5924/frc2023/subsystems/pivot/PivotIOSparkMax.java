@@ -25,11 +25,21 @@ public class PivotIOSparkMax implements PivotIO {
 
     @Override
     public void updateInputs(PivotIOInputs inputs) {
-        inputs.encoderPosition = mEncoder.getPosition();
+        inputs.pivotPositionDegrees = mEncoder.getPosition() * 360 / PivotConstants.kGearRatio;
     }
 
     @Override
     public void setPercent(double percent) {
         mLeaderSpark.set(percent);
+    }
+
+    @Override
+    public void setVoltage(double volts) {
+        mLeaderSpark.setVoltage(volts);
+    }
+
+    @Override
+    public void setEncoderPosition(double position) {
+        mEncoder.setPosition(position);
     }
 }
