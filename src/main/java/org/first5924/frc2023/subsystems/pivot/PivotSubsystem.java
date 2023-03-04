@@ -4,6 +4,7 @@
 
 package org.first5924.frc2023.subsystems.pivot;
 
+import org.first5924.frc2023.constants.PivotConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -32,6 +33,10 @@ public class PivotSubsystem extends SubsystemBase {
 
   public void setPosition(double position) {
     io.setVoltage(MathUtil.clamp(mPID.calculate(getEncoderPosition(), position), -3, 3));
+  }
+
+  public void setEncoderFromPivotDegrees(double pivotDegrees) {
+    io.setEncoderPosition(pivotDegrees / 360 * PivotConstants.kGearRatio);
   }
 
   @Override

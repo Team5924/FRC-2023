@@ -21,4 +21,7 @@ public interface PivotIO {
 
     public default void setVoltage(double volts) {
     }
+
+    public default void setEncoderPosition(double position) {
+    }
 }

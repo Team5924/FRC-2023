@@ -29,6 +29,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -103,7 +104,10 @@ public class RobotContainer {
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
 
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
-   mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
+    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
+    mOperatorController.y().onTrue(new InstantCommand(() -> {
+      mPivot.setEncoderFromPivotDegrees(0);
+    }));
 
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));

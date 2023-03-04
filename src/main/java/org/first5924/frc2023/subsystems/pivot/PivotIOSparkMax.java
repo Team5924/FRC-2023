@@ -38,4 +38,8 @@ public class PivotIOSparkMax implements PivotIO {
         mLeaderSpark.setVoltage(volts);
     }
 
+    @Override
+    public void setEncoderPosition(double position) {
+        mEncoder.setPosition(position);
+    }
 }
