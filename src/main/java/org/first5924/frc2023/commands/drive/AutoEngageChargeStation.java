@@ -4,16 +4,22 @@
 
 package org.first5924.frc2023.commands.drive;
 
+import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoEngageChargeStation extends CommandBase {
   private final DriveSubsystem mDrive;
+  private final boolean mIsFromCenter;
+  private double mStartSettleTimestamp;
+  private boolean misWaitingForSettle = false;
 
   /** Creates a new AutoEngageChargeStation. */
-  public AutoEngageChargeStation(DriveSubsystem drive) {
+  public AutoEngageChargeStation(DriveSubsystem drive, boolean isFromCenter) {
     mDrive = drive;
+    mIsFromCenter = isFromCenter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(mDrive);
   }
@@ -25,10 +31,32 @@ public class AutoEngageChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (mDrive.getPitch() < 2.5) {
-      mDrive.setPercent(0.3, 0.3);
-    } else if (mDrive.getPitch() > 2.5) {
-      mDrive.setPercent(-0.3, -0.3);
+    if (misWaitingForSettle) {
+      if (Timer.getFPGATimestamp() >= mStartSettleTimestamp + 1) {
+        misWaitingForSettle = false;
+      }
+    } else {
+      if (mIsFromCenter) {
+        if (mDrive.getPitch() < -AutoConstants.kAllowedChargeStationErrorDegrees) {
+          mDrive.setPercent(-AutoConstants.kChargeStationBalanceDriveSpeed, -AutoConstants.kChargeStationBalanceDriveSpeed);
+        } else if (mDrive.getPitch() > AutoConstants.kAllowedChargeStationErrorDegrees) {
+          mDrive.setPercent(AutoConstants.kChargeStationBalanceDriveSpeed, AutoConstants.kChargeStationBalanceDriveSpeed);
+        } else {
+          mDrive.setPercent(0, 0);
+          misWaitingForSettle = true;
+          mStartSettleTimestamp = Timer.getFPGATimestamp();
+        }
+      } else {
+        if (mDrive.getPitch() < -AutoConstants.kAllowedChargeStationErrorDegrees) {
+          mDrive.setPercent(AutoConstants.kChargeStationBalanceDriveSpeed, AutoConstants.kChargeStationBalanceDriveSpeed);
+        } else if (mDrive.getPitch() > AutoConstants.kAllowedChargeStationErrorDegrees) {
+          mDrive.setPercent(-AutoConstants.kChargeStationBalanceDriveSpeed, -AutoConstants.kChargeStationBalanceDriveSpeed);
+        } else {
+          mDrive.setPercent(0, 0);
+          misWaitingForSettle = true;
+          mStartSettleTimestamp = Timer.getFPGATimestamp();
+        }
+      }
     }
   }
 

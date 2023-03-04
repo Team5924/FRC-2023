@@ -74,9 +74,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetPosition(Pose2d pose) {
-    io.setPigeonYaw(pose.getRotation().getDegrees());
     io.resetEncoders();
-    mOdometry.resetPosition(getRotation2d(), 0, 0, pose);
+    io.setPigeonYaw(pose.getRotation().getDegrees());
+    mOdometry.resetPosition(pose.getRotation(), 0, 0, pose);
   }
 
   public void setVoltage(double leftVolts, double rightVolts) {

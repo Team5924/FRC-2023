@@ -31,6 +31,8 @@ public class DriveIOSparkMax implements DriveIO {
         mRightBackSpark.follow(mRightFrontSpark);
 
         mLeftFrontSpark.setInverted(true);
+
+        mPigeon2.configMountPose(-90, 0, 0);
     }
 
     @Override

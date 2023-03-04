@@ -24,11 +24,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OnePieceClimbAuto extends SequentialCommandGroup {
+public class OnePieceAroundClimbAuto extends SequentialCommandGroup {
   private final Trajectory mOnePieceA;
 
   /** Creates a new DriveOneMeter. */
-  public OnePieceClimbAuto(DriveSubsystem drive, Alliance alliance) {
+  public OnePieceAroundClimbAuto(DriveSubsystem drive, Alliance alliance) {
     mOnePieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("1 Piece Climb A", 2.5, 2), alliance);
     Logger.getInstance().recordOutput("One Piece Climb A", mOnePieceA);
     // Add your commands in the addCommands() call, e.g.
@@ -52,7 +52,7 @@ public class OnePieceClimbAuto extends SequentialCommandGroup {
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
       }),
-      new AutoEngageChargeStation(drive)
+      new AutoEngageChargeStation(drive, true)
     );
   }
 }
