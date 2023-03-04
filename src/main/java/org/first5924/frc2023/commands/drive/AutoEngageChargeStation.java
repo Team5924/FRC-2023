@@ -6,15 +6,17 @@ package org.first5924.frc2023.commands.drive;
 
 import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoEngageChargeStation extends CommandBase {
   private final DriveSubsystem mDrive;
   private final boolean mIsFromCenter;
-  private final Timer mTimer = new Timer();
-  private boolean mWaitingForSettle = false;
+  private double mStartSettleTimestamp;
+  private boolean misWaitingForSettle = false;
 
   /** Creates a new AutoEngageChargeStation. */
   public AutoEngageChargeStation(DriveSubsystem drive, boolean isFromCenter) {
@@ -31,28 +33,34 @@ public class AutoEngageChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (mWaitingForSettle) {
-      if (mTimer.get() > 0.5) {
-        mWaitingForSettle = false;
+    Logger.getInstance().recordOutput("Is Waiting for Settle?", misWaitingForSettle);
+    if (misWaitingForSettle) {
+      if (Timer.getFPGATimestamp() >= mStartSettleTimestamp + 1) {
+        misWaitingForSettle = false;
       }
     } else {
       if (mIsFromCenter) {
-        if (mDrive.getPitch() < AutoConstants.kAllowedChargeStationErrorDegrees) {
-          mDrive.setPercent(-AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed);
+        if (mDrive.getPitch() < -AutoConstants.kAllowedChargeStationErrorDegrees) {
+          SmartDashboard.putString("State", "Back");
+          mDrive.setPercent(-AutoConstants.kChargeStationBalanceDriveSpeed, -AutoConstants.kChargeStationBalanceDriveSpeed);
         } else if (mDrive.getPitch() > AutoConstants.kAllowedChargeStationErrorDegrees) {
-          mDrive.setPercent(AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed);
+          SmartDashboard.putString("State", "Front");
+          mDrive.setPercent(AutoConstants.kChargeStationBalanceDriveSpeed, AutoConstants.kChargeStationBalanceDriveSpeed);
         } else {
+          SmartDashboard.putString("State", "Settle");
           mDrive.setPercent(0, 0);
-          mWaitingForSettle = true;
+          misWaitingForSettle = true;
+          mStartSettleTimestamp = Timer.getFPGATimestamp();
         }
       } else {
-        if (mDrive.getPitch() < AutoConstants.kAllowedChargeStationErrorDegrees) {
-          mDrive.setPercent(AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed);
+        if (mDrive.getPitch() < -AutoConstants.kAllowedChargeStationErrorDegrees) {
+          mDrive.setPercent(AutoConstants.kChargeStationBalanceDriveSpeed, AutoConstants.kChargeStationBalanceDriveSpeed);
         } else if (mDrive.getPitch() > AutoConstants.kAllowedChargeStationErrorDegrees) {
-          mDrive.setPercent(-AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed);
+          mDrive.setPercent(-AutoConstants.kChargeStationBalanceDriveSpeed, -AutoConstants.kChargeStationBalanceDriveSpeed);
         } else {
           mDrive.setPercent(0, 0);
-          mWaitingForSettle = true;
+          misWaitingForSettle = true;
+          mStartSettleTimestamp = Timer.getFPGATimestamp();
         }
       }
     }

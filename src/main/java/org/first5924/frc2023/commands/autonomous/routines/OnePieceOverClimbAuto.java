@@ -5,6 +5,7 @@
 package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
+import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -23,21 +24,30 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelDeadlineGroup(
-        new WaitCommand(4),
+        new WaitCommand(1.25),
         new InstantCommand(() -> {
-          drive.setPercent(-0.3, -0.3);
+          drive.setPercent(-AutoConstants.kChargeStationClimbDriveSpeed, -AutoConstants.kChargeStationClimbDriveSpeed);
         })
       ),
-      new InstantCommand(() -> {
-        drive.setPercent(0, 0);
-      }),
       new ParallelDeadlineGroup(
-        new WaitCommand(2),
+        new WaitCommand(2.75),
         new InstantCommand(() -> {
-          drive.setPercent(0.3, 0.3);
+          drive.setPercent(-AutoConstants.kChargeStationDescentDriveSpeed, -AutoConstants.kChargeStationDescentDriveSpeed);
         })
       ),
-      new AutoEngageChargeStation(drive, false)
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.25),
+        new InstantCommand(() -> {
+          drive.setPercent(0, 0);
+        })
+      ),
+      new ParallelDeadlineGroup(
+        new WaitCommand(1.25),
+        new InstantCommand(() -> {
+          drive.setPercent(AutoConstants.kChargeStationClimbDriveSpeed, AutoConstants.kChargeStationClimbDriveSpeed);
+        })
+      ),
+      new AutoEngageChargeStation(drive, true)
     );
   }
 }
