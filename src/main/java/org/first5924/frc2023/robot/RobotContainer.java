@@ -11,6 +11,7 @@ import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
+import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.constants.OIConstants;
@@ -104,6 +105,7 @@ public class RobotContainer {
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
+    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY));
   }
 
   /**

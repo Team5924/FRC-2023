@@ -13,6 +13,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+
 /** Add your docs here. */
 public class PivotIOSparkMax implements PivotIO {
     private final CANSparkMax mLeaderSpark = SparkMaxFactory.createSparkMax(PivotConstants.kLeaderSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
@@ -32,4 +34,10 @@ public class PivotIOSparkMax implements PivotIO {
     public void setPercent(double percent) {
         mLeaderSpark.set(percent);
     }
+
+    @Override
+    public void setVoltage(double volts) {
+        mLeaderSpark.setVoltage(volts);
+    }
+
 }

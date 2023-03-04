@@ -5,27 +5,26 @@
 package org.first5924.frc2023.commands.pivot;
 import java.util.function.DoubleSupplier;
 
+import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
-
-import edu.wpi.first.math.MathUtil;
+import com.fasterxml.jackson.databind.ser.std.NumberSerializers.DoubleSerializer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RotatePivot extends CommandBase {
+public class SetPivot extends CommandBase {
   private final PivotSubsystem mPivot;
   private final DoubleSupplier mJoystickY;
 
-  //private final PivotIOSparkMax m_pivot;
-  //pr0ivate PivotIO m_percentage;
-  /** Creates a new RotatePivot. */
-  public RotatePivot(PivotSubsystem pivot, DoubleSupplier joystickY) {
+  /** Creates a new SetPivot. */
+  public SetPivot(PivotSubsystem pivot, DoubleSupplier joystickY) {
     mPivot = pivot;
     mJoystickY = joystickY;
 
+
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(mPivot);
+    addRequirements();
   }
-
-
 
   // Called when the command is initially scheduled.
   @Override
@@ -34,16 +33,26 @@ public class RotatePivot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mPivot.setMotorPercent(MathUtil.applyDeadband(mJoystickY.getAsDouble(), 0.05));
+    mPivot.setPIDPosition(4);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    mPivot.setMotorPercent(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (mJoystickY.getAsDouble() > 0.05) {
+      return true;
+    } 
+    else if (mJoystickY.getAsDouble() < -0.05) {
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }

@@ -6,6 +6,7 @@ package org.first5924.frc2023.subsystems.pivot;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -13,13 +14,23 @@ public class PivotSubsystem extends SubsystemBase {
   /** Creates a new PivotSubsystem. */
   private final PivotIO io;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
+  private final PIDController mPID = new PIDController(0.1, 0, 0);
+
 
   public PivotSubsystem(PivotIO io) {
     this.io = io;
   }
 
+  public double getEncoderPosition() {
+    return inputs.encoderPosition;
+  }
+
   public void setMotorPercent(double percent) {
     io.setPercent(percent);
+  }
+
+  public void setPIDPosition(double position) {
+    mPID.setSetpoint(position);
   }
 
   @Override

@@ -18,4 +18,7 @@ public interface PivotIO {
 
     public default void setPercent(double percent) {
     }
+
+    public default void setVoltage(double volts) {
+    }
 }
