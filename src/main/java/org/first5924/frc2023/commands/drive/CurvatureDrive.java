@@ -33,7 +33,7 @@ public class CurvatureDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.curvatureDrive(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband));
+    mDrive.curvatureDrive(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband), JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband) * 0.8);
   }
 
   // Called once the command ends or is interrupted.
