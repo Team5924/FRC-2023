@@ -31,6 +31,8 @@ public class DriveIOSparkMax implements DriveIO {
         mRightBackSpark.follow(mRightFrontSpark);
 
         mLeftFrontSpark.setInverted(true);
+
+        mPigeon2.configMountPose(-90, 0, 0);
     }
 
     @Override
@@ -39,7 +41,8 @@ public class DriveIOSparkMax implements DriveIO {
         inputs.rightPositionMeters = mRightEncoder.getDistance() / 2048 * DriveConstants.kWheelCircumferenceMeters;
         inputs.leftVelocityMetersPerSec = mLeftEncoder.getRate() / 2048 * DriveConstants.kWheelCircumferenceMeters;
         inputs.rightVelocityMetersPerSec = mRightEncoder.getRate() / 2048 * DriveConstants.kWheelCircumferenceMeters;
-        inputs.pigeonRotationDeg = mPigeon2.getRotation2d().getDegrees();
+        inputs.pigeonYaw = mPigeon2.getYaw();
+        inputs.pigeonPitch = mPigeon2.getPitch();
     }
 
     @Override

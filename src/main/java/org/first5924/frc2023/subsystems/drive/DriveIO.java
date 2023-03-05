@@ -9,7 +9,8 @@ public interface DriveIO {
         public double rightPositionMeters = 0.0;
         public double leftVelocityMetersPerSec = 0.0;
         public double rightVelocityMetersPerSec = 0.0;
-        public double pigeonRotationDeg = 0.0;
+        public double pigeonYaw = 0.0;
+        public double pigeonPitch = 0.0;
     }
 
     /** Updates the set of loggable inputs. */

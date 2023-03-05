@@ -33,7 +33,7 @@ public class TurnInPlace extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.turnInPlace(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kJoystickDeadband), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), OIConstants.kJoystickDeadband));
+    mDrive.turnInPlace(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband), JoystickToOutput.calculateLinear(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.

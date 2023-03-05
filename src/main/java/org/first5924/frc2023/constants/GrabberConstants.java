@@ -5,11 +5,8 @@
 package org.first5924.frc2023.constants;
 
 /** Add your docs here. */
-public class PivotConstants {
-    private PivotConstants() {}
+public class GrabberConstants {
+    private GrabberConstants() {}
 
-    public static final int kLeaderSparkPort = 8;
-    public static final int kFollowerSparkPort = 7;
-
-    public static final double kGearRatio = 70.69;
+    public static final int kSparkPort = 6;
 }
