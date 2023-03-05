@@ -1,5 +1,6 @@
 package org.first5924.frc2023.subsystems.telescope;
 
+import org.first5924.frc2023.constants.TelescopeConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -9,15 +10,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TelescopeSubsystem extends SubsystemBase {
   private final TelescopeIO io;
   private final TelescopeIOInputsAutoLogged inputs = new TelescopeIOInputsAutoLogged();
-  private final PIDController mPID = new PIDController(0.2, 0, 0);
+  private final PIDController mPID = new PIDController(0.05, 0, 0);
 
   /** Creates a new TelescopeSubsystem. */
   public TelescopeSubsystem(TelescopeIO io) {
     this.io = io;
   }
 
-  public double getEncoderPosition() {
-   return inputs.encoderRotations;
+  public double getTelescopeExtensionInches() {
+   return inputs.telescopeExtensionInches;
+  }
+
+  public double getTelescopeExtensionInchesPerSecond() {
+   return inputs.telescopeExtensionInchesPerSecond;
   }
 
   public void setPercent(double percent) {
@@ -25,11 +30,11 @@ public class TelescopeSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    io.setVoltage(MathUtil.clamp(mPID.calculate(getEncoderPosition(), position), -3, 3));
+    io.setVoltage(MathUtil.clamp(mPID.calculate(getTelescopeExtensionInches(), position), -3, 3));
   }
 
-  public void setEncoderPosition(double position) {
-    io.setEncoderPosition(position);
+  public void setEncoderFromTelescopeExtensionInches(double extensionInches) {
+    io.setEncoderPosition(extensionInches * TelescopeConstants.kGearRatio / TelescopeConstants.kSprocketCircumferenceInches);
   }
 
   @Override

@@ -7,8 +7,7 @@ package org.first5924.frc2023.robot;
 import org.first5924.frc2023.commands.autonomous.ThreePieceAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
-import org.first5924.frc2023.commands.pivot.RotatePivot;
-import org.first5924.frc2023.commands.telescope.ExtendAndRetract;
+import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
@@ -18,7 +17,6 @@ import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIOSparkMax;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.first5924.frc2023.subsystems.PivotSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -89,8 +87,7 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    mTelescope.setDefaultCommand(new ExtendAndRetract(mTelescope, mOperatorController::getRightY));
-    
+    mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
   }
 
   /**

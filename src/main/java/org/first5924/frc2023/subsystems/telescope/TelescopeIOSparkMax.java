@@ -21,7 +21,8 @@ public class TelescopeIOSparkMax implements TelescopeIO {
 
     @Override
     public void updateInputs(TelescopeIOInputs inputs) {
-        //inputs.telescopePositionDegrees = mEncoder.getPosition() * 360 / TelescopeConstants.kGearRatio;
+        inputs.telescopeExtensionInches = mEncoder.getPosition() / TelescopeConstants.kGearRatio * TelescopeConstants.kSprocketCircumferenceInches;
+        inputs.telescopeExtensionInchesPerSecond = mEncoder.getVelocity() / 60 / TelescopeConstants.kGearRatio * TelescopeConstants.kSprocketCircumferenceInches;
     }
 
     @Override

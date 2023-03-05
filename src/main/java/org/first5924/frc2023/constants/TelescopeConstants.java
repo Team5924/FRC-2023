@@ -9,4 +9,7 @@ public class TelescopeConstants {
     public TelescopeConstants() {}
 
     public static final int kSparkMaxPort = 10;
+
+    public static final double kGearRatio = 10.29;
+    public static final double kSprocketCircumferenceInches = Math.PI * 1.273;
 }

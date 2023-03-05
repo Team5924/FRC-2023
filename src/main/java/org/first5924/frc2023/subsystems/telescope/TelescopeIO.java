@@ -10,7 +10,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface TelescopeIO {
     @AutoLog
     public static class TelescopeIOInputs {
-        public double encoderRotations = 0.0;
+        public double telescopeExtensionInches = 0.0;
+        public double telescopeExtensionInchesPerSecond = 0.0;
     }
 
     /** Updates the set of loggable inputs. */

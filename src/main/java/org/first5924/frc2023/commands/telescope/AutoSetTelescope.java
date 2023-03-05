@@ -3,22 +3,18 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package org.first5924.frc2023.commands.telescope;
-import java.util.function.DoubleSupplier;
 
-import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoSetTelescope extends CommandBase {
   private final TelescopeSubsystem mTelescope;
-  private final DoubleSupplier mJoystickY;
-  private final double mPosition;
+  private final double mExtensionInches;
 
   /** Creates a new SetPivot. */
-  public AutoSetTelescope(TelescopeSubsystem telescope, DoubleSupplier joystickY, double position) {
+  public AutoSetTelescope(TelescopeSubsystem telescope, double extensionInches) {
     mTelescope = telescope;
-    mJoystickY = joystickY;
-    mPosition = position;
+    mExtensionInches = extensionInches;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(mTelescope);
@@ -31,7 +27,7 @@ public class AutoSetTelescope extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mTelescope.setPosition(mPosition);
+    mTelescope.setPosition(mExtensionInches);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,10 +39,6 @@ public class AutoSetTelescope extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(mJoystickY.getAsDouble()) > OIConstants.kJoystickDeadband) {
-      return true;
-    } else {
-      return false;
-    }
+    return Math.abs(mExtensionInches - mTelescope.getTelescopeExtensionInches()) < 0.3 && Math.abs(mTelescope.getTelescopeExtensionInchesPerSecond()) < 0.2;
   }
 }
