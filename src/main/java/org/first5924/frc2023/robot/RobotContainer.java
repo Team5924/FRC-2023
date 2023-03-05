@@ -12,6 +12,7 @@ import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
+import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
@@ -34,7 +35,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -45,22 +45,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // * SUBSYSTEMS
   private final DriveSubsystem mDrive;
   private final TelescopeSubsystem mTelescope;
-  // private final PivotSubsystem mPivot = new PivotSubsystem();
-
-  private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
 
-  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
-  private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
-
-  // * CONTROLLER & BUTTONS
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+
+  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
+  private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -75,22 +69,16 @@ public class RobotContainer {
 
       // Sim robot, instantiate physics sim IO implementations
       case SIM:
-        mDrive = new DriveSubsystem(new DriveIO() {
-        });
-        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
-        });
         mDrive = new DriveSubsystem(new DriveIO() {});
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
         break;
 
       // Replayed robot, disable IO implementations
       default:
-        mDrive = new DriveSubsystem(new DriveIO() {
-        });
-        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
-        });
         mDrive = new DriveSubsystem(new DriveIO() {});
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
         break;
@@ -122,13 +110,12 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
+    mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 3));
 
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
     mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
-    mOperatorController.y().onTrue(new InstantCommand(() -> {
-      mPivot.setEncoderFromPivotDegrees(0);
-    }));
 
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
@@ -150,7 +137,7 @@ public class RobotContainer {
       case stationary:
         return new StationaryAuto();
       default:
-      return new OnePieceAroundClimbAuto(mDrive, mAllianceChooser.get());
+        return new OnePieceAroundClimbAuto(mDrive, mAllianceChooser.get());
     }
   }
 }
