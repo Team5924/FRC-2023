@@ -11,6 +11,7 @@ import org.first5924.frc2023.commands.autonomous.routines.StationaryAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
+import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
@@ -20,6 +21,9 @@ import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
+import org.first5924.frc2023.subsystems.telescope.TelescopeIOSparkMax;
+import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
@@ -43,6 +47,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // * SUBSYSTEMS
   private final DriveSubsystem mDrive;
+  private final TelescopeSubsystem mTelescope;
+  // private final PivotSubsystem mPivot = new PivotSubsystem();
+
+  private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
 
@@ -59,12 +68,17 @@ public class RobotContainer {
       // Real robot, instantiate hardware IO implementations
       case REAL:
         mDrive = new DriveSubsystem(new DriveIOSparkMax());
+        mTelescope = new TelescopeSubsystem(new TelescopeIOSparkMax());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
         break;
 
       // Sim robot, instantiate physics sim IO implementations
       case SIM:
+        mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
+        });
         mDrive = new DriveSubsystem(new DriveIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
@@ -72,6 +86,10 @@ public class RobotContainer {
 
       // Replayed robot, disable IO implementations
       default:
+        mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
+        });
         mDrive = new DriveSubsystem(new DriveIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
@@ -104,6 +122,7 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
 
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
     mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
