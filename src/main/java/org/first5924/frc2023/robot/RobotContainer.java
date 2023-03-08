@@ -28,6 +28,9 @@ import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
+import org.first5924.frc2023.subsystems.lights.LightsIO;
+import org.first5924.frc2023.subsystems.lights.LightsIOReal;
+import org.first5924.frc2023.subsystems.lights.LightsSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
@@ -49,6 +52,7 @@ public class RobotContainer {
   private final TelescopeSubsystem mTelescope;
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
+  private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -65,6 +69,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIOSparkMax());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
+        mLights = new LightsSubsystem(new LightsIOReal());
         break;
 
       // Sim robot, instantiate physics sim IO implementations
@@ -73,6 +78,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
+        mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
       // Replayed robot, disable IO implementations
@@ -81,6 +87,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
+        mLights = new LightsSubsystem(new LightsIO() {});
         break;
     }
 
