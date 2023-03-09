@@ -32,11 +32,14 @@ import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,6 +55,8 @@ public class RobotContainer {
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+
+  
 
   private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
   private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
@@ -110,15 +115,19 @@ public class RobotContainer {
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-
+    
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 3));
 
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
-    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
+    mOperatorController.pov(170).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
+    mOperatorController.pov(90).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 90));
+    mOperatorController.pov(0).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 0));
+    mOperatorController.pov(270).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 270));
+
 
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
-    mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
+    mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber)); 
   }
 
   /**
