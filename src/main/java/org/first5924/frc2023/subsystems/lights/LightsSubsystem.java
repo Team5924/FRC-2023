@@ -32,5 +32,9 @@ public class LightsSubsystem extends SubsystemBase {
 
   public void animate(Animation animation) {
     io.animate(animation);
-}
+  }
+
+  public void clearAnimation() {
+    io.clearAnimation();
+  }
 }

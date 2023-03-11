@@ -25,4 +25,9 @@ public class LightsIOReal implements LightsIO {
     public void animate(Animation animation) {
         mCANdle.animate(animation);
     }
+
+    @Override
+    public void clearAnimation() {
+        mCANdle.clearAnimation(0);
+    }
 }

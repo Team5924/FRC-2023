@@ -17,6 +17,7 @@ import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
+import org.first5924.frc2023.commands.lights.SetLightsColorAndAnimation;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
@@ -35,6 +36,8 @@ import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.ctre.phoenix.led.FireAnimation;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -116,16 +119,16 @@ public class RobotContainer {
    */
   private void configureBindings() {
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
+    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
+
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
 
-    mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 3));
-
-    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
     mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
-
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
+    mOperatorController.a().onTrue(new SetLightsColorAndAnimation(mLights, 255, 79, 0, null));
   }
 
   /**

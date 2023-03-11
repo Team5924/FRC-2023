@@ -22,4 +22,7 @@ public interface LightsIO {
 
     public default void animate(Animation animation) {
     }
+
+    public default void clearAnimation() {
+    }
 }

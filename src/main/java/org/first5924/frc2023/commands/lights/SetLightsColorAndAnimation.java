@@ -34,6 +34,10 @@ public class SetLightsColorAndAnimation extends InstantCommand {
   @Override
   public void initialize() {
     mLights.setColor(mR, mG, mB);
-    mLights.animate(mAnimation);
+    if (mAnimation == null) {
+      mLights.clearAnimation();
+    } else {
+      mLights.animate(mAnimation);
+    }
   }
 }
