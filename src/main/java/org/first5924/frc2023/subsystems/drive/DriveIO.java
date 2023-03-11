@@ -11,6 +11,7 @@ public interface DriveIO {
         public double rightVelocityMetersPerSec = 0.0;
         public double pigeonYaw = 0.0;
         public double pigeonPitch = 0.0;
+        public long pitchTimestamp = 0;
     }
 
     /** Updates the set of loggable inputs. */

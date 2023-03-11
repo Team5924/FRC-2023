@@ -19,6 +19,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDriveOdometry mOdometry = new DifferentialDriveOdometry(getRotation2d(), 0, 0);
 
+  private Double mLastPitch = null;
+  private Long mLastPitchTimestamp = null;
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(DriveIO io) {
     this.io = io;
@@ -67,6 +70,17 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double getPitch() {
     return inputs.pigeonPitch;
+  }
+
+  public double getPitchChangePerSecond() {
+    if (mLastPitch == null || mLastPitchTimestamp == null) {
+      mLastPitch = inputs.pigeonPitch;
+      mLastPitchTimestamp = inputs.pitchTimestamp;
+    }
+    double pitchChangePerSecond = ((inputs.pigeonPitch - mLastPitch) / (inputs.pitchTimestamp - mLastPitchTimestamp));
+    mLastPitch = inputs.pigeonPitch;
+    mLastPitchTimestamp = inputs.pitchTimestamp;
+    return pitchChangePerSecond;
   }
 
   public Pose2d getPoseMeters() {
