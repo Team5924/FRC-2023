@@ -8,7 +8,7 @@ package org.first5924.frc2023.constants;
 public class TelescopeConstants {
     public TelescopeConstants() {}
 
-    public static final int kSparkMaxPort = 10;
+    public static final int kTalonPort = 10;
 
     public static final double kGearRatio = 10.29;
     public static final double kSprocketCircumferenceInches = Math.PI * 1.273;

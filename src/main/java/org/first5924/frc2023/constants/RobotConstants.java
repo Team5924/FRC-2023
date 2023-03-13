@@ -11,6 +11,7 @@ public class RobotConstants {
     public static final int kNominalVoltage = 10;
 
     public static final int kThroughBoreCPR = 8192;
+    public static final int kTalonFXIntegratedSensorCPR = 2048;
 
     public static final Mode kCurrentMode = Mode.REAL;
 

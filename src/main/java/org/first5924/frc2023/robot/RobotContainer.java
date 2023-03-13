@@ -24,7 +24,7 @@ import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
-import org.first5924.frc2023.subsystems.telescope.TelescopeIOSparkMax;
+import org.first5924.frc2023.subsystems.telescope.TelescopeIOTalonFX;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
@@ -67,7 +67,7 @@ public class RobotContainer {
       // Real robot, instantiate hardware IO implementations
       case REAL:
         mDrive = new DriveSubsystem(new DriveIOSparkMax());
-        mTelescope = new TelescopeSubsystem(new TelescopeIOSparkMax());
+        mTelescope = new TelescopeSubsystem(new TelescopeIOTalonFX());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
         mLights = new LightsSubsystem(new LightsIOReal());
