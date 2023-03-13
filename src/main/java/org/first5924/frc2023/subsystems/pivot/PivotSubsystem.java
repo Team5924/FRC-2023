@@ -5,6 +5,7 @@
 package org.first5924.frc2023.subsystems.pivot;
 
 import org.first5924.frc2023.constants.PivotConstants;
+import org.first5924.frc2023.constants.RobotConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -40,7 +41,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setEncoderFromPivotDegrees(double pivotDegrees) {
-    io.setEncoderPosition(pivotDegrees / 360 * PivotConstants.kGearRatio);
+    io.setEncoderPosition(pivotDegrees / 360 * RobotConstants.kTalonFXIntegratedSensorCPR * PivotConstants.kGearRatio);
   }
 
   @Override

@@ -6,41 +6,51 @@ package org.first5924.frc2023.subsystems.pivot;
 
 
 import org.first5924.frc2023.constants.PivotConstants;
-import org.first5924.lib.util.SparkMaxFactory;
+import org.first5924.frc2023.constants.RobotConstants;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /** Add your docs here. */
 public class PivotIOSparkMax implements PivotIO {
-    private final CANSparkMax mLeaderSpark = SparkMaxFactory.createSparkMax(PivotConstants.kLeaderSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
-    private final CANSparkMax mFollowerSpark = SparkMaxFactory.createSparkMax(PivotConstants.kFollowerSparkPort, MotorType.kBrushless, IdleMode.kBrake, 42);
-    private final RelativeEncoder mEncoder = mLeaderSpark.getEncoder();
+    private final WPI_TalonFX mLeaderTalon = new WPI_TalonFX(PivotConstants.kLeaderTalonPort);
+    private final WPI_TalonFX mFollowerTalon = new WPI_TalonFX(PivotConstants.kFollowerTalonPort);
 
     public PivotIOSparkMax() {
-        mFollowerSpark.follow(mLeaderSpark);
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.voltageCompSaturation = RobotConstants.kNominalVoltage;
+        config.supplyCurrLimit.enable = true;
+        config.supplyCurrLimit.currentLimit = 42;
+        config.supplyCurrLimit.triggerThresholdCurrent = 42;
+        config.supplyCurrLimit.triggerThresholdTime = 0.1;
+
+        mLeaderTalon.configAllSettings(config);
+        mLeaderTalon.enableVoltageCompensation(true);
+        mLeaderTalon.set(0);
+
+        mFollowerTalon.follow(mLeaderTalon);
+        mFollowerTalon.setInverted(TalonFXInvertType.FollowMaster);
     }
 
     @Override
     public void updateInputs(PivotIOInputs inputs) {
-        inputs.pivotPositionDegrees = mEncoder.getPosition() * 360 / PivotConstants.kGearRatio;
-        inputs.pivotVelocityDegreesPerSecond = mEncoder.getVelocity() / 60 * 360 / PivotConstants.kGearRatio;
+        inputs.pivotPositionDegrees = mLeaderTalon.getSelectedSensorPosition() / RobotConstants.kTalonFXIntegratedSensorCPR * 360 / PivotConstants.kGearRatio;
+        inputs.pivotVelocityDegreesPerSecond = mLeaderTalon.getSelectedSensorVelocity() / RobotConstants.kTalonFXIntegratedSensorCPR * 360 * 10 / PivotConstants.kGearRatio;
     }
 
     @Override
     public void setPercent(double percent) {
-        mLeaderSpark.set(percent);
+        mLeaderTalon.set(percent);
     }
 
     @Override
     public void setVoltage(double volts) {
-        mLeaderSpark.setVoltage(volts);
+        mLeaderTalon.setVoltage(volts);
     }
 
     @Override
     public void setEncoderPosition(double position) {
-        mEncoder.setPosition(position);
+        mLeaderTalon.setSelectedSensorPosition(position);
     }
 }

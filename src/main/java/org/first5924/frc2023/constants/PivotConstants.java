@@ -8,8 +8,8 @@ package org.first5924.frc2023.constants;
 public class PivotConstants {
     private PivotConstants() {}
 
-    public static final int kLeaderSparkPort = 8;
-    public static final int kFollowerSparkPort = 7;
+    public static final int kLeaderTalonPort = 8;
+    public static final int kFollowerTalonPort = 7;
 
     public static final double kGearRatio = 70.69;
 }
