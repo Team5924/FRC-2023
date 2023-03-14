@@ -9,7 +9,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -28,8 +27,6 @@ public class PivotSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
-    SmartDashboard.putBoolean("Pivot In Forward Slow Zone?", isInForwardSlowZone());
-    SmartDashboard.putBoolean("Pivot In Backward Slow Zone?", isInBackwardSlowZone());
     Logger.getInstance().processInputs("Pivot", inputs);
   }
 
