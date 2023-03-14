@@ -6,8 +6,9 @@ package org.first5924.frc2023.commands.autonomous;
 
 /** Add your docs here. */
 public enum AutoRoutines {
-    onePieceAroundClimb,
     onePieceOverClimb,
-    twoPieceClimb,
-    stationary
+    onePieceAroundClimb,
+    onePieceMobility,
+    onePieceStationary,
+    nothing
 }

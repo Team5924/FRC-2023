@@ -5,16 +5,19 @@
 package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
+import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
+import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
 import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
+import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -24,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class OnePieceOverClimbAuto extends SequentialCommandGroup {
   /** Creates a new DriveOneMeter. */
-  public OnePieceOverClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, TelescopeSubsystem telescope, Alliance alliance) {
+  public OnePieceOverClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -32,10 +35,17 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
-      new AutoSetPivot(pivot, -41),
-      new WaitCommand(0.3),
-      new AutoSetPivot(pivot, -32),
-      new WaitCommand(0.5),
+      new ParallelCommandGroup(
+        new AutoSetPivot(pivot, 41),
+        new AutoSetTelescope(telescope, 10)
+      ),
+      new WaitCommand(0.05),
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.75),
+        new AutoSetPivot(pivot, 38),
+        new Release(grabber)
+      ),
+      new AutoSetPivot(pivot, 41),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new ParallelDeadlineGroup(
@@ -51,10 +61,11 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
             })
           )
         ),
-        new AutoSetPivot(pivot, 23)
+        new AutoSetPivot(pivot, PivotConstants.kStartingDegrees),
+        new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
       ),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
+        new WaitCommand(0.15),
         new InstantCommand(() -> {
           drive.setPercent(0, 0);
         })

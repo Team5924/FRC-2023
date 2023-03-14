@@ -4,7 +4,6 @@
 
 package org.first5924.frc2023.commands.autonomous.routines;
 
-import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
@@ -35,13 +34,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OnePieceAroundClimbAuto extends SequentialCommandGroup {
-  private final Trajectory mOnePieceAroundClimb;
+public class OnePieceMobilityAuto extends SequentialCommandGroup {
+  private final Trajectory mOnePieceMobility;
 
-  /** Creates a new DriveOneMeter. */
-  public OnePieceAroundClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
-    mOnePieceAroundClimb = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("One Piece Around Climb", 2.5, 2), alliance);
-    Logger.getInstance().recordOutput("One Piece Around Climb", mOnePieceAroundClimb);
+  /** Creates a new OnePieceMobilityAuto. */
+  public OnePieceMobilityAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
+    mOnePieceMobility = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("One Piece Mobility", 2.5, 2), alliance);
+    Logger.getInstance().recordOutput("One Piece Mobility", mOnePieceMobility);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -62,7 +61,7 @@ public class OnePieceAroundClimbAuto extends SequentialCommandGroup {
       new AutoSetPivot(pivot, 41),
       new ParallelDeadlineGroup(
         new RamseteCommand(
-          mOnePieceAroundClimb,
+          mOnePieceMobility,
           drive::getPoseMeters,
           new RamseteController(),
           new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
@@ -75,11 +74,7 @@ public class OnePieceAroundClimbAuto extends SequentialCommandGroup {
         ),
         new AutoSetPivot(pivot, PivotConstants.kStartingDegrees),
         new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
-      ),
-      new InstantCommand(() -> {
-        drive.setVoltage(0, 0);
-      }),
-      new AutoEngageChargeStation(drive, true)
+      )
     );
   }
 }

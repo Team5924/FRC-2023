@@ -6,9 +6,10 @@ package org.first5924.frc2023.robot;
 
 import org.first5924.frc2023.commands.autonomous.AutoRoutines;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceAroundClimbAuto;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceMobilityAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceOverClimbAuto;
-import org.first5924.frc2023.commands.autonomous.routines.StationaryAuto;
-import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceStationaryAuto;
+import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
@@ -94,12 +95,11 @@ public class RobotContainer {
     mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
     mAllianceChooser.addOption("Red", Alliance.Red);
 
-    mAutoChooser.addDefaultOption("One Piece Around Climb", AutoRoutines.onePieceAroundClimb);
-    mAutoChooser.addOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
-    mAutoChooser.addOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
-    mAutoChooser.addOption("Stationary", AutoRoutines.stationary);
-
-    //mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getRightY));
+    mAutoChooser.addDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
+    mAutoChooser.addOption("One Piece Around Climb", AutoRoutines.onePieceAroundClimb);
+    mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
+    mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
+    mAutoChooser.addOption("Nothing", AutoRoutines.nothing);
 
     // Configure the trigger bindings
     configureBindings();
@@ -142,16 +142,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     switch (mAutoChooser.get()) {
-      case onePieceAroundClimb:
-        return new OnePieceAroundClimbAuto(mDrive, mAllianceChooser.get());
       case onePieceOverClimb:
-        return new OnePieceOverClimbAuto(mDrive, mPivot, mTelescope, mAllianceChooser.get());
-      case twoPieceClimb:
-        return new TwoPieceClimbAuto(mDrive, mAllianceChooser.get());
-      case stationary:
-        return new StationaryAuto();
+        return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
+      case onePieceAroundClimb:
+        return new OnePieceAroundClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+      case onePieceMobility:
+        return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+      case onePieceStationary:
+        return new OnePieceStationaryAuto(mPivot, mGrabber, mTelescope);
+      case nothing:
+        return new NothingAuto(mPivot, mTelescope);
       default:
-        return new OnePieceAroundClimbAuto(mDrive, mAllianceChooser.get());
+        return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
     }
   }
 }
