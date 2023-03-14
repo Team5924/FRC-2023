@@ -8,8 +8,10 @@ import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.constants.PivotConstants;
+import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
+import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,12 +24,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class OnePieceOverClimbAuto extends SequentialCommandGroup {
   /** Creates a new DriveOneMeter. */
-  public OnePieceOverClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, Alliance alliance) {
+  public OnePieceOverClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, TelescopeSubsystem telescope, Alliance alliance) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> {
-        pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingPositionDegrees);
+        pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
+        telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
       new AutoSetPivot(pivot, -41),
       new WaitCommand(0.3),

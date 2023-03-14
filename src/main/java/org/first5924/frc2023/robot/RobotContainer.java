@@ -145,7 +145,7 @@ public class RobotContainer {
       case onePieceAroundClimb:
         return new OnePieceAroundClimbAuto(mDrive, mAllianceChooser.get());
       case onePieceOverClimb:
-        return new OnePieceOverClimbAuto(mDrive, mPivot, mAllianceChooser.get());
+        return new OnePieceOverClimbAuto(mDrive, mPivot, mTelescope, mAllianceChooser.get());
       case twoPieceClimb:
         return new TwoPieceClimbAuto(mDrive, mAllianceChooser.get());
       case stationary:

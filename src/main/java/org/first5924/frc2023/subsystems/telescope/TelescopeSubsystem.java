@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TelescopeSubsystem extends SubsystemBase {
@@ -22,6 +23,8 @@ public class TelescopeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
+    SmartDashboard.putBoolean("Telescope In Forward Slow Zone?", isInForwardSlowZone());
+    SmartDashboard.putBoolean("Telescope In Backward Slow Zone?", isInBackwardSlowZone());
     Logger.getInstance().processInputs("Telescope", inputs);
   }
 
@@ -35,6 +38,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
   public void setPercent(double percent) {
     io.setPercent(percent);
+    SmartDashboard.putNumber("Telescope percent", percent);
   }
 
   public void setPosition(double position) {
@@ -43,5 +47,13 @@ public class TelescopeSubsystem extends SubsystemBase {
 
   public void setEncoderFromTelescopeExtensionInches(double extensionInches) {
     io.setEncoderPosition(extensionInches * TelescopeConstants.kGearRatio / TelescopeConstants.kSprocketCircumferenceInches * RobotConstants.kTalonFXIntegratedSensorCPR);
+  }
+
+  public boolean isInForwardSlowZone() {
+    return getTelescopeExtensionInches() >= TelescopeConstants.kMaxForwardExtensionInches - TelescopeConstants.kSlowZoneInches;
+  }
+
+  public boolean isInBackwardSlowZone() {
+    return getTelescopeExtensionInches() <= TelescopeConstants.kMaxBackwardExtensionInches + TelescopeConstants.kSlowZoneInches;
   }
 }
