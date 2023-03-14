@@ -10,6 +10,6 @@ public class TelescopeConstants {
 
     public static final int kTalonPort = 10;
 
-    public static final double kGearRatio = 10.29;
-    public static final double kSprocketCircumferenceInches = Math.PI * 1.273;
+    public static final double kGearRatio = 11.43;
+    public static final double kSprocketCircumferenceInches = Math.PI * 1.29;
 }

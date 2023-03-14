@@ -7,6 +7,7 @@ package org.first5924.frc2023.subsystems.telescope;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -24,6 +25,8 @@ public class TelescopeIOTalonFX implements TelescopeIO {
 
         mTelescopeTalon.configAllSettings(config);
         mTelescopeTalon.enableVoltageCompensation(true);
+        mTelescopeTalon.setNeutralMode(NeutralMode.Brake);
+        // mTelescopeTalon.setInverted(true);
         mTelescopeTalon.set(0);
     }
 
