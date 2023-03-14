@@ -16,12 +16,23 @@ public class TurnInPlace extends CommandBase {
   private final DriveSubsystem mDrive;
   private final DoubleSupplier mLeftJoystickY;
   private final DoubleSupplier mRightJoystickX;
+  private final double mMultiplier;
 
   /** Creates a new CurvatureDrive. */
   public TurnInPlace(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX) {
     mDrive = drive;
     mLeftJoystickY = leftJoystickY;
     mRightJoystickX = rightJoystickX;
+    mMultiplier = 1;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(mDrive);
+  }
+
+  public TurnInPlace(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX, double multiplier) {
+    mDrive = drive;
+    mLeftJoystickY = leftJoystickY;
+    mRightJoystickX = rightJoystickX;
+    mMultiplier = multiplier;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(mDrive);
   }
@@ -33,7 +44,7 @@ public class TurnInPlace extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.turnInPlace(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband), JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband));
+    mDrive.turnInPlace(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband) * mMultiplier, JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.

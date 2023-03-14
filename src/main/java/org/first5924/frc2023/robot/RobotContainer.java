@@ -17,7 +17,6 @@ import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
-import org.first5924.frc2023.commands.lights.SetLightsColorAndAnimation;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
@@ -29,9 +28,9 @@ import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
-import org.first5924.frc2023.subsystems.lights.LightsIO;
-import org.first5924.frc2023.subsystems.lights.LightsIOReal;
-import org.first5924.frc2023.subsystems.lights.LightsSubsystem;
+// import org.first5924.frc2023.subsystems.lights.LightsIO;
+// import org.first5924.frc2023.subsystems.lights.LightsIOReal;
+// import org.first5924.frc2023.subsystems.lights.LightsSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
@@ -53,7 +52,7 @@ public class RobotContainer {
   private final TelescopeSubsystem mTelescope;
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
-  private final LightsSubsystem mLights;
+  // private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -70,7 +69,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIOTalonFX());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
-        mLights = new LightsSubsystem(new LightsIOReal());
+        // mLights = new LightsSubsystem(new LightsIOReal());
         break;
 
       // Sim robot, instantiate physics sim IO implementations
@@ -79,7 +78,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        mLights = new LightsSubsystem(new LightsIO() {});
+        // mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
       // Replayed robot, disable IO implementations
@@ -88,7 +87,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        mLights = new LightsSubsystem(new LightsIO() {});
+        // mLights = new LightsSubsystem(new LightsIO() {});
         break;
     }
 
@@ -116,17 +115,24 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Driver Left Stick
+    // Driver Right Stick
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    // Driver Left Bumper
+    mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    // Driver Right Bumper
+    mDriverController.rightBumper().whileTrue(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
+    // Driver Left Bumper and Right Bumper
+    mDriverController.leftBumper().and(mDriverController.rightBumper()).whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
+
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
 
-    mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
 
     mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 3));
     mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
-    mOperatorController.a().onTrue(new SetLightsColorAndAnimation(mLights, 255, 79, 0, null));
   }
 
   /**
