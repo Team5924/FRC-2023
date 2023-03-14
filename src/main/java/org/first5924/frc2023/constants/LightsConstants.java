@@ -8,5 +8,5 @@ package org.first5924.frc2023.constants;
 public class LightsConstants {
     private LightsConstants() {}
 
-    public static final int kCANdlePort = 11;
+    public static final int kCANdlePort = 9;
 }
