@@ -7,6 +7,7 @@ package org.first5924.frc2023.commands.autonomous.routines;
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.constants.AutoConstants;
+import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 
@@ -26,7 +27,7 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> {
-        pivot.setEncoderFromPivotDegrees(23);
+        pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingPositionDegrees);
       }),
       new AutoSetPivot(pivot, -41),
       new WaitCommand(0.3),

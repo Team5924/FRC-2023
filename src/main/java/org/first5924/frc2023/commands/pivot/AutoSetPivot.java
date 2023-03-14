@@ -39,7 +39,7 @@ public class AutoSetPivot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(mPosition - mPivot.getEncoderPosition()) < 2 && Math.abs(mPivot.getEncoderVelocity()) < 1) {
+    if (Math.abs(mPosition - mPivot.getPivotPositionDegrees()) < 2 && Math.abs(mPivot.getPivotVelocityDegreesPerSecond()) < 1) {
       return true;
     } else {
       return false;

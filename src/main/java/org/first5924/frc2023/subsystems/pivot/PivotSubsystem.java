@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -23,11 +24,20 @@ public class PivotSubsystem extends SubsystemBase {
     this.io = io;
   }
 
-  public double getEncoderPosition() {
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    io.updateInputs(inputs);
+    SmartDashboard.putBoolean("Pivot In Forward Slow Zone?", isInForwardSlowZone());
+    SmartDashboard.putBoolean("Pivot In Backward Slow Zone?", isInBackwardSlowZone());
+    Logger.getInstance().processInputs("Pivot", inputs);
+  }
+
+  public double getPivotPositionDegrees() {
     return inputs.pivotPositionDegrees;
   }
 
-  public double getEncoderVelocity() {
+  public double getPivotVelocityDegreesPerSecond() {
     return inputs.pivotVelocityDegreesPerSecond;
   }
 
@@ -36,17 +46,18 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    io.setVoltage(MathUtil.clamp(mPID.calculate(getEncoderPosition(), position), -3, 3));
+    io.setVoltage(MathUtil.clamp(mPID.calculate(getPivotPositionDegrees(), position), -3, 3));
   }
 
   public void setEncoderFromPivotDegrees(double pivotDegrees) {
     io.setEncoderPosition(pivotDegrees / 360 * PivotConstants.kGearRatio);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    io.updateInputs(inputs);
-    Logger.getInstance().processInputs("Pivot", inputs);
+  public boolean isInForwardSlowZone() {
+    return getPivotPositionDegrees() >= PivotConstants.kMaxForwardDegrees - PivotConstants.kSlowZoneDegrees;
+  }
+
+  public boolean isInBackwardSlowZone() {
+    return getPivotPositionDegrees() <= PivotConstants.kMaxBackwardDegrees + PivotConstants.kSlowZoneDegrees;
   }
 }
