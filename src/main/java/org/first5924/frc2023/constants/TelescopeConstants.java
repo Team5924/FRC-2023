@@ -8,8 +8,17 @@ package org.first5924.frc2023.constants;
 public class TelescopeConstants {
     public TelescopeConstants() {}
 
-    public static final int kSparkMaxPort = 10;
+    public static final int kTalonPort = 10;
 
-    public static final double kGearRatio = 10.29;
-    public static final double kSprocketCircumferenceInches = Math.PI * 1.273;
+    public static final double kGearRatio = 11.43;
+    public static final double kSprocketCircumferenceInches = Math.PI * 1.29;
+
+    public static final double kSpeedMultiplier = 1;
+
+    public static final double kSlowZoneSpeedMax = 0.1;
+
+    public static final double kStartingExtensionInches = 2;
+    public static final double kMaxForwardExtensionInches = 16;
+    public static final double kMaxBackwardExtensionInches = 4;
+    public static final double kSlowZoneInches = 3;
 }
