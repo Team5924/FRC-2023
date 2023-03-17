@@ -16,7 +16,7 @@ public class GrabberIOSparkMax implements GrabberIO {
     private final CANSparkMax mGrabberSpark = SparkMaxFactory.createSparkMax(GrabberConstants.kSparkPort, MotorType.kBrushed, IdleMode.kBrake, 42);
 
     public GrabberIOSparkMax() {
-
+        mGrabberSpark.setInverted(true);
     }
 
     @Override
