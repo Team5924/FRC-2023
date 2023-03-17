@@ -10,6 +10,6 @@ public class AutoConstants {
 
     public static final double kAllowedChargeStationErrorDegrees = 5;
     public static final double kChargeStationBalanceDriveSpeed = 0.1;
-    public static final double kChargeStationClimbDriveSpeed = 0.5;
-    public static final double kChargeStationDescentDriveSpeed = 0.25;
+    public static final double kChargeStationDriveSpeed = 0.25;
+    public static final double kChargeStationDescentSpeed = 0.125;
 }
