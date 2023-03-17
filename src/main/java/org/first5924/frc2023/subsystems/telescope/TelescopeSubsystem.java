@@ -16,6 +16,7 @@ public class TelescopeSubsystem extends SubsystemBase {
   /** Creates a new TelescopeSubsystem. */
   public TelescopeSubsystem(TelescopeIO io) {
     this.io = io;
+    setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
   }
 
   @Override

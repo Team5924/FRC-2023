@@ -21,6 +21,7 @@ public class PivotSubsystem extends SubsystemBase {
 
   public PivotSubsystem(PivotIO io) {
     this.io = io;
+    setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
   }
 
   @Override
