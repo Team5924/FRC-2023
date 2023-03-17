@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -99,9 +98,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     io.setPercent(leftPercent, rightPercent);
-
-    SmartDashboard.putNumber("Left %", leftPercent);
-    SmartDashboard.putNumber("Right %", rightPercent);
   }
 
   public void turnInPlace(double xSpeed, double zRotation) {
