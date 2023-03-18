@@ -11,14 +11,14 @@ public class PivotConstants {
     public static final int kLeaderSparkPort = 8;
     public static final int kFollowerSparkPort = 7;
 
-    public static final double kGearRatio = 70.69;
+    public static final double kGearRatio = 131.22;
 
     public static final double kSpeedMultiplier = 0.55;
 
     public static final double kSlowZoneSpeedMax = 0.1;
 
-    public static final double kStartingDegrees = -90;
-    public static final double kMaxForwardDegrees = -45;
-    public static final double kMaxBackwardDegrees = -102.5;
-    public static final double kSlowZoneDegrees = 15;
+    public static final double kStartingDegrees = 0;
+    public static final double kMaxForwardDegrees = 115;
+    public static final double kMaxBackwardDegrees = -115;
+    public static final double kSlowZoneDegrees = 35;
 }

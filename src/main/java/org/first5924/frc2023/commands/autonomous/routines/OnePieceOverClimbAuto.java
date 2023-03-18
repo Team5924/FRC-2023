@@ -4,10 +4,10 @@
 
 package org.first5924.frc2023.commands.autonomous.routines;
 
+import org.first5924.frc2023.commands.drive.AutoDrivePercent;
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
-import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
 import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
@@ -16,8 +16,7 @@ import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand; 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -35,47 +34,18 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
-      new ParallelCommandGroup(
-        new AutoSetPivot(pivot, 41),
-        new AutoSetTelescope(telescope, 10)
-      ),
-      new WaitCommand(0.05),
+      new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.75),
-        new AutoSetPivot(pivot, 38),
+        new WaitCommand(0.55),
         new Release(grabber)
       ),
-      new AutoSetPivot(pivot, 41),
       new ParallelDeadlineGroup(
-        new SequentialCommandGroup(
-          new ParallelDeadlineGroup(
-            new WaitCommand(1.25),
-            new InstantCommand(() -> {
-              drive.setPercent(-AutoConstants.kChargeStationClimbDriveSpeed, -AutoConstants.kChargeStationClimbDriveSpeed);
-            })
-          ),
-          new ParallelDeadlineGroup(
-            new WaitCommand(2.75),
-            new InstantCommand(() -> {
-              drive.setPercent(-AutoConstants.kChargeStationDescentDriveSpeed, -AutoConstants.kChargeStationDescentDriveSpeed);
-            })
-          )
-        ),
-        new AutoSetPivot(pivot, PivotConstants.kStartingDegrees),
-        new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
+        new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 3.25),
+        new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
       ),
-      new ParallelDeadlineGroup(
-        new WaitCommand(0.15),
-        new InstantCommand(() -> {
-          drive.setPercent(0, 0);
-        })
-      ),
-      new ParallelDeadlineGroup(
-        new WaitCommand(1.25),
-        new InstantCommand(() -> {
-          drive.setPercent(AutoConstants.kChargeStationClimbDriveSpeed, AutoConstants.kChargeStationClimbDriveSpeed);
-        })
-      ),
+      new AutoDrivePercent(drive, -AutoConstants.kChargeStationDescentSpeed, -AutoConstants.kChargeStationDescentSpeed, 3.9),
+      new AutoDrivePercent(drive, 0, 0, 0.25),
+      new AutoDrivePercent(drive, AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed, 2.25),
       new AutoEngageChargeStation(drive, true)
     );
   }

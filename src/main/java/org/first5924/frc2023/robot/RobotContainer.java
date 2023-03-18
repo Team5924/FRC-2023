@@ -13,9 +13,7 @@ import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
-import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
-import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.constants.OIConstants;
@@ -115,8 +113,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Driver Left Stick
-    // Driver Right Stick
+    // Driver Left Stick and Driver Right Stick
     mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     // Driver Left Bumper
     mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
@@ -125,13 +122,13 @@ public class RobotContainer {
     // Driver Left Bumper and Right Bumper
     mDriverController.leftBumper().and(mDriverController.rightBumper()).whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
 
-    mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
+    // Operator Left Stick
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
-
-
-    mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 3));
-    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
+    // Operator Right Stick
+    mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
+    // Operator Left Trigger
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
+    // Operator Right Trigger
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
   }
 
@@ -147,7 +144,7 @@ public class RobotContainer {
       case onePieceAroundClimb:
         return new OnePieceAroundClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
       case onePieceMobility:
-        return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+        return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceStationary:
         return new OnePieceStationaryAuto(mPivot, mGrabber, mTelescope);
       case nothing:

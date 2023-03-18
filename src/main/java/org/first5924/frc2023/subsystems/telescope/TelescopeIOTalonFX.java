@@ -26,7 +26,7 @@ public class TelescopeIOTalonFX implements TelescopeIO {
         mTelescopeTalon.configAllSettings(config);
         mTelescopeTalon.enableVoltageCompensation(true);
         mTelescopeTalon.setNeutralMode(NeutralMode.Brake);
-        // mTelescopeTalon.setInverted(true);
+        mTelescopeTalon.setInverted(true);
         mTelescopeTalon.set(0);
     }
 

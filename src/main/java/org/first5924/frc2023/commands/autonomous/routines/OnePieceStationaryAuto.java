@@ -6,7 +6,6 @@ package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
-import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
@@ -14,7 +13,6 @@ import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -32,21 +30,12 @@ public class OnePieceStationaryAuto extends SequentialCommandGroup {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
-      new ParallelCommandGroup(
-        new AutoSetPivot(pivot, 41),
-        new AutoSetTelescope(telescope, 10)
-      ),
-      new WaitCommand(0.05),
+      new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.75),
-        new AutoSetPivot(pivot, 38),
+        new WaitCommand(0.55),
         new Release(grabber)
       ),
-      new AutoSetPivot(pivot, 41),
-      new ParallelCommandGroup(
-        new AutoSetPivot(pivot, PivotConstants.kStartingDegrees),
-        new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
-      )
+      new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
     );
   }
 }
