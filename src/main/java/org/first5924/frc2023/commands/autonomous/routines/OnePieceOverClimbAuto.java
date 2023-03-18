@@ -4,6 +4,7 @@
 
 package org.first5924.frc2023.commands.autonomous.routines;
 
+import org.first5924.frc2023.commands.drive.AutoDrivePercent;
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
@@ -39,32 +40,12 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
         new Release(grabber)
       ),
       new ParallelDeadlineGroup(
-        new ParallelDeadlineGroup(
-          new WaitCommand(3.25),
-          new InstantCommand(() -> {
-            drive.setPercent(-AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed);
-          })
-        ),
+        new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 3.25),
         new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
       ),
-      new ParallelDeadlineGroup(
-        new WaitCommand(3.9),
-        new InstantCommand(() -> {
-          drive.setPercent(-AutoConstants.kChargeStationDescentSpeed, -AutoConstants.kChargeStationDescentSpeed);
-        })
-      ),
-      new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
-        new InstantCommand(() -> {
-          drive.setPercent(0, 0);
-        })
-      ),
-      new ParallelDeadlineGroup(
-        new WaitCommand(2.25),
-        new InstantCommand(() -> {
-          drive.setPercent(AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed);
-        })
-      ),
+      new AutoDrivePercent(drive, -AutoConstants.kChargeStationDescentSpeed, -AutoConstants.kChargeStationDescentSpeed, 3.9),
+      new AutoDrivePercent(drive, 0, 0, 0.25),
+      new AutoDrivePercent(drive, AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed, 2.25),
       new AutoEngageChargeStation(drive, true)
     );
   }
