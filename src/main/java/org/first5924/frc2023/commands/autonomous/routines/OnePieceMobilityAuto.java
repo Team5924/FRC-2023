@@ -6,28 +6,15 @@ package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
-import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
-import org.first5924.frc2023.constants.DriveConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-import org.littletonrobotics.junction.Logger;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -35,12 +22,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class OnePieceMobilityAuto extends SequentialCommandGroup {
-  private final Trajectory mOnePieceMobility;
-
   /** Creates a new OnePieceMobilityAuto. */
-  public OnePieceMobilityAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
-    mOnePieceMobility = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("One Piece Mobility", 2.5, 2), alliance);
-    Logger.getInstance().recordOutput("One Piece Mobility", mOnePieceMobility);
+  public OnePieceMobilityAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -48,32 +31,19 @@ public class OnePieceMobilityAuto extends SequentialCommandGroup {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
-      new ParallelCommandGroup(
-        new AutoSetPivot(pivot, 41),
-        new AutoSetTelescope(telescope, 10)
-      ),
-      new WaitCommand(0.05),
+      new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.75),
-        new AutoSetPivot(pivot, 38),
+        new WaitCommand(0.55),
         new Release(grabber)
       ),
-      new AutoSetPivot(pivot, 41),
       new ParallelDeadlineGroup(
-        new RamseteCommand(
-          mOnePieceMobility,
-          drive::getPoseMeters,
-          new RamseteController(),
-          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-          DriveConstants.kKinematics,
-          drive::getWheelSpeeds,
-          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-          drive::setVoltage,
-          drive
+        new ParallelDeadlineGroup(
+          new WaitCommand(3.25),
+          new InstantCommand(() -> {
+            drive.setPercent(-0.275, -0.275);
+          })
         ),
-        new AutoSetPivot(pivot, PivotConstants.kStartingDegrees),
-        new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
+        new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
       )
     );
   }
