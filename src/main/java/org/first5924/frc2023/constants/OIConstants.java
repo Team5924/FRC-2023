@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package org.first5924.frc2023.constants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -12,8 +12,12 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+public final class OIConstants {
+  private OIConstants() {}
+
+  public static final int kDriverControllerPort = 0;
+  public static final int kOperatorControllerPort = 1;
+
+  public static final double kDriverJoystickDeadband = 0.04;
+  public static final double kOperatorJoystickDeadband = 0.1;
 }
