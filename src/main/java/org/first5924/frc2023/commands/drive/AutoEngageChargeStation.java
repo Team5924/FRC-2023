@@ -32,7 +32,7 @@ public class AutoEngageChargeStation extends CommandBase {
   @Override
   public void execute() {
     if (misWaitingForSettle) {
-      if (Timer.getFPGATimestamp() >= mStartSettleTimestamp + 1) {
+      if (Timer.getFPGATimestamp() >= mStartSettleTimestamp + 1.15) {
         misWaitingForSettle = false;
       }
     } else {

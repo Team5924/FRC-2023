@@ -16,6 +16,7 @@ import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
+import org.first5924.frc2023.commands.grabber.SlowRelease;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.RobotConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
@@ -60,7 +61,7 @@ public class RobotContainer {
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
+  // private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
   private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -97,11 +98,11 @@ public class RobotContainer {
         break;
     }
 
-    mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
-    mAllianceChooser.addOption("Red", Alliance.Red);
+    // mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
+    // mAllianceChooser.addOption("Red", Alliance.Red);
 
     mAutoChooser.addDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
-    mAutoChooser.addOption("One Piece Around Climb", AutoRoutines.onePieceAroundClimb);
+    // mAutoChooser.addOption("One Piece Around Climb", AutoRoutines.onePieceAroundClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
     mAutoChooser.addOption("Nothing", AutoRoutines.nothing);
@@ -137,6 +138,8 @@ public class RobotContainer {
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     // Operator Right Trigger
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
+    // Operator Left Bumper
+    mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
   }
 
   /**
@@ -148,8 +151,8 @@ public class RobotContainer {
     switch (mAutoChooser.get()) {
       case onePieceOverClimb:
         return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
-      case onePieceAroundClimb:
-        return new OnePieceAroundClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+      // case onePieceAroundClimb:
+      //   return new OnePieceAroundClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
       case onePieceMobility:
         return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceStationary:

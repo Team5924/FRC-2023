@@ -5,7 +5,7 @@
 package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.drive.AutoDrivePercent;
-import org.first5924.frc2023.commands.grabber.Release;
+import org.first5924.frc2023.commands.grabber.SlowRelease;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
@@ -35,7 +35,7 @@ public class OnePieceMobilityAuto extends SequentialCommandGroup {
       new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
-        new Release(grabber)
+        new SlowRelease(grabber)
       ),
       new ParallelDeadlineGroup(
         new AutoDrivePercent(drive, -0.275, -0.275, 3.25),
