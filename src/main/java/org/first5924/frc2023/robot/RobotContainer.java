@@ -150,7 +150,7 @@ public class RobotContainer {
       case nothing:
         return new NothingAuto(mPivot, mTelescope);
       default:
-        return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
+        return new NothingAuto(mPivot, mTelescope);
     }
   }
 }
