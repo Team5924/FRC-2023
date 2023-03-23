@@ -13,7 +13,9 @@ import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
+import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
+import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.grabber.SlowRelease;
@@ -140,6 +142,10 @@ public class RobotContainer {
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
+
+    mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 6));
+    
+    mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
   }
 
   /**
