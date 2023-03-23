@@ -22,6 +22,7 @@ import org.first5924.frc2023.commands.grabber.SlowRelease;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.RobotConstants;
+import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
@@ -144,17 +145,8 @@ public class RobotContainer {
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
 
-    //mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 6));
-    //
-    //mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
-    //Set pivot for substation/grid
-    //mOperatorController.pov(35).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
-    //mOperatorController.pov(90).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
-    //mOperatorController.pov(135).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
-    //mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
-    //mOperatorController.pov(225).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
-    //mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
-
+    //Keybinds for intake and outtake positions
+    // For Pivot
     mOperatorController.a().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
     mOperatorController.b().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
     mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
@@ -162,6 +154,15 @@ public class RobotContainer {
 
     mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
     mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+
+    // For Telescope
+    mOperatorController.a().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup));
+    mOperatorController.b().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone));
+    mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube));
+    mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
+
+    mOperatorController.pov(0).whileTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation));
+    mOperatorController.pov(180).whileTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation));
 
 
   }
