@@ -55,7 +55,7 @@ public class RobotContainer {
   private final TelescopeSubsystem mTelescope;
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
-  private final VisionSubsystem mVision;
+  // private final VisionSubsystem mVision;
   // private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -73,7 +73,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIOTalonFX());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
-        mVision = new VisionSubsystem(new VisionIOReal());
+        // mVision = new VisionSubsystem(new VisionIOReal());
         // mLights = new LightsSubsystem(new LightsIOReal());
         break;
 
@@ -83,7 +83,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        mVision = new VisionSubsystem(new VisionIO() {});
+        // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
@@ -93,7 +93,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        mVision = new VisionSubsystem(new VisionIO() {});
+        // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
     }
