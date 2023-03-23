@@ -35,7 +35,7 @@ public class TelescopeSubsystem extends SubsystemBase {
   }
 
   public void setPercent(double percent) {
-    io.setPercent(percent);
+    io.setVoltage(percent * RobotConstants.kNominalVoltage);
   }
 
   public void setPosition(double position) {
