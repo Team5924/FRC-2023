@@ -144,16 +144,26 @@ public class RobotContainer {
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
 
-    mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 6));
-    
-    mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
+    //mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getRightY, 6));
+    //
+    //mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, 180));
     //Set pivot for substation/grid
-    mOperatorController.pov(35).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(90).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
-    mOperatorController.pov(135).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
-    mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
-    mOperatorController.pov(225).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
-    mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
+    //mOperatorController.pov(35).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
+    //mOperatorController.pov(90).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+    //mOperatorController.pov(135).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
+    //mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
+    //mOperatorController.pov(225).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
+    //mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
+
+    mOperatorController.a().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
+    mOperatorController.b().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
+    mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
+    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
+
+    mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
+    mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+
+
   }
 
   /**
