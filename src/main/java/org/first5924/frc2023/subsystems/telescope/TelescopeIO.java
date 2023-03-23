@@ -18,9 +18,6 @@ public interface TelescopeIO {
     public default void updateInputs(TelescopeIOInputs inputs) {
     }
 
-    public default void setPercent(double percent) {
-    }
-
     public default void setVoltage(double volts) {
     }
 
