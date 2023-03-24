@@ -30,9 +30,9 @@ import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIOTalonFX;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-import org.first5924.frc2023.subsystems.vision.VisionSubsystem;
-import org.first5924.frc2023.subsystems.vision.VisionIO;
-import org.first5924.frc2023.subsystems.vision.VisionIOReal;
+// import org.first5924.frc2023.subsystems.vision.VisionSubsystem;
+// import org.first5924.frc2023.subsystems.vision.VisionIO;
+// import org.first5924.frc2023.subsystems.vision.VisionIOReal;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
@@ -109,6 +109,8 @@ public class RobotContainer {
     mAutoChooser.addDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
+    mAutoChooser.addOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
+    mAutoChooser.addOption("Three Piece", AutoRoutines.threePiece);
     mAutoChooser.addOption("Nothing", AutoRoutines.nothing);
 
     // Configure the trigger bindings
