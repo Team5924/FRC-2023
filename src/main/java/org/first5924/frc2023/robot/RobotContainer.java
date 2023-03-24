@@ -5,10 +5,11 @@
 package org.first5924.frc2023.robot;
 
 import org.first5924.frc2023.commands.autonomous.AutoRoutines;
-import org.first5924.frc2023.commands.autonomous.routines.OnePieceAroundClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceMobilityAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceOverClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceStationaryAuto;
+import org.first5924.frc2023.commands.autonomous.routines.ThreePieceAuto;
+import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
@@ -61,7 +62,7 @@ public class RobotContainer {
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  // private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
+  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
   private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -98,11 +99,10 @@ public class RobotContainer {
         break;
     }
 
-    // mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
-    // mAllianceChooser.addOption("Red", Alliance.Red);
+    mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAllianceChooser.addOption("Red", Alliance.Red);
 
     mAutoChooser.addDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
-    // mAutoChooser.addOption("One Piece Around Climb", AutoRoutines.onePieceAroundClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
     mAutoChooser.addOption("Nothing", AutoRoutines.nothing);
@@ -151,12 +151,14 @@ public class RobotContainer {
     switch (mAutoChooser.get()) {
       case onePieceOverClimb:
         return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
-      // case onePieceAroundClimb:
-      //   return new OnePieceAroundClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
       case onePieceMobility:
         return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceStationary:
         return new OnePieceStationaryAuto(mPivot, mGrabber, mTelescope);
+      case twoPieceClimb:
+        return new TwoPieceClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+      case threePiece:
+        return new ThreePieceAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
       case nothing:
         return new NothingAuto(mPivot, mTelescope);
       default:
