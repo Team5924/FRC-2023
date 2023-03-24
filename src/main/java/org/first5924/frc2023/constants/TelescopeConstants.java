@@ -15,7 +15,14 @@ public class TelescopeConstants {
 
     public static final double kSpeedMultiplier = 0.5;
 
-    public static final double kSlowZoneSpeedMax = 0.15;
-
     public static final double kStartingExtensionInches = 2.75;
+
+    //All specific telescope lengths
+    public static final double kMiddleGridCube = 17.75;
+    public static final double kMiddleGridCone = 23.75;
+    public static final double kTopGridCube = 23.75;
+
+    public static final double kSingleSubstation = 60;
+    public static final double kDoubleSubstation = 57;
+    public static final double kGroundPickup = 5.75;
 }

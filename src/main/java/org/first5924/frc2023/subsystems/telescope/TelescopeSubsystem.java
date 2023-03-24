@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TelescopeSubsystem extends SubsystemBase {
   private final TelescopeIO io;
   private final TelescopeIOInputsAutoLogged inputs = new TelescopeIOInputsAutoLogged();
-  private final PIDController mPID = new PIDController(0.001, 0, 0);
+  private final PIDController mPID = new PIDController(10, 0, 0);
 
   /** Creates a new TelescopeSubsystem. */
   public TelescopeSubsystem(TelescopeIO io) {
@@ -35,7 +35,7 @@ public class TelescopeSubsystem extends SubsystemBase {
   }
 
   public void setPercent(double percent) {
-    io.setPercent(percent);
+    io.setVoltage(percent * RobotConstants.kNominalVoltage);
   }
 
   public void setPosition(double position) {

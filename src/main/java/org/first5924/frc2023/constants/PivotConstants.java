@@ -16,4 +16,15 @@ public class PivotConstants {
     public static final double kSpeedMultiplier = 0.16; //lower this, delete the unused constants after
 
     public static final double kStartingDegrees = 0;
+
+    //All specific pivot angles
+    public static final double kMiddleGridCube = 73;
+    public static final double kMiddleGridCone = 61;
+    public static final double kTopGridCube = 61;
+
+
+    public static final double kSingleSubstation = 60;
+    public static final double kDoubleSubstation = 57;
+    public static final double kGroundPickup = 113;
+
 }
