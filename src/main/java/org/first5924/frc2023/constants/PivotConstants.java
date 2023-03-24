@@ -22,7 +22,7 @@ public class PivotConstants {
     public static final double kMaxBackwardDegrees = -115;
     public static final double kSlowZoneDegrees = 35;
 
-    //All specific pivot angles (currently placeholders)
+    //All specific pivot angles
     public static final double kMiddleGridCube = 73;
     public static final double kMiddleGridCone = 61;
     public static final double kTopGridCube = 61;
