@@ -14,12 +14,16 @@ import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.drive.CurvatureDrive;
 import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
+import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
+import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
 import org.first5924.frc2023.commands.grabber.SlowRelease;
 import org.first5924.frc2023.constants.OIConstants;
+import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.RobotConstants;
+import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
@@ -56,7 +60,7 @@ public class RobotContainer {
   private final TelescopeSubsystem mTelescope;
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
-  private final VisionSubsystem mVision;
+  // private final VisionSubsystem mVision;
   // private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -74,7 +78,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIOTalonFX());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
-        mVision = new VisionSubsystem(new VisionIOReal());
+        // mVision = new VisionSubsystem(new VisionIOReal());
         // mLights = new LightsSubsystem(new LightsIOReal());
         break;
 
@@ -84,7 +88,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        mVision = new VisionSubsystem(new VisionIO() {});
+        // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
@@ -94,7 +98,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        mVision = new VisionSubsystem(new VisionIO() {});
+        // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
     }
@@ -140,6 +144,27 @@ public class RobotContainer {
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
+
+    //Keybinds for intake and outtake positions
+    // For Pivot
+    mOperatorController.a().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
+    mOperatorController.b().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
+    mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
+    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
+
+    mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
+    mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+
+    // For Telescope
+    mOperatorController.a().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup));
+    mOperatorController.b().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone));
+    mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube));
+    mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
+
+    mOperatorController.pov(0).whileTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation));
+    mOperatorController.pov(180).whileTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation));
+
+
   }
 
   /**

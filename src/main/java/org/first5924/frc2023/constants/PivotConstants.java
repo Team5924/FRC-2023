@@ -21,4 +21,15 @@ public class PivotConstants {
     public static final double kMaxForwardDegrees = 115;
     public static final double kMaxBackwardDegrees = -115;
     public static final double kSlowZoneDegrees = 35;
+
+    //All specific pivot angles
+    public static final double kMiddleGridCube = 73;
+    public static final double kMiddleGridCone = 61;
+    public static final double kTopGridCube = 61;
+
+
+    public static final double kSingleSubstation = 60;
+    public static final double kDoubleSubstation = 57;
+    public static final double kGroundPickup = 113;
+
 }
