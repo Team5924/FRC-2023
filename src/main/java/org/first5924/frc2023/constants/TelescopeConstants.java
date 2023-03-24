@@ -13,12 +13,9 @@ public class TelescopeConstants {
     public static final double kGearRatio = 11.43;
     public static final double kSprocketCircumferenceInches = Math.PI * 1.29;
 
-    public static final double kSpeedMultiplier = 1;
+    public static final double kSpeedMultiplier = 0.5;
 
     public static final double kSlowZoneSpeedMax = 0.15;
 
     public static final double kStartingExtensionInches = 2.75;
-    public static final double kMaxForwardExtensionInches = 20.375;
-    public static final double kMaxBackwardExtensionInches = 2.75;
-    public static final double kSlowZoneInches = 4;
 }

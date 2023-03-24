@@ -45,12 +45,4 @@ public class TelescopeSubsystem extends SubsystemBase {
   public void setEncoderFromTelescopeExtensionInches(double extensionInches) {
     io.setEncoderPosition(extensionInches * TelescopeConstants.kGearRatio / TelescopeConstants.kSprocketCircumferenceInches * RobotConstants.kTalonFXIntegratedSensorCPR);
   }
-
-  public boolean isInForwardSlowZone() {
-    return getTelescopeExtensionInches() >= TelescopeConstants.kMaxForwardExtensionInches - TelescopeConstants.kSlowZoneInches;
-  }
-
-  public boolean isInBackwardSlowZone() {
-    return getTelescopeExtensionInches() <= TelescopeConstants.kMaxBackwardExtensionInches + TelescopeConstants.kSlowZoneInches;
-  }
 }

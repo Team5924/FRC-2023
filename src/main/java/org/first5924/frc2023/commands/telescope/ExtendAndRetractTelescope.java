@@ -32,22 +32,7 @@ public class ExtendAndRetractTelescope extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double flippedJoystick = -mJoystickY.getAsDouble();
-    if (mTelescope.isInForwardSlowZone()) {
-      if (flippedJoystick > 0) {
-        mTelescope.setPercent(MathUtil.clamp(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier, -TelescopeConstants.kSlowZoneSpeedMax, TelescopeConstants.kSlowZoneSpeedMax));
-      } else {
-        mTelescope.setPercent(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier);
-      }
-    } else if (mTelescope.isInBackwardSlowZone()) {
-      if (flippedJoystick > 0) {
-        mTelescope.setPercent(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier);
-      } else {
-        mTelescope.setPercent(MathUtil.clamp(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier, -TelescopeConstants.kSlowZoneSpeedMax, TelescopeConstants.kSlowZoneSpeedMax));
-      }
-    } else {
-      mTelescope.setPercent(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier);
-    }
+    mTelescope.setPercent(MathUtil.applyDeadband(-mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier);
   }
 
   // Called once the command ends or is interrupted.
