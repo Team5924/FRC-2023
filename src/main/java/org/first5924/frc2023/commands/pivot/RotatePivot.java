@@ -36,22 +36,7 @@ public class RotatePivot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double flippedJoystick = -mJoystickY.getAsDouble();
-    if (mPivot.isInForwardSlowZone()) {
-      if (flippedJoystick > 0) {
-        mPivot.setPercent(MathUtil.clamp(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * PivotConstants.kSpeedMultiplier, -PivotConstants.kSlowZoneSpeedMax, PivotConstants.kSlowZoneSpeedMax));
-      } else {
-        mPivot.setPercent(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * PivotConstants.kSpeedMultiplier);
-      }
-    } else if (mPivot.isInBackwardSlowZone()) {
-      if (flippedJoystick > 0) {
-        mPivot.setPercent(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * PivotConstants.kSpeedMultiplier);
-      } else {
-        mPivot.setPercent(MathUtil.clamp(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * PivotConstants.kSpeedMultiplier, -PivotConstants.kSlowZoneSpeedMax, PivotConstants.kSlowZoneSpeedMax));
-      }
-    } else {
-      mPivot.setPercent(MathUtil.applyDeadband(flippedJoystick, OIConstants.kOperatorJoystickDeadband) * PivotConstants.kSpeedMultiplier);
-    }
+    mPivot.setPercent(MathUtil.applyDeadband(-mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband) * PivotConstants.kSpeedMultiplier);
   }
 
   // Called once the command ends or is interrupted.

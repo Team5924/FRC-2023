@@ -13,12 +13,7 @@ public class PivotConstants {
 
     public static final double kGearRatio = 131.22;
 
-    public static final double kSpeedMultiplier = 0.55;
-
-    public static final double kSlowZoneSpeedMax = 0.1;
+    public static final double kSpeedMultiplier = 0.16; //lower this, delete the unused constants after
 
     public static final double kStartingDegrees = 0;
-    public static final double kMaxForwardDegrees = 115;
-    public static final double kMaxBackwardDegrees = -115;
-    public static final double kSlowZoneDegrees = 35;
 }

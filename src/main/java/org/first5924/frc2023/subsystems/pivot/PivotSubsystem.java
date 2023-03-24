@@ -50,12 +50,4 @@ public class PivotSubsystem extends SubsystemBase {
   public void setEncoderFromPivotDegrees(double pivotDegrees) {
     io.setEncoderPosition(pivotDegrees / 360 * PivotConstants.kGearRatio);
   }
-
-  public boolean isInForwardSlowZone() {
-    return getPivotPositionDegrees() >= PivotConstants.kMaxForwardDegrees - PivotConstants.kSlowZoneDegrees;
-  }
-
-  public boolean isInBackwardSlowZone() {
-    return getPivotPositionDegrees() <= PivotConstants.kMaxBackwardDegrees + PivotConstants.kSlowZoneDegrees;
-  }
 }
