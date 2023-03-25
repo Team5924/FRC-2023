@@ -7,6 +7,7 @@ import java.util.function.DoubleSupplier;
 
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SetPivot extends CommandBase {
@@ -26,7 +27,8 @@ public class SetPivot extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -43,7 +45,7 @@ public class SetPivot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(mJoystickY.getAsDouble()) > OIConstants.kOperatorJoystickDeadband || mPivot.getOutputCurrent() > 35) {
+    if (Math.abs(mJoystickY.getAsDouble()) > OIConstants.kOperatorJoystickDeadband) {
       return true;
     } else {
       return false;

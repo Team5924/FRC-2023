@@ -46,6 +46,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -147,63 +148,47 @@ public class RobotContainer {
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
 
-    //Keybinds for intake and outtake positions
     // Pivot - Front + Cube
-    mOperatorController.a().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickupCube));
-    mOperatorController.b().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
-    mOperatorController.y().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
-    mOperatorController.x().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kHolding));
+    
+    mOperatorController.a().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickupCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCube)));
+    mOperatorController.b().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
+    mOperatorController.y().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
+    mOperatorController.x().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kHolding), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kHolding)));
 
-    mOperatorController.pov(0).and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(180).and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+    mOperatorController.pov(0).and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
+    mOperatorController.pov(180).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
 
     // Pivot - Front + Cone
 
-    mOperatorController.a().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickupCone));
-    mOperatorController.b().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
-    mOperatorController.y().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
-    mOperatorController.x().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kHolding));
+    mOperatorController.a().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickupCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCone)));
+    mOperatorController.b().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone)));
+    mOperatorController.y().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
+    mOperatorController.x().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kHolding), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kHolding)));
 
-    mOperatorController.pov(0).and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(180).and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+    mOperatorController.pov(0).and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
+    mOperatorController.pov(180).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
 
     // Pivot - Back + Cube
 
     mOperatorController.a().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickupCube));
-    mOperatorController.b().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCube));
-    mOperatorController.y().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube));
-    mOperatorController.x().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kHolding));
+    mOperatorController.a().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickupCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCube)));
+    mOperatorController.b().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
+    mOperatorController.y().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
+    mOperatorController.x().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kHolding), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kHolding)));
 
-    mOperatorController.pov(0).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(180).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kSingleSubstation));
+    mOperatorController.pov(0).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
+    mOperatorController.pov(180).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
 
     // Pivot - Back + Cone
 
-    mOperatorController.a().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickupCone));
-    mOperatorController.b().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCone));
-    mOperatorController.y().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube));
-    mOperatorController.x().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kHolding));
+    mOperatorController.a().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickupCube));
+    mOperatorController.a().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickupCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCone)));
+    mOperatorController.b().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone)));
+    mOperatorController.y().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
+    mOperatorController.x().and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kHolding), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kHolding)));
 
-    mOperatorController.pov(0).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(180).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kSingleSubstation));
-
-    // Telescope - Cube
-    mOperatorController.a().and(mOperatorController.rightBumper().negate()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCube));
-    mOperatorController.b().and(mOperatorController.rightBumper().negate()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
-    mOperatorController.y().and(mOperatorController.rightBumper().negate()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube));
-    mOperatorController.x().and(mOperatorController.rightBumper().negate()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
-
-    mOperatorController.pov(0).and(mOperatorController.rightBumper().negate()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation));
-    mOperatorController.pov(180).and(mOperatorController.rightBumper().negate()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation));
-
-    // Telescope - Cone
-    mOperatorController.a().and(mOperatorController.rightBumper()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCube));
-    mOperatorController.b().and(mOperatorController.rightBumper()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
-    mOperatorController.y().and(mOperatorController.rightBumper()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube));
-    mOperatorController.x().and(mOperatorController.rightBumper()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
-
-    mOperatorController.pov(0).and(mOperatorController.rightBumper()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation));
-    mOperatorController.pov(180).and(mOperatorController.rightBumper()).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation));
+    mOperatorController.pov(0).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
+    mOperatorController.pov(180).and(mOperatorController.leftBumper()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
   }
 
   /**

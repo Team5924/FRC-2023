@@ -43,7 +43,7 @@ public class TelescopeSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    io.setVoltage(MathUtil.clamp(mPID.calculate(getTelescopeExtensionInches(), position), -3, 3));
+    io.setVoltage(MathUtil.clamp(mPID.calculate(getTelescopeExtensionInches(), position), -5.5, 5.5));
   }
 
   public void setEncoderFromTelescopeExtensionInches(double extensionInches) {

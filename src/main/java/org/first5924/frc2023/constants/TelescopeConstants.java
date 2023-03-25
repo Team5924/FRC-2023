@@ -30,6 +30,7 @@ public class TelescopeConstants {
     public static final double kMiddleGridCone = 21.375;
     public static final double kTopGridCube = 21.375;
 
+    //! For new arm
     // public static final double kMiddleGridCube = 17.75;
     // public static final double kMiddleGridCone = 23.75;
     // public static final double kTopGridCube = 23.75;
