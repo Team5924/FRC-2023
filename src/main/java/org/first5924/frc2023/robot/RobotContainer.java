@@ -149,13 +149,13 @@ public class RobotContainer {
 
     //Keybinds for intake and outtake positions
     // For Pivot
-    mOperatorController.a().negate(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
-    mOperatorController.b().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
-    mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
-    mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
+    mOperatorController.a().and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
+    mOperatorController.b().and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
+    mOperatorController.y().and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
+    mOperatorController.x().and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
 
-    mOperatorController.pov(0).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(180).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+    mOperatorController.pov(0).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
+    mOperatorController.pov(180).and(mOperatorController.rightBumper().negate()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
 
     // For Telescope
     mOperatorController.a().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup));

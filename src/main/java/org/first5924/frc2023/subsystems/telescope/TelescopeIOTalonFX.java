@@ -33,6 +33,7 @@ public class TelescopeIOTalonFX implements TelescopeIO {
     public void updateInputs(TelescopeIOInputs inputs) {
         inputs.telescopeExtensionInches = mTelescopeTalon.getSelectedSensorPosition() / RobotConstants.kTalonFXIntegratedSensorCPR / TelescopeConstants.kGearRatio * TelescopeConstants.kSprocketCircumferenceInches;
         inputs.telescopeExtensionInchesPerSecond = mTelescopeTalon.getSelectedSensorVelocity() / RobotConstants.kTalonFXIntegratedSensorCPR * 10 / TelescopeConstants.kGearRatio * TelescopeConstants.kSprocketCircumferenceInches;
+        inputs.outputCurrent = mTelescopeTalon.getStatorCurrent();
     }
 
     @Override

@@ -18,7 +18,7 @@ public class PivotConstants {
     public static final double kStartingDegrees = 0;
 
     //All specific pivot angles
-    public static final double kMiddleGridCube = 73;
+    public static final double kMiddleGridCube =  73;
     public static final double kMiddleGridCone = 61;
     public static final double kTopGridCube = 61;
 

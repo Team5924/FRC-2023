@@ -39,6 +39,10 @@ public class PivotSubsystem extends SubsystemBase {
     return inputs.pivotVelocityDegreesPerSecond;
   }
 
+  public double getOutputCurrent() {
+    return inputs.outputCurrent;
+  }
+  
   public void setPercent(double percent) {
     io.setPercent(percent);
   }
@@ -50,4 +54,6 @@ public class PivotSubsystem extends SubsystemBase {
   public void setEncoderFromPivotDegrees(double pivotDegrees) {
     io.setEncoderPosition(pivotDegrees / 360 * PivotConstants.kGearRatio);
   }
+
+
 }

@@ -39,6 +39,6 @@ public class AutoSetTelescope extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(mExtensionInches - mTelescope.getTelescopeExtensionInches()) < 0.3 && Math.abs(mTelescope.getTelescopeExtensionInchesPerSecond()) < 0.2;
+    return Math.abs(mExtensionInches - mTelescope.getTelescopeExtensionInches()) < 0.3 && Math.abs(mTelescope.getTelescopeExtensionInchesPerSecond()) < 0.2 || mTelescope.getOutputCurrent() > 20;
   }
 }

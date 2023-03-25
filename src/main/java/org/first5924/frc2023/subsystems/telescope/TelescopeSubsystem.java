@@ -33,6 +33,10 @@ public class TelescopeSubsystem extends SubsystemBase {
   public double getTelescopeExtensionInchesPerSecond() {
    return inputs.telescopeExtensionInchesPerSecond;
   }
+  
+  public double getOutputCurrent() {
+    return inputs.outputCurrent;
+  }
 
   public void setPercent(double percent) {
     io.setVoltage(percent * RobotConstants.kNominalVoltage);
@@ -45,4 +49,6 @@ public class TelescopeSubsystem extends SubsystemBase {
   public void setEncoderFromTelescopeExtensionInches(double extensionInches) {
     io.setEncoderPosition(extensionInches * TelescopeConstants.kGearRatio / TelescopeConstants.kSprocketCircumferenceInches * RobotConstants.kTalonFXIntegratedSensorCPR);
   }
+
+  
 }

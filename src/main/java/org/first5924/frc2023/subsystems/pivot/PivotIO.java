@@ -11,6 +11,7 @@ public interface PivotIO {
     public static class PivotIOInputs {
         public double pivotPositionDegrees = 0.0;
         public double pivotVelocityDegreesPerSecond = 0.0;
+        public double outputCurrent = 0.0;
     }
 
     /** Updates the set of loggable inputs */
