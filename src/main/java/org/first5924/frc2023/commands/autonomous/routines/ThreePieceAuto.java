@@ -37,10 +37,10 @@ public class ThreePieceAuto extends SequentialCommandGroup {
 
   /** Creates a new DriveOneMeter. */
   public ThreePieceAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
-    mStartToPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Start to Piece A", 3.5, 3), alliance);
-    mPieceAToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space From Start", 3.5, 3, true), alliance);
-    mSpaceFromStartToPieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Space From Start to Piece B", 3.5, 3), alliance);
-    mPieceBToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece B to Space From Start", 3.5, 3, true), alliance);
+    mStartToPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Start to Piece A", 3.5, 3, true), alliance);
+    mPieceAToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space from Start", 3.5, 3), alliance);
+    mSpaceFromStartToPieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Space from Start to Piece B", 3.5, 3, true), alliance);
+    mPieceBToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece B to Space from Start", 3.5, 3), alliance);
     Logger.getInstance().recordOutput("3P1", mStartToPieceA);
     Logger.getInstance().recordOutput("3P2", mPieceAToSpaceFromStart);
     Logger.getInstance().recordOutput("3P3", mSpaceFromStartToPieceB);
@@ -51,6 +51,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       new InstantCommand(() -> {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
+        drive.resetPosition(mStartToPieceA.getInitialPose());
       }),
       new RamseteCommand(
         mStartToPieceA,

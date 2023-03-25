@@ -34,7 +34,7 @@
       "nextControl": null,
       "holonomicAngle": 0,
       "isReversal": false,
-      "velOverride": 1.0,
+      "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -45,5 +45,8 @@
       }
     }
   ],
+  "maxVelocity": 3.5,
+  "maxAcceleration": null,
+  "isReversed": true,
   "markers": []
 }
