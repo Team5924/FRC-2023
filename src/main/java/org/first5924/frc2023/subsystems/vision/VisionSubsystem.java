@@ -21,6 +21,6 @@ public class VisionSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
-    Logger.getInstance().processInputs("Telescope", inputs);
+    Logger.getInstance().processInputs("Vision", inputs);
   }
 }

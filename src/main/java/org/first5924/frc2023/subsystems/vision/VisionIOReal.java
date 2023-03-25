@@ -9,16 +9,11 @@ import edu.wpi.first.cscore.UsbCamera;
 
 /** Add your docs here. */
 public class VisionIOReal implements VisionIO {
-    private UsbCamera frontCamera = CameraServer.startAutomaticCapture("Front Camera", 0);
-    // private UsbCamera backCamera = CameraServer.startAutomaticCapture("Back Camera", 1);
+    private UsbCamera camera = CameraServer.startAutomaticCapture("Camera", 0);
 
     public VisionIOReal() {
-        frontCamera.setFPS(30);
-        frontCamera.setBrightness(70);
-        frontCamera.setResolution(320, 240);
-
-        // backCamera.setFPS(20);
-        // backCamera.setBrightness(70);
-        // backCamera.setResolution(256, 192);
+        camera.setFPS(30);
+        camera.setBrightness(70);
+        camera.setResolution(320, 240);
     }
 }
