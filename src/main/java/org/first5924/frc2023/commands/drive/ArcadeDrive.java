@@ -45,7 +45,7 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.arcadeDrive(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband) * mMultiplier, JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband) * 0.8);
+    mDrive.arcadeDrive(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband) * mMultiplier, JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband) * 0.6);
   }
 
   // Called once the command ends or is interrupted.
