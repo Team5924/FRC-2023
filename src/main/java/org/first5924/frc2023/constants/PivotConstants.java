@@ -18,13 +18,15 @@ public class PivotConstants {
     public static final double kStartingDegrees = 0;
 
     //All specific pivot angles
+    public static final double kSingleSubstation = 60;
+    public static final double kDoubleSubstation = 57;
+
+    public static final double kHolding = 40;
+
+    public static final double kGroundPickupCube = 113;
+    public static final double kGroundPickupCone = 113;
+
     public static final double kMiddleGridCube =  73;
     public static final double kMiddleGridCone = 61;
     public static final double kTopGridCube = 61;
-
-
-    public static final double kSingleSubstation = 60;
-    public static final double kDoubleSubstation = 57;
-    public static final double kGroundPickup = 113;
-
 }

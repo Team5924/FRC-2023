@@ -47,6 +47,6 @@ public class SetPivot extends CommandBase {
       return true;
     } else {
       return false;
-    } 
+    }
   }
 }
