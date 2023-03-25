@@ -10,17 +10,14 @@ import org.first5924.frc2023.commands.autonomous.routines.OnePieceOverClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceStationaryAuto;
 import org.first5924.frc2023.commands.autonomous.routines.ThreePieceAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
+import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
-import org.first5924.frc2023.commands.drive.ArcadeDrive;
-import org.first5924.frc2023.commands.drive.CurvatureDrive;
-import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Grab;
 import org.first5924.frc2023.commands.grabber.Release;
-import org.first5924.frc2023.commands.grabber.SlowRelease;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.RobotConstants;
@@ -131,12 +128,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver Left Stick and Driver Right Stick
     mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    // Driver Left Bumper
-    // mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     // Driver Right Bumper
     mDriverController.rightBumper().whileTrue(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
-    // Driver Left Bumper and Right Bumper
-    // mDriverController.leftBumper().and(mDriverController.rightBumper()).whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
 
     // Operator Left Stick
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
@@ -146,11 +139,9 @@ public class RobotContainer {
     mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
     // Operator Right Trigger
     mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
-    // Operator Left Bumper
-    mOperatorController.leftBumper().whileTrue(new SlowRelease(mGrabber));
 
     // Pivot - Front + Cube
-    
+
     mOperatorController.a().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickupCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickupCube)));
     mOperatorController.b().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
     mOperatorController.y().and(mOperatorController.leftBumper().negate()).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));

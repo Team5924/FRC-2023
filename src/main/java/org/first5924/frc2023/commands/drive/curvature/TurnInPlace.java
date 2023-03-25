@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.first5924.frc2023.commands.drive;
+package org.first5924.frc2023.commands.drive.curvature;
 
 import java.util.function.DoubleSupplier;
 
@@ -12,14 +12,14 @@ import org.first5924.lib.util.JoystickToOutput;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArcadeDrive extends CommandBase {
+public class TurnInPlace extends CommandBase {
   private final DriveSubsystem mDrive;
   private final DoubleSupplier mLeftJoystickY;
   private final DoubleSupplier mRightJoystickX;
   private final double mMultiplier;
 
   /** Creates a new CurvatureDrive. */
-  public ArcadeDrive(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX) {
+  public TurnInPlace(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX) {
     mDrive = drive;
     mLeftJoystickY = leftJoystickY;
     mRightJoystickX = rightJoystickX;
@@ -28,8 +28,7 @@ public class ArcadeDrive extends CommandBase {
     addRequirements(mDrive);
   }
 
-  /** Creates a new CurvatureDrive. */
-  public ArcadeDrive(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX, double multiplier) {
+  public TurnInPlace(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickX, double multiplier) {
     mDrive = drive;
     mLeftJoystickY = leftJoystickY;
     mRightJoystickX = rightJoystickX;
@@ -45,7 +44,7 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.arcadeDrive(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband) * mMultiplier, JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband) * 0.6);
+    mDrive.turnInPlace(JoystickToOutput.calculateSquared(-mLeftJoystickY.getAsDouble(), OIConstants.kDriverJoystickDeadband) * mMultiplier, JoystickToOutput.calculateSquared(mRightJoystickX.getAsDouble(), OIConstants.kDriverJoystickDeadband));
   }
 
   // Called once the command ends or is interrupted.
