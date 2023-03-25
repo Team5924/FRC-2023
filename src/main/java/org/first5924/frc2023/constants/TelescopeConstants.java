@@ -22,7 +22,7 @@ public class TelescopeConstants {
     public static final double kMiddleGridCone = 23.75;
     public static final double kTopGridCube = 23.75;
 
-    public static final double kSingleSubstation = 60;
-    public static final double kDoubleSubstation = 57;
+    public static final double kSingleSubstation = 23.75;
+    public static final double kDoubleSubstation = 23.75;
     public static final double kGroundPickup = 5.75;
 }

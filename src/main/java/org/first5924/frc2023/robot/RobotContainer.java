@@ -149,13 +149,13 @@ public class RobotContainer {
 
     //Keybinds for intake and outtake positions
     // For Pivot
-    mOperatorController.a().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
+    mOperatorController.a().negate(mOperatorController.rightBumper()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup));
     mOperatorController.b().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone));
     mOperatorController.y().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube));
     mOperatorController.x().onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube));
 
-    mOperatorController.pov(0).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
-    mOperatorController.pov(180).whileTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
+    mOperatorController.pov(0).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
+    mOperatorController.pov(180).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
 
     // For Telescope
     mOperatorController.a().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup));
@@ -163,10 +163,17 @@ public class RobotContainer {
     mOperatorController.y().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube));
     mOperatorController.x().onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube));
 
-    mOperatorController.pov(0).whileTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation));
-    mOperatorController.pov(180).whileTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation));
+    mOperatorController.pov(0).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation));
+    mOperatorController.pov(180).onTrue(new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation));
+    
+    //Inverted w/ right bumper
+    mOperatorController.rightBumper().and(mOperatorController.a()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickup));
+    mOperatorController.rightBumper().and(mOperatorController.b()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCone));
+    mOperatorController.rightBumper().and(mOperatorController.y()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube));
+    mOperatorController.rightBumper().and(mOperatorController.x()).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCube));
 
-
+    mOperatorController.rightBumper().and(mOperatorController.pov(0)).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation));
+    mOperatorController.rightBumper().and(mOperatorController.pov(180)).onTrue(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation));
   }
 
   /**
