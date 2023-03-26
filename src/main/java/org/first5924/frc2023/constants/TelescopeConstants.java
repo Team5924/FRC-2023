@@ -13,12 +13,29 @@ public class TelescopeConstants {
     public static final double kGearRatio = 11.43;
     public static final double kSprocketCircumferenceInches = Math.PI * 1.29;
 
-    public static final double kSpeedMultiplier = 1;
-
-    public static final double kSlowZoneSpeedMax = 0.15;
+    public static final double kSpeedMultiplier = 0.5;
 
     public static final double kStartingExtensionInches = 2.75;
-    public static final double kMaxForwardExtensionInches = 20.375;
-    public static final double kMaxBackwardExtensionInches = 2.75;
-    public static final double kSlowZoneInches = 4;
+
+    //All specific telescope lengths
+    public static final double kSingleSubstation = 2.25;
+    public static final double kDoubleSubstation = 21;
+
+    public static final double kHolding = 2.25;
+
+    public static final double kGroundPickupCube = 5.75;
+    public static final double kGroundPickupCone = 5.75;
+
+    public static final double kMiddleGridCube = 13.25;
+    public static final double kMiddleGridCone = 21;
+    public static final double kTopGridCube = 21;
+
+    //! For new arm
+    // public static final double kMiddleGridCube = 17.75;
+    // public static final double kMiddleGridCone = 23.75;
+    // public static final double kTopGridCube = 23.75;
+
+    // public static final double kSingleSubstation = 23.75;
+    // public static final double kDoubleSubstation = 23.75;
+    // public static final double kGroundPickup = 5.75;
 }
