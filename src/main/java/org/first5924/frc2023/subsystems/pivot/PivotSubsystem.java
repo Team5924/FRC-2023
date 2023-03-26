@@ -16,7 +16,7 @@ public class PivotSubsystem extends SubsystemBase {
   /** Creates a new PivotSubsystem. */
   private final PivotIO io;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
-  private final PIDController mPID = new PIDController(0.5, 0, 0);
+  private final PIDController mPID = new PIDController(0.4, 0, 0);
 
 
   public PivotSubsystem(PivotIO io) {
@@ -42,13 +42,13 @@ public class PivotSubsystem extends SubsystemBase {
   public double getOutputCurrent() {
     return inputs.outputCurrent;
   }
-  
+
   public void setPercent(double percent) {
     io.setPercent(percent);
   }
 
   public void setPosition(double position) {
-    io.setVoltage(MathUtil.clamp(mPID.calculate(getPivotPositionDegrees(), position), -4.5, 4.5));
+    io.setVoltage(MathUtil.clamp(mPID.calculate(getPivotPositionDegrees(), position), -5, 5));
   }
 
   public void setEncoderFromPivotDegrees(double pivotDegrees) {
