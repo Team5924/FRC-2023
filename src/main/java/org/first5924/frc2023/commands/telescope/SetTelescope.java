@@ -45,7 +45,7 @@ public class SetTelescope extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(mJoystickY.getAsDouble()) > OIConstants.kOperatorJoystickDeadband || mTelescope.getOutputCurrent() > 20) {
+    if (Math.abs(mJoystickY.getAsDouble()) > OIConstants.kOperatorJoystickDeadband || mTelescope.getOutputCurrent() > 40) {
       return true;
     } else {
       return false;
