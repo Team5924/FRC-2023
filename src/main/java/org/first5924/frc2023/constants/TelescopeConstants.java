@@ -18,17 +18,17 @@ public class TelescopeConstants {
     public static final double kStartingExtensionInches = 2.75;
 
     //All specific telescope lengths
-    public static final double kSingleSubstation = 21.375;
-    public static final double kDoubleSubstation = 21.375;
+    public static final double kSingleSubstation = 2.25;
+    public static final double kDoubleSubstation = 21;
 
-    public static final double kHolding = 1.75;
+    public static final double kHolding = 2.25;
 
     public static final double kGroundPickupCube = 5.75;
     public static final double kGroundPickupCone = 5.75;
 
-    public static final double kMiddleGridCube = 17.75;
-    public static final double kMiddleGridCone = 21.375;
-    public static final double kTopGridCube = 21.375;
+    public static final double kMiddleGridCube = 13.25;
+    public static final double kMiddleGridCone = 21;
+    public static final double kTopGridCube = 21;
 
     //! For new arm
     // public static final double kMiddleGridCube = 17.75;
