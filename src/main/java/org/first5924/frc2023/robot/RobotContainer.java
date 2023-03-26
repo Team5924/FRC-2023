@@ -40,9 +40,10 @@ import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -65,8 +66,8 @@ public class RobotContainer {
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
-  private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
+  private final SendableChooser<Alliance> mAllianceChooser = new SendableChooser<>();
+  private final SendableChooser<AutoRoutines> mAutoChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -102,15 +103,18 @@ public class RobotContainer {
         break;
     }
 
-    mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAllianceChooser.setDefaultOption("Blue", Alliance.Blue);
     mAllianceChooser.addOption("Red", Alliance.Red);
 
-    mAutoChooser.addDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
+    mAutoChooser.setDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
     mAutoChooser.addOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
     mAutoChooser.addOption("Three Piece", AutoRoutines.threePiece);
     mAutoChooser.addOption("Nothing", AutoRoutines.nothing);
+
+    SmartDashboard.putData("Alliance Chooser", mAllianceChooser);
+    SmartDashboard.putData("Auto Chooser", mAutoChooser);
 
     // Configure the trigger bindings
     configureBindings();
@@ -189,7 +193,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    switch (mAutoChooser.get()) {
+    switch (mAutoChooser.getSelected()) {
       case onePieceOverClimb:
         return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceMobility:
@@ -197,9 +201,9 @@ public class RobotContainer {
       case onePieceStationary:
         return new OnePieceStationaryAuto(mPivot, mGrabber, mTelescope);
       case twoPieceClimb:
-        return new TwoPieceClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+        return new TwoPieceClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
       case threePiece:
-        return new ThreePieceAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
+        return new ThreePieceAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
       case nothing:
         return new NothingAuto(mPivot, mTelescope);
       default:
