@@ -113,7 +113,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
       }),
-      new AutoEngageChargeStation(drive, false)
+      new AutoEngageChargeStation(drive, true)
     );
   }
 }
