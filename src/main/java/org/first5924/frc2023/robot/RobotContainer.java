@@ -16,8 +16,7 @@ import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
-import org.first5924.frc2023.commands.grabber.Grab;
-import org.first5924.frc2023.commands.grabber.Release;
+import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.RobotConstants;
@@ -140,9 +139,9 @@ public class RobotContainer {
     // Operator Right Stick
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     // Operator Left Trigger
-    mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
+    mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -1));
     // Operator Right Trigger
-    mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
+    mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 1));
 
     // Pivot - Front + Cube
 

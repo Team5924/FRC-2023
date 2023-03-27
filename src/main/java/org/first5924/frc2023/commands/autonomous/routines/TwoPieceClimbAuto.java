@@ -5,6 +5,9 @@
 package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
+import org.first5924.frc2023.commands.grabber.RunGrabber;
+import org.first5924.frc2023.commands.pivot.AutoSetPivot;
+import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
 import org.first5924.frc2023.constants.DriveConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
@@ -23,8 +26,11 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -53,62 +59,100 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
         drive.resetPosition(mStartToPieceA.getInitialPose());
       }),
-      new RamseteCommand(
-        mStartToPieceA,
-        drive::getPoseMeters,
-        new RamseteController(),
-        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-        DriveConstants.kKinematics,
-        drive::getWheelSpeeds,
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        drive::setVoltage,
-        drive
+      new ParallelCommandGroup(
+        new AutoSetPivot(pivot, PivotConstants.kTopGridCube),
+        new AutoSetTelescope(telescope, TelescopeConstants.kTopGridCube)
+      ),
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.5),
+        new RunGrabber(grabber, -1)
+      ),
+      new ParallelDeadlineGroup(
+        new RamseteCommand(
+          mStartToPieceA,
+          drive::getPoseMeters,
+          new RamseteController(),
+          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+          DriveConstants.kKinematics,
+          drive::getWheelSpeeds,
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          drive::setVoltage,
+          drive
+        ),
+        new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
+        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube),
+        new ParallelCommandGroup(
+          new WaitCommand(1.75),
+          new RunGrabber(grabber, 1)
+        )
       ),
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
       }),
-      new RamseteCommand(
-        mPieceAToSpaceFromStart,
-        drive::getPoseMeters,
-        new RamseteController(),
-        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-        DriveConstants.kKinematics,
-        drive::getWheelSpeeds,
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        drive::setVoltage,
-        drive
+      new ParallelDeadlineGroup(
+        new RamseteCommand(
+          mPieceAToSpaceFromStart,
+          drive::getPoseMeters,
+          new RamseteController(),
+          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+          DriveConstants.kKinematics,
+          drive::getWheelSpeeds,
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          drive::setVoltage,
+          drive
+        ),
+        new AutoSetPivot(pivot, PivotConstants.kMiddleGridCube),
+        new AutoSetTelescope(telescope, TelescopeConstants.kMiddleGridCone)
       ),
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
       }),
-      new RamseteCommand(
-        mSpaceFromStartToPieceBAndStraighten,
-        drive::getPoseMeters,
-        new RamseteController(),
-        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-        DriveConstants.kKinematics,
-        drive::getWheelSpeeds,
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        drive::setVoltage,
-        drive
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.5),
+        new RunGrabber(grabber, -1)
+      ),
+      new ParallelDeadlineGroup(
+        new RamseteCommand(
+          mSpaceFromStartToPieceBAndStraighten,
+          drive::getPoseMeters,
+          new RamseteController(),
+          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+          DriveConstants.kKinematics,
+          drive::getWheelSpeeds,
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          drive::setVoltage,
+          drive
+        ),
+        new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
+        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube),
+        new ParallelCommandGroup(
+          new WaitCommand(2),
+          new ParallelDeadlineGroup(
+            new WaitCommand(1.2),
+            new RunGrabber(grabber, -1))
+        )
       ),
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
       }),
-      new RamseteCommand(
-        mPieceBStraightenToClimb,
-        drive::getPoseMeters,
-        new RamseteController(),
-        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-        DriveConstants.kKinematics,
-        drive::getWheelSpeeds,
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-        drive::setVoltage,
-        drive
+      new ParallelDeadlineGroup(
+        new RamseteCommand(
+          mPieceBStraightenToClimb,
+          drive::getPoseMeters,
+          new RamseteController(),
+          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+          DriveConstants.kKinematics,
+          drive::getWheelSpeeds,
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
+          drive::setVoltage,
+          drive
+        ),
+        new AutoSetPivot(pivot, -PivotConstants.kStartingDegrees),
+        new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
       ),
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
