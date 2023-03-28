@@ -9,6 +9,7 @@ import org.first5924.frc2023.commands.autonomous.routines.OnePieceMobilityAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceOverClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceStationaryAuto;
 import org.first5924.frc2023.commands.autonomous.routines.ThreePieceAuto;
+import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
@@ -201,6 +202,8 @@ public class RobotContainer {
         return new OnePieceStationaryAuto(mPivot, mGrabber, mTelescope);
       case twoPieceClimb:
         return new TwoPieceClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
+      case twoPieceCable:
+        return new TwoPieceCableAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
       case threePiece:
         return new ThreePieceAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
       case nothing:

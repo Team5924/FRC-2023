@@ -73,5 +73,18 @@
   "maxVelocity": 3.5,
   "maxAcceleration": 3.0,
   "isReversed": true,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.72,
+      "names": [
+        "intake"
+      ]
+    },
+    {
+      "position": 1.2,
+      "names": [
+        "stopGrabber"
+      ]
+    }
+  ]
 }

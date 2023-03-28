@@ -48,5 +48,12 @@
   "maxVelocity": 3.5,
   "maxAcceleration": null,
   "isReversed": true,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.6974076704545457,
+      "names": [
+        "intake"
+      ]
+    }
+  ]
 }
