@@ -11,7 +11,7 @@ public class PivotConstants {
     public static final int kLeaderSparkPort = 8;
     public static final int kFollowerSparkPort = 7;
 
-    public static final double kGearRatio = 131.22;
+    public static final double kGearRatio = 196.44;
 
     public static final double kSpeedMultiplier = 0.16; //lower this, delete the unused constants after
 
