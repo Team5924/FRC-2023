@@ -86,8 +86,8 @@ public class ThreePieceAuto extends SequentialCommandGroup {
             drive::setVoltage,
             drive
           ),
-          new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
-          new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube)
+          new AutoSetPivot(pivot, -PivotConstants.kGroundPickup),
+          new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
         ),
         mStartToPieceA.getMarkers(),
         mEventMap
@@ -133,8 +133,8 @@ public class ThreePieceAuto extends SequentialCommandGroup {
             drive::setVoltage,
             drive
           ),
-          new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
-          new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube)
+          new AutoSetPivot(pivot, -PivotConstants.kGroundPickup),
+          new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
         ),
         mSpaceFromStartToPieceB.getMarkers(),
         mEventMap
@@ -155,8 +155,8 @@ public class ThreePieceAuto extends SequentialCommandGroup {
           drive::setVoltage,
           drive
         ),
-        new AutoSetPivot(pivot, PivotConstants.kGroundPickupCube),
-        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube)
+        new AutoSetPivot(pivot, PivotConstants.kGroundPickup),
+        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
       ),
       new InstantCommand(() -> {
         drive.setVoltage(0, 0);
@@ -166,8 +166,8 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         new RunGrabber(grabber, -0.4)
       ),
       new ParallelCommandGroup(
-        new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
-        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube)
+        new AutoSetPivot(pivot, -PivotConstants.kGroundPickup),
+        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
       )
     );
   }

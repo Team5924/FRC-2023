@@ -80,8 +80,8 @@ public class TwoPieceCableAuto extends SequentialCommandGroup {
             drive::setVoltage,
             drive
           ),
-          new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
-          new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube)
+          new AutoSetPivot(pivot, -PivotConstants.kGroundPickup),
+          new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
         ),
         mCableStartToPieceA.getMarkers(),
         mEventMap
@@ -114,8 +114,8 @@ public class TwoPieceCableAuto extends SequentialCommandGroup {
         new RunGrabber(grabber, -1)
       ),
       new ParallelCommandGroup(
-        new AutoSetPivot(pivot, -PivotConstants.kGroundPickupCube),
-        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickupCube)
+        new AutoSetPivot(pivot, -PivotConstants.kGroundPickup),
+        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
       )
     );
   }
