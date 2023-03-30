@@ -13,7 +13,7 @@ public class PivotConstants {
 
     public static final double kGearRatio = 196.44;
 
-    public static final double kSpeedMultiplier = 0.16; //lower this, delete the unused constants after
+    public static final double kSpeedMultiplier = 1;
 
     public static final double kStartingDegrees = 0;
 
