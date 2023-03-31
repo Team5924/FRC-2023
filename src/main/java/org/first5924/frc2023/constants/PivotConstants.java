@@ -11,9 +11,9 @@ public class PivotConstants {
     public static final int kLeaderSparkPort = 8;
     public static final int kFollowerSparkPort = 7;
 
-    public static final double kGearRatio = 196.44;
+    public static final double kGearRatio = 142.87;
 
-    public static final double kSpeedMultiplier = 1;
+    public static final double kSpeedMultiplier = 0.6;
 
     public static final double kStartingDegrees = 0;
 

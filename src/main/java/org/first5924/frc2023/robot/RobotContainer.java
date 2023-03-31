@@ -17,6 +17,7 @@ import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
 import org.first5924.frc2023.commands.pivot.SetPivot;
+import org.first5924.frc2023.commands.grabber.Flutter;
 import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.constants.OIConstants;
 import org.first5924.frc2023.constants.PivotConstants;
@@ -168,6 +169,8 @@ public class RobotContainer {
     mOperatorController.pov(180).onTrue(new InstantCommand(() -> {
       mPivot.setPosition(0);
     }));
+
+    mGrabber.setDefaultCommand(new Flutter(mGrabber));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

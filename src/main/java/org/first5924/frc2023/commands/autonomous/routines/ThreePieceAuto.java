@@ -16,11 +16,11 @@ import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -71,7 +71,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       ),
       new FollowPathWithEvents(
         new ParallelDeadlineGroup(
-          new RamseteCommand(
+          new PPRamseteCommand(
             mStartToPieceA,
             drive::getPoseMeters,
             new RamseteController(),
@@ -118,7 +118,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       ),
       new FollowPathWithEvents(
         new ParallelDeadlineGroup(
-          new RamseteCommand(
+          new PPRamseteCommand(
             mSpaceFromStartToPieceB,
             drive::getPoseMeters,
             new RamseteController(),

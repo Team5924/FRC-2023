@@ -16,7 +16,6 @@ import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -47,8 +46,6 @@ public class TwoPieceCableAuto extends SequentialCommandGroup {
   public TwoPieceCableAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
     mCableStartToPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Cable Start to Piece A", 1.5, 2, true), alliance);
     mPieceAToSpaceFromCableStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space from Cable Start", 1.5, 2), alliance);
-    Logger.getInstance().recordOutput("2PC1", mCableStartToPieceA);
-    Logger.getInstance().recordOutput("2PC2", mPieceAToSpaceFromCableStart);
     mEventMap.put("intake", new RunGrabber(grabber, 1));
     mEventMap.put("stopGrabber", new RunGrabber(grabber, 0));
     // Add your commands in the addCommands() call, e.g.

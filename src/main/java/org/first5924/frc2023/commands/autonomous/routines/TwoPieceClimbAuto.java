@@ -17,7 +17,6 @@ import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -52,10 +51,6 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
     mPieceAToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space from Start", 3.5, 3), alliance);
     mSpaceFromStartToPieceBAndStraighten = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Space from Start to Piece B and Straighten", 3.5, 3, true), alliance);
     mPieceBStraightenToClimb = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece B Straighten to Climb", 2, 3), alliance);
-    Logger.getInstance().recordOutput("2P1", mStartToPieceA);
-    Logger.getInstance().recordOutput("2P2", mPieceAToSpaceFromStart);
-    Logger.getInstance().recordOutput("2P3", mSpaceFromStartToPieceBAndStraighten);
-    Logger.getInstance().recordOutput("2P4", mPieceBStraightenToClimb);
     mEventMap.put("intake", new RunGrabber(grabber, 1));
     mEventMap.put("stopGrabber", new RunGrabber(grabber, 0));
     // Add your commands in the addCommands() call, e.g.
