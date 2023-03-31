@@ -13,6 +13,7 @@ import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceLowOverClimbAuto;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
@@ -109,6 +110,7 @@ public class RobotContainer {
     mAllianceChooser.addOption("Red", Alliance.Red);
 
     mAutoChooser.setDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
+    mAutoChooser.addOption("One Piece Low Over Climb", AutoRoutines.onePieceLowOverClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
     mAutoChooser.addOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
@@ -181,6 +183,8 @@ public class RobotContainer {
     switch (mAutoChooser.getSelected()) {
       case onePieceOverClimb:
         return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
+      case onePieceLowOverClimb:
+        return new OnePieceLowOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceMobility:
         return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceStationary:
