@@ -10,6 +10,7 @@ public enum AutoRoutines {
     onePieceMobility,
     onePieceStationary,
     twoPieceClimb,
+    twoPieceCable,
     threePiece,
     nothing
 }

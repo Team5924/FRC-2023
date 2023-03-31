@@ -4,7 +4,7 @@
 
 package org.first5924.frc2023.commands.autonomous.routines;
 
-import org.first5924.frc2023.commands.grabber.SlowRelease;
+import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
@@ -33,7 +33,7 @@ public class OnePieceStationaryAuto extends SequentialCommandGroup {
       new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
-        new SlowRelease(grabber)
+        new RunGrabber(grabber, -0.2)
       ),
       new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
     );

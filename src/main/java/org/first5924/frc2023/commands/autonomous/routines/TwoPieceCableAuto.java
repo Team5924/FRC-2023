@@ -4,7 +4,6 @@
 
 package org.first5924.frc2023.commands.autonomous.routines;
 
-import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.commands.telescope.AutoSetTelescope;
@@ -34,25 +33,21 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoPieceClimbAuto extends SequentialCommandGroup {
-  private final Trajectory mStartToPieceA;
-  private final Trajectory mPieceAToSpaceFromStart;
-  private final Trajectory mSpaceFromStartToPieceBAndStraighten;
-  private final Trajectory mPieceBStraightenToClimb;
+public class TwoPieceCableAuto extends SequentialCommandGroup {
+  private final Trajectory mCableStartToPieceA;
+  private final Trajectory mPieceAToSpaceFromCableStart;
 
   /** Creates a new DriveOneMeter. */
-  public TwoPieceClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
-    mStartToPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Start to Piece A", 3.5, 3, true), alliance);
-    mPieceAToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space from Start", 3.5, 3), alliance);
-    mSpaceFromStartToPieceBAndStraighten = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Space from Start to Piece B and Straighten", 3.5, 3, true), alliance);
-    mPieceBStraightenToClimb = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece B Straighten to Climb", 2, 3), alliance);
+  public TwoPieceCableAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope, Alliance alliance) {
+    mCableStartToPieceA = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Cable Start to Piece A", 1.5, 2, true), alliance);
+    mPieceAToSpaceFromCableStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space from Cable Start", 1.5, 2), alliance);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
-        drive.resetPosition(mStartToPieceA.getInitialPose());
+        drive.resetPosition(mCableStartToPieceA.getInitialPose());
       }),
       new ParallelCommandGroup(
         new AutoSetPivot(pivot, PivotConstants.kTopGridCube),
@@ -64,7 +59,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new RamseteCommand(
-          mStartToPieceA,
+          mCableStartToPieceA,
           drive::getPoseMeters,
           new RamseteController(),
           new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
@@ -84,7 +79,7 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
       }),
       new ParallelDeadlineGroup(
         new RamseteCommand(
-          mPieceAToSpaceFromStart,
+          mPieceAToSpaceFromCableStart,
           drive::getPoseMeters,
           new RamseteController(),
           new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
@@ -105,46 +100,10 @@ public class TwoPieceClimbAuto extends SequentialCommandGroup {
         new WaitCommand(0.5),
         new RunGrabber(grabber, -0.2)
       ),
-      new ParallelDeadlineGroup(
-        new RamseteCommand(
-          mSpaceFromStartToPieceBAndStraighten,
-          drive::getPoseMeters,
-          new RamseteController(),
-          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-          DriveConstants.kKinematics,
-          drive::getWheelSpeeds,
-          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-          drive::setVoltage,
-          drive
-        ),
+      new ParallelCommandGroup(
         new AutoSetPivot(pivot, -PivotConstants.kGroundPickup),
-        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup),
-        new RunGrabber(grabber, 1)
-      ),
-      new InstantCommand(() -> {
-        drive.setVoltage(0, 0);
-      }),
-      new ParallelDeadlineGroup(
-        new RamseteCommand(
-          mPieceBStraightenToClimb,
-          drive::getPoseMeters,
-          new RamseteController(),
-          new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-          DriveConstants.kKinematics,
-          drive::getWheelSpeeds,
-          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-          new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD),
-          drive::setVoltage,
-          drive
-        ),
-        new AutoSetPivot(pivot, -PivotConstants.kStartingDegrees),
-        new AutoSetTelescope(telescope, TelescopeConstants.kStartingExtensionInches)
-      ),
-      new InstantCommand(() -> {
-        drive.setVoltage(0, 0);
-      }),
-      new AutoEngageChargeStation(drive, true)
+        new AutoSetTelescope(telescope, TelescopeConstants.kGroundPickup)
+      )
     );
   }
 }

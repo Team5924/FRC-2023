@@ -48,7 +48,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    io.setVoltage(MathUtil.clamp(mPID.calculate(getPivotPositionDegrees(), position), -5, 5));
+    io.setVoltage(MathUtil.clamp(mPID.calculate(getPivotPositionDegrees(), position), -9, 9));
   }
 
   public void setEncoderFromPivotDegrees(double pivotDegrees) {

@@ -20,6 +20,7 @@ public class PivotIOSparkMax implements PivotIO {
     private final RelativeEncoder mEncoder = mLeaderSpark.getEncoder();
 
     public PivotIOSparkMax() {
+        mLeaderSpark.setInverted(true);
         mFollowerSpark.follow(mLeaderSpark);
     }
 
