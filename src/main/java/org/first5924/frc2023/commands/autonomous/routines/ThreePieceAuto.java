@@ -25,6 +25,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -39,9 +40,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ThreePieceAuto extends SequentialCommandGroup {
   private final PathPlannerTrajectory mStartToPieceA;
-  private final PathPlannerTrajectory mPieceAToSpaceFromStart;
+  private final Trajectory mPieceAToSpaceFromStart;
   private final PathPlannerTrajectory mSpaceFromStartToPieceB;
-  private final PathPlannerTrajectory mPieceBToSpaceFromStart;
+  private final Trajectory mPieceBToSpaceFromStart;
   private final HashMap<String, Command> mEventMap = new HashMap<>();
 
   /** Creates a new DriveOneMeter. */
@@ -50,10 +51,6 @@ public class ThreePieceAuto extends SequentialCommandGroup {
     mPieceAToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece A to Space from Start", 3.5, 3), alliance);
     mSpaceFromStartToPieceB = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Space from Start to Piece B", 3.5, 3, true), alliance);
     mPieceBToSpaceFromStart = PathPlannerTrajectory.transformTrajectoryForAlliance(PathPlanner.loadPath("Piece B to Space from Start", 3.5, 3), alliance);
-    Logger.getInstance().recordOutput("3P1", mStartToPieceA);
-    Logger.getInstance().recordOutput("3P2", mPieceAToSpaceFromStart);
-    Logger.getInstance().recordOutput("3P3", mSpaceFromStartToPieceB);
-    Logger.getInstance().recordOutput("3P4", mPieceBToSpaceFromStart);
     mEventMap.put("intake", new RunGrabber(grabber, 1));
     mEventMap.put("stopGrabber", new RunGrabber(grabber, 0));
     // Add your commands in the addCommands() call, e.g.

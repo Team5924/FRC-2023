@@ -17,10 +17,10 @@ public class PivotConstants {
 
     public static final double kStartingDegrees = 0;
 
-    public static final double kSingleSubstation = 46.5;
+    public static final double kSingleSubstation = 45;
     public static final double kDoubleSubstation = 57;
     public static final double kGroundPickup = 104;
-    public static final double kMiddleGridCube =  65.5;
-    public static final double kMiddleGridCone = 56;
-    public static final double kTopGridCube = 48.5;
+    public static final double kMiddleGridCube =  60;
+    public static final double kMiddleGridCone = 50.5;
+    public static final double kTopGridCube = 55;
 }
