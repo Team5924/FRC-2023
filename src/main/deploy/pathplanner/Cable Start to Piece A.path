@@ -48,12 +48,5 @@
   "maxVelocity": 1.5,
   "maxAcceleration": 2.0,
   "isReversed": true,
-  "markers": [
-    {
-      "position": 0.7,
-      "names": [
-        "intake"
-      ]
-    }
-  ]
+  "markers": []
 }

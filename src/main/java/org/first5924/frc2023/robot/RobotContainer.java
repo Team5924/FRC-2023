@@ -144,7 +144,7 @@ public class RobotContainer {
     // Operator Left Trigger
     mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -1));
     // Operator Left Bumper
-    mOperatorController.leftBumper().whileTrue(new RunGrabber(mGrabber, -0.4));
+    mOperatorController.leftBumper().whileTrue(new RunGrabber(mGrabber, -0.2));
     // Operator Right Trigger
     mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 1));
 
