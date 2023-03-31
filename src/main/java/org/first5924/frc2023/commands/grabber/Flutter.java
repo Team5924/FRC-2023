@@ -8,11 +8,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 
-public class Grab extends CommandBase {
+public class Flutter extends CommandBase {
   private final GrabberSubsystem mGrabber;
+  private boolean wait = true;
+  private double switchAt = System.currentTimeMillis() + 100;
 
-  /** Creates a new Grab. */
-  public Grab(GrabberSubsystem grabber) {
+  /** Creates a new Grab.
+   * @param grabber The grabber subsystem.
+   * @param speed The speed of the grabber from [-1, 1]. Positive is intaking, negative is outtaking.
+  */
+  public Flutter(GrabberSubsystem grabber) {
     mGrabber = grabber;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(grabber);
@@ -25,15 +30,25 @@ public class Grab extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // '1' spins inward
-    mGrabber.runGrabber(1);
+    if (System.currentTimeMillis() >= switchAt) {
+      if (wait) {
+        wait = false;
+        switchAt = System.currentTimeMillis() + 100;
+      } else {
+        wait = true;
+        switchAt = System.currentTimeMillis() + 100;
+      }
+    }
+    if (wait) {
+      mGrabber.runGrabber(0);
+    } else {
+      mGrabber.runGrabber(0.5);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    mGrabber.runGrabber(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

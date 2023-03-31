@@ -12,13 +12,11 @@ public interface TelescopeIO {
     public static class TelescopeIOInputs {
         public double telescopeExtensionInches = 0.0;
         public double telescopeExtensionInchesPerSecond = 0.0;
+        public double outputCurrent = 0.0;
     }
 
     /** Updates the set of loggable inputs. */
     public default void updateInputs(TelescopeIOInputs inputs) {
-    }
-
-    public default void setPercent(double percent) {
     }
 
     public default void setVoltage(double volts) {

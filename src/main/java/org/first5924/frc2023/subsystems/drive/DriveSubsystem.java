@@ -86,6 +86,23 @@ public class DriveSubsystem extends SubsystemBase {
     io.setPercent(leftPercent, rightPercent);
   }
 
+  public void arcadeDrive(double xSpeed, double zRotation) {
+    double leftPercent = xSpeed + zRotation;
+    double rightPercent = xSpeed - zRotation;
+
+    double greaterInput = Math.max(Math.abs(xSpeed), Math.abs(zRotation));
+    double lesserInput = Math.min(Math.abs(xSpeed), Math.abs(zRotation));
+
+    if (greaterInput == 0.0) {
+      io.setPercent(0.0, 0.0);
+    } else {
+      double saturatedInput = (greaterInput + lesserInput) / greaterInput;
+      leftPercent /= saturatedInput;
+      rightPercent /= saturatedInput;
+      io.setPercent(leftPercent, rightPercent);
+    }
+  }
+
   public void curvatureDrive(double xSpeed, double zRotation) {
     double leftPercent = xSpeed + (Math.abs(xSpeed) * zRotation);
     double rightPercent = xSpeed - (Math.abs(xSpeed) * zRotation);

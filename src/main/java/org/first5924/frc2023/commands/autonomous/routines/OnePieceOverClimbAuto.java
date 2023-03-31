@@ -6,7 +6,7 @@ package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.drive.AutoDrivePercent;
 import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
-import org.first5924.frc2023.commands.grabber.Release;
+import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
 import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.constants.PivotConstants;
@@ -16,7 +16,7 @@ import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand; 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -37,15 +37,15 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
       new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
-        new Release(grabber)
+        new RunGrabber(grabber, -0.2)
       ),
       new ParallelDeadlineGroup(
-        new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 3.25),
+        new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 2.35),
         new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
       ),
-      new AutoDrivePercent(drive, -AutoConstants.kChargeStationDescentSpeed, -AutoConstants.kChargeStationDescentSpeed, 3.9),
+      new AutoDrivePercent(drive, -AutoConstants.kChargeStationDescentSpeed, -AutoConstants.kChargeStationDescentSpeed, 3.55),
       new AutoDrivePercent(drive, 0, 0, 0.25),
-      new AutoDrivePercent(drive, AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed, 2.25),
+      new AutoDrivePercent(drive, AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed, 1.85),
       new AutoEngageChargeStation(drive, true)
     );
   }

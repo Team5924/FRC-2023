@@ -20,6 +20,7 @@ public class PivotIOSparkMax implements PivotIO {
     private final RelativeEncoder mEncoder = mLeaderSpark.getEncoder();
 
     public PivotIOSparkMax() {
+        mLeaderSpark.setInverted(true);
         mFollowerSpark.follow(mLeaderSpark);
     }
 
@@ -27,6 +28,7 @@ public class PivotIOSparkMax implements PivotIO {
     public void updateInputs(PivotIOInputs inputs) {
         inputs.pivotPositionDegrees = mEncoder.getPosition() * 360 / PivotConstants.kGearRatio;
         inputs.pivotVelocityDegreesPerSecond = mEncoder.getVelocity() / 60 * 360 / PivotConstants.kGearRatio;
+        inputs.outputCurrent = mLeaderSpark.getOutputCurrent();
     }
 
     @Override

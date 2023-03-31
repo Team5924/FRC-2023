@@ -5,25 +5,33 @@
 package org.first5924.frc2023.robot;
 
 import org.first5924.frc2023.commands.autonomous.AutoRoutines;
-import org.first5924.frc2023.commands.autonomous.routines.OnePieceAroundClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceMobilityAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceOverClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceStationaryAuto;
+import org.first5924.frc2023.commands.autonomous.routines.ThreePieceAuto;
+import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
+import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
+import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
-import org.first5924.frc2023.commands.drive.CurvatureDrive;
-import org.first5924.frc2023.commands.drive.TurnInPlace;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
+import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
-import org.first5924.frc2023.commands.grabber.Grab;
-import org.first5924.frc2023.commands.grabber.Release;
+import org.first5924.frc2023.commands.pivot.SetPivot;
+import org.first5924.frc2023.commands.grabber.Flutter;
+import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.constants.OIConstants;
+import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.RobotConstants;
+import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIOTalonFX;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
+// import org.first5924.frc2023.subsystems.vision.VisionSubsystem;
+// import org.first5924.frc2023.subsystems.vision.VisionIO;
+// import org.first5924.frc2023.subsystems.vision.VisionIOReal;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
@@ -33,10 +41,13 @@ import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
 import org.first5924.frc2023.subsystems.pivot.PivotIO;
 import org.first5924.frc2023.subsystems.pivot.PivotIOSparkMax;
 import org.first5924.frc2023.subsystems.pivot.PivotSubsystem;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -51,13 +62,14 @@ public class RobotContainer {
   private final TelescopeSubsystem mTelescope;
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
+  // private final VisionSubsystem mVision;
   // private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private final LoggedDashboardChooser<Alliance> mAllianceChooser = new LoggedDashboardChooser<>("AllianceChooser");
-  private final LoggedDashboardChooser<AutoRoutines> mAutoChooser = new LoggedDashboardChooser<>("AutoChooser");
+  private final SendableChooser<Alliance> mAllianceChooser = new SendableChooser<>();
+  private final SendableChooser<AutoRoutines> mAutoChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -68,6 +80,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIOTalonFX());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
+        // mVision = new VisionSubsystem(new VisionIOReal());
         // mLights = new LightsSubsystem(new LightsIOReal());
         break;
 
@@ -77,6 +90,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
+        // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
@@ -86,18 +100,23 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
+        // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
     }
 
-    mAllianceChooser.addDefaultOption("Blue", Alliance.Blue);
+    mAllianceChooser.setDefaultOption("Blue", Alliance.Blue);
     mAllianceChooser.addOption("Red", Alliance.Red);
 
-    mAutoChooser.addDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
-    mAutoChooser.addOption("One Piece Around Climb", AutoRoutines.onePieceAroundClimb);
+    mAutoChooser.setDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
+    mAutoChooser.addOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
+    mAutoChooser.addOption("Three Piece", AutoRoutines.threePiece);
     mAutoChooser.addOption("Nothing", AutoRoutines.nothing);
+
+    SmartDashboard.putData("Alliance Chooser", mAllianceChooser);
+    SmartDashboard.putData("Auto Chooser", mAutoChooser);
 
     // Configure the trigger bindings
     configureBindings();
@@ -114,43 +133,68 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Driver Left Stick and Driver Right Stick
-    mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
-    // Driver Left Bumper
-    mDriverController.leftBumper().whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     // Driver Right Bumper
-    mDriverController.rightBumper().whileTrue(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
-    // Driver Left Bumper and Right Bumper
-    mDriverController.leftBumper().and(mDriverController.rightBumper()).whileTrue(new TurnInPlace(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
+    mDriverController.rightBumper().whileTrue(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
 
     // Operator Left Stick
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
     // Operator Right Stick
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     // Operator Left Trigger
-    mOperatorController.leftTrigger().whileTrue(new Release(mGrabber));
+    mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -1));
+    // Operator Left Bumper
+    mOperatorController.leftBumper().whileTrue(new RunGrabber(mGrabber, -0.2));
     // Operator Right Trigger
-    mOperatorController.rightTrigger().whileTrue(new Grab(mGrabber));
-  }
+    mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 1));
 
+    // Pivot + Telescope - Front
+
+    mOperatorController.a().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup)));
+    mOperatorController.b().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
+    mOperatorController.y().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
+    mOperatorController.x().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone)));
+    mOperatorController.pov(0).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
+    mOperatorController.pov(180).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
+
+    // Pivot + Telescope - Back
+
+    mOperatorController.a().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickup), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup)));
+    mOperatorController.b().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
+    mOperatorController.y().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
+    mOperatorController.x().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone)));
+    mOperatorController.pov(0).and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
+    mOperatorController.pov(180).and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
+
+    mOperatorController.pov(180).onTrue(new InstantCommand(() -> {
+      mPivot.setPosition(0);
+    }));
+
+    mGrabber.setDefaultCommand(new Flutter(mGrabber));
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    switch (mAutoChooser.get()) {
+    switch (mAutoChooser.getSelected()) {
       case onePieceOverClimb:
         return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
-      case onePieceAroundClimb:
-        return new OnePieceAroundClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.get());
       case onePieceMobility:
         return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceStationary:
         return new OnePieceStationaryAuto(mPivot, mGrabber, mTelescope);
+      case twoPieceClimb:
+        return new TwoPieceClimbAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
+      case twoPieceCable:
+        return new TwoPieceCableAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
+      case threePiece:
+        return new ThreePieceAuto(mDrive, mPivot, mGrabber, mTelescope, mAllianceChooser.getSelected());
       case nothing:
         return new NothingAuto(mPivot, mTelescope);
       default:
-        return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
+        return new NothingAuto(mPivot, mTelescope);
     }
   }
 }

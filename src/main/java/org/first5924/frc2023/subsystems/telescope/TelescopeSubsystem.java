@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TelescopeSubsystem extends SubsystemBase {
   private final TelescopeIO io;
   private final TelescopeIOInputsAutoLogged inputs = new TelescopeIOInputsAutoLogged();
-  private final PIDController mPID = new PIDController(0.001, 0, 0);
+  private final PIDController mPID = new PIDController(10, 0, 0);
 
   /** Creates a new TelescopeSubsystem. */
   public TelescopeSubsystem(TelescopeIO io) {
@@ -34,23 +34,19 @@ public class TelescopeSubsystem extends SubsystemBase {
    return inputs.telescopeExtensionInchesPerSecond;
   }
 
+  public double getOutputCurrent() {
+    return inputs.outputCurrent;
+  }
+
   public void setPercent(double percent) {
-    io.setPercent(percent);
+    io.setVoltage(percent * RobotConstants.kNominalVoltage);
   }
 
   public void setPosition(double position) {
-    io.setVoltage(MathUtil.clamp(mPID.calculate(getTelescopeExtensionInches(), position), -3, 3));
+    io.setVoltage(MathUtil.clamp(mPID.calculate(getTelescopeExtensionInches(), position), -8.5, 8.5));
   }
 
   public void setEncoderFromTelescopeExtensionInches(double extensionInches) {
     io.setEncoderPosition(extensionInches * TelescopeConstants.kGearRatio / TelescopeConstants.kSprocketCircumferenceInches * RobotConstants.kTalonFXIntegratedSensorCPR);
-  }
-
-  public boolean isInForwardSlowZone() {
-    return getTelescopeExtensionInches() >= TelescopeConstants.kMaxForwardExtensionInches - TelescopeConstants.kSlowZoneInches;
-  }
-
-  public boolean isInBackwardSlowZone() {
-    return getTelescopeExtensionInches() <= TelescopeConstants.kMaxBackwardExtensionInches + TelescopeConstants.kSlowZoneInches;
   }
 }
