@@ -38,7 +38,7 @@ public class OnePieceMobilityAuto extends SequentialCommandGroup {
         new RunGrabber(grabber, -0.2)
       ),
       new ParallelDeadlineGroup(
-        new AutoDrivePercent(drive, -0.275, -0.275, 4),
+        new AutoDrivePercent(drive, -0.275, -0.275, 4.6),
         new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
       ),
       new InstantCommand(() -> {
