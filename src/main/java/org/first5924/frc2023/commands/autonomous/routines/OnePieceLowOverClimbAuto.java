@@ -5,8 +5,10 @@
 package org.first5924.frc2023.commands.autonomous.routines;
 
 import org.first5924.frc2023.commands.drive.AutoDrivePercent;
+import org.first5924.frc2023.commands.drive.AutoEngageChargeStation;
 import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.commands.pivot.AutoSetPivot;
+import org.first5924.frc2023.constants.AutoConstants;
 import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
@@ -22,9 +24,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OnePieceMobilityAuto extends SequentialCommandGroup {
-  /** Creates a new OnePieceMobilityAuto. */
-  public OnePieceMobilityAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope) {
+public class OnePieceLowOverClimbAuto extends SequentialCommandGroup {
+  /** Creates a new DriveOneMeter. */
+  public OnePieceLowOverClimbAuto(DriveSubsystem drive, PivotSubsystem pivot, GrabberSubsystem grabber, TelescopeSubsystem telescope) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -32,18 +34,19 @@ public class OnePieceMobilityAuto extends SequentialCommandGroup {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
-      new AutoSetPivot(pivot, 53),
+      new AutoSetPivot(pivot, PivotConstants.kGroundPickup),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
         new RunGrabber(grabber, -0.2)
       ),
       new ParallelDeadlineGroup(
-        new AutoDrivePercent(drive, -0.275, -0.275, 4.6),
+        new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 2.35),
         new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
       ),
-      new InstantCommand(() -> {
-        drive.setPercent(0, 0);
-      })
+      new AutoDrivePercent(drive, -AutoConstants.kChargeStationDescentSpeed, -AutoConstants.kChargeStationDescentSpeed, 3.55),
+      new AutoDrivePercent(drive, 0, 0, 0.25),
+      new AutoDrivePercent(drive, AutoConstants.kChargeStationDriveSpeed, AutoConstants.kChargeStationDriveSpeed, 1.85),
+      new AutoEngageChargeStation(drive, true)
     );
   }
 }
