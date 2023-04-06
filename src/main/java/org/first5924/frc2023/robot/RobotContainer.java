@@ -13,16 +13,15 @@ import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceHighOverClimbAuto;
+import org.first5924.frc2023.commands.autonomous.routines.OnePieceLowOverClimbAuto;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
-import org.first5924.frc2023.commands.telescope.SetTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
-import org.first5924.frc2023.commands.pivot.SetPivot;
 import org.first5924.frc2023.commands.grabber.Flutter;
 import org.first5924.frc2023.commands.grabber.RunGrabber;
+import org.first5924.frc2023.commands.grabber.StopGrabber;
 import org.first5924.frc2023.constants.OIConstants;
-import org.first5924.frc2023.constants.PivotConstants;
 import org.first5924.frc2023.constants.RobotConstants;
-import org.first5924.frc2023.constants.TelescopeConstants;
 import org.first5924.frc2023.subsystems.drive.DriveIO;
 import org.first5924.frc2023.subsystems.drive.DriveIOSparkMax;
 import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
@@ -46,8 +45,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -109,6 +106,8 @@ public class RobotContainer {
     mAllianceChooser.addOption("Red", Alliance.Red);
 
     mAutoChooser.setDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
+    mAutoChooser.addOption("One Piece Low Over Climb", AutoRoutines.onePieceLowOverClimb);
+    mAutoChooser.addOption("One Piece High Over Climb", AutoRoutines.onePieceHighOverClimb);
     mAutoChooser.addOption("One Piece Mobility", AutoRoutines.onePieceMobility);
     mAutoChooser.addOption("One Piece Stationary", AutoRoutines.onePieceStationary);
     mAutoChooser.addOption("Two Piece Climb", AutoRoutines.twoPieceClimb);
@@ -142,33 +141,13 @@ public class RobotContainer {
     // Operator Right Stick
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     // Operator Left Trigger
-    mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -1));
-    // Operator Left Bumper
-    mOperatorController.leftBumper().whileTrue(new RunGrabber(mGrabber, -0.2));
+    mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -0.15));
     // Operator Right Trigger
-    mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 1));
-
-    // Pivot + Telescope - Front
-
-    mOperatorController.a().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kGroundPickup), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup)));
-    mOperatorController.b().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
-    mOperatorController.y().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
-    mOperatorController.x().and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kMiddleGridCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone)));
-    mOperatorController.pov(0).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
-    mOperatorController.pov(180).and(mOperatorController.rightBumper().negate()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
-
-    // Pivot + Telescope - Back
-
-    mOperatorController.a().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kGroundPickup), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kGroundPickup)));
-    mOperatorController.b().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCube)));
-    mOperatorController.y().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kTopGridCube), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kTopGridCube)));
-    mOperatorController.x().and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kMiddleGridCone), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kMiddleGridCone)));
-    mOperatorController.pov(0).and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kDoubleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kDoubleSubstation)));
-    mOperatorController.pov(180).and(mOperatorController.rightBumper()).onTrue(new ParallelCommandGroup(new SetPivot(mPivot, mOperatorController::getLeftY, -PivotConstants.kSingleSubstation), new SetTelescope(mTelescope, mOperatorController::getLeftY, TelescopeConstants.kSingleSubstation)));
-
-    mOperatorController.pov(180).onTrue(new InstantCommand(() -> {
-      mPivot.setPosition(0);
-    }));
+    mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 0.8));
+    // Operator A
+    mOperatorController.a().whileTrue(new RunGrabber(mGrabber, -1));
+    // Operator Left Bumper
+    mOperatorController.leftBumper().whileTrue(new StopGrabber(mGrabber));
 
     mGrabber.setDefaultCommand(new Flutter(mGrabber));
   }
@@ -181,6 +160,10 @@ public class RobotContainer {
     switch (mAutoChooser.getSelected()) {
       case onePieceOverClimb:
         return new OnePieceOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
+      case onePieceLowOverClimb:
+        return new OnePieceLowOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
+      case onePieceHighOverClimb:
+        return new OnePieceHighOverClimbAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceMobility:
         return new OnePieceMobilityAuto(mDrive, mPivot, mGrabber, mTelescope);
       case onePieceStationary:
