@@ -10,9 +10,17 @@ import org.littletonrobotics.junction.AutoLog;
 public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
+        public boolean hasTarget = false;
+        public double range = 0;
+        public double targetPitch = 0;
+        public double bestTargetID = 0;
+        public double numberOfTargets = 0;
+        public double xAngle = 0;
     }
 
     /** Updates the set of loggable inputs. */
     public default void updateInputs(VisionIOInputs inputs) {
     }
+
+
 }

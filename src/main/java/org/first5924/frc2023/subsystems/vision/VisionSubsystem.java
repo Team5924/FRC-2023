@@ -6,12 +6,14 @@ package org.first5924.frc2023.subsystems.vision;
 
 import org.littletonrobotics.junction.Logger;
 
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSubsystem extends SubsystemBase {
   private final VisionIO io;
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
+  
   /** Creates a new VisionSubsystem. */
   public VisionSubsystem(VisionIO io) {
     this.io = io;
@@ -23,4 +25,22 @@ public class VisionSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Vision", inputs);
   }
+
+  public boolean hasTarget() {
+    return inputs.hasTarget;
+  }
+
+  public double range () {
+    return inputs.range;
+  }
+
+  public double xAngle() {
+    return inputs.xAngle;
+  }
+
+
+
+
+
+
 }

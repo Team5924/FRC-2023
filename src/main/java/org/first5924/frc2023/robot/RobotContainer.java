@@ -28,9 +28,9 @@ import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIO;
 import org.first5924.frc2023.subsystems.telescope.TelescopeIOTalonFX;
 import org.first5924.frc2023.subsystems.telescope.TelescopeSubsystem;
-// import org.first5924.frc2023.subsystems.vision.VisionSubsystem;
-// import org.first5924.frc2023.subsystems.vision.VisionIO;
-// import org.first5924.frc2023.subsystems.vision.VisionIOReal;
+import org.first5924.frc2023.subsystems.vision.VisionSubsystem;
+import org.first5924.frc2023.subsystems.vision.VisionIO;
+import org.first5924.frc2023.subsystems.vision.VisionIOReal;
 import org.first5924.frc2023.subsystems.grabber.GrabberIO;
 import org.first5924.frc2023.subsystems.grabber.GrabberIOSparkMax;
 import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
@@ -59,7 +59,7 @@ public class RobotContainer {
   private final TelescopeSubsystem mTelescope;
   private final PivotSubsystem mPivot;
   private final GrabberSubsystem mGrabber;
-  // private final VisionSubsystem mVision;
+  private final VisionSubsystem mVision;
   // private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -77,7 +77,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIOTalonFX());
         mPivot = new PivotSubsystem(new PivotIOSparkMax());
         mGrabber = new GrabberSubsystem(new GrabberIOSparkMax());
-        // mVision = new VisionSubsystem(new VisionIOReal());
+        mVision = new VisionSubsystem(new VisionIOReal());
         // mLights = new LightsSubsystem(new LightsIOReal());
         break;
 
@@ -87,7 +87,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        // mVision = new VisionSubsystem(new VisionIO() {});
+        mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
@@ -97,7 +97,7 @@ public class RobotContainer {
         mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
         mPivot = new PivotSubsystem(new PivotIO() {});
         mGrabber = new GrabberSubsystem(new GrabberIO() {});
-        // mVision = new VisionSubsystem(new VisionIO() {});
+        mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
     }
