@@ -6,7 +6,8 @@ package org.first5924.frc2023.subsystems.vision;
 
 import org.littletonrobotics.junction.Logger;
 
-
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -24,6 +25,12 @@ public class VisionSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Vision", inputs);
+    SmartDashboard.putNumber("range", range());
+    SmartDashboard.putBoolean("hasTarget", hasTarget());
+    SmartDashboard.putNumber("targetpitch", targetPitch());
+    SmartDashboard.putNumber("xDistance", inputs.range.getX());
+    SmartDashboard.putNumber("xAngle", xAngle());
+
   }
 
   public boolean hasTarget() {
@@ -31,13 +38,21 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double range () {
-    return inputs.range;
+    double distance = Math.sqrt(inputs.range.getX() * inputs.range.getX() + inputs.range.getY() * inputs.range.getY());
+    return distance;
+  }
+
+  public double getTagID () {
+    return inputs.bestTargetID;
   }
 
   public double xAngle() {
     return inputs.xAngle;
   }
 
+  public double targetPitch() {
+    return inputs.targetPitch;
+  }
 
 
 

@@ -30,7 +30,7 @@ public class VisionIOReal implements VisionIO {
 
     public VisionIOReal() {
                 // Change the name of your camera here to whatever it is in the PhotonVision UI.
-                mCamera = new PhotonCamera("PhotonUSBCamera");
+                mCamera = new PhotonCamera(VisionConstants.cameraName);
 
                 try {
                     // Attempt to load the AprilTagFieldLayout that will tell us where the tags are on the field.
@@ -51,16 +51,16 @@ public class VisionIOReal implements VisionIO {
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         if (mCamera.getLatestResult().hasTargets()) {
-        inputs.hasTarget =  mCamera.getLatestResult().hasTargets();
-        inputs.range = PhotonUtils.calculateDistanceToTargetMeters(
-            VisionConstants.kCameraHeightMeters,
-            VisionConstants.kTargetHeightMeters,
-            VisionConstants.kCameraPitchRadians,
-            Units.degreesToRadians(mCamera.getLatestResult().getBestTarget().getPitch()));
-        inputs.targetPitch = mCamera.getLatestResult().getBestTarget().getPitch();
-        inputs.bestTargetID = mCamera.getLatestResult().getBestTarget().getFiducialId();
-        inputs.numberOfTargets = mCamera.getLatestResult().getTargets().size();
-        inputs.xAngle= mCamera.getLatestResult().getBestTarget().getYaw();
+            inputs.hasTarget =  mCamera.getLatestResult().hasTargets();
+            inputs.range = mCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+                //VisionConstants.kCameraHeightMeters,
+                //VisionConstants.kTargetHeightMeters,
+                //VisionConstants.kCameraPitchRadians,
+                //Units.degreesToRadians(mCamera.getLatestResult().getBestTarget().getPitch()));
+            inputs.targetPitch = mCamera.getLatestResult().getBestTarget().getPitch();
+            inputs.bestTargetID = mCamera.getLatestResult().getBestTarget().getFiducialId();
+            inputs.numberOfTargets = mCamera.getLatestResult().getTargets().size();
+            inputs.xAngle= mCamera.getLatestResult().getBestTarget().getYaw();
         }
  }
 

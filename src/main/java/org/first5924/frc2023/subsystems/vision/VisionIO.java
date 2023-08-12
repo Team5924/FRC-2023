@@ -6,12 +6,14 @@ package org.first5924.frc2023.subsystems.vision;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Transform3d;
+
 /** Add your docs here. */
 public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
         public boolean hasTarget = false;
-        public double range = 0;
+        public Transform3d range = new Transform3d();
         public double targetPitch = 0;
         public double bestTargetID = 0;
         public double numberOfTargets = 0;

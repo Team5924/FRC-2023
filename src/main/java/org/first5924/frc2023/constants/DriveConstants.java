@@ -36,4 +36,8 @@ public class DriveConstants {
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
     public static final double kWheelCircumferenceMeters = Units.inchesToMeters(5 * Math.PI);
+
+    public static final double kTurnP = 0.005; 
+    public static final double kPDriveVel = 1.1772;
+    public static final double minTurn = .03;
 }

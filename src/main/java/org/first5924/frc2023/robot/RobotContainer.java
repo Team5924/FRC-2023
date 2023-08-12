@@ -11,6 +11,7 @@ import org.first5924.frc2023.commands.autonomous.routines.OnePieceStationaryAuto
 import org.first5924.frc2023.commands.autonomous.routines.ThreePieceAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
+import org.first5924.frc2023.commands.drive.DriveToPositionWithVision;
 import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceHighOverClimbAuto;
@@ -136,6 +137,7 @@ public class RobotContainer {
     // Driver Right Bumper
     mDriverController.rightBumper().whileTrue(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
 
+    mDriverController.x().onTrue(new DriveToPositionWithVision(mDrive, mVision, 2.6543, 2.44, 0.01));
     // Operator Left Stick
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
     // Operator Right Stick
