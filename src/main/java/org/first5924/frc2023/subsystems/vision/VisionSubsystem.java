@@ -25,20 +25,14 @@ public class VisionSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Vision", inputs);
-    SmartDashboard.putNumber("range", range());
-    SmartDashboard.putBoolean("hasTarget", hasTarget());
-    SmartDashboard.putNumber("targetpitch", targetPitch());
-    SmartDashboard.putNumber("xDistance", inputs.range.getX());
-    SmartDashboard.putNumber("xAngle", xAngle());
-
   }
 
   public boolean hasTarget() {
     return inputs.hasTarget;
   }
 
-  public double range () {
-    double distance = Math.sqrt(inputs.range.getX() * inputs.range.getX() + inputs.range.getY() * inputs.range.getY());
+  public double distance () {
+    double distance = Math.sqrt(inputs.xDistance * inputs.xDistance + inputs.yDistance * inputs.yDistance);
     return distance;
   }
 
@@ -51,11 +45,23 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double targetPitch() {
-    return inputs.targetPitch;
+    return inputs.yAngle;
   }
 
+  public double xDistance() {
+    double xDistance= inputs.xDistance;
+    return xDistance;
+  }
 
+  public double yDistance() {
+    double yDistance= inputs.yDistance;
+    return yDistance;
+  }
 
-
+  public double zDistance() {
+    double zDistance= inputs.zDistance;
+    return zDistance;
+  }
+ 
 
 }

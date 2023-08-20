@@ -71,13 +71,13 @@ public class DriveToPositionWithVision extends CommandBase {
 
 
     angleError = vision.xAngle() - targetAngle;
-    distanceError = vision.range() - targetDistance;
+    distanceError = vision.distance() - targetDistance;
     SmartDashboard.putNumber("intakeVisionAngleError", angleError);
     SmartDashboard.putNumber("intakeVisionDistanceError", distanceError);
 
     double turnCorrection = angleError * DriveConstants.kTurnP * -1;
     double driveCorrection = distanceError * 0.0254 * DriveConstants.kPDriveVel / 12;
-    //drive.arcadeDrive(driveCorrection + Math.signum(driveCorrection) * driveSpeed,
+    drive.arcadeDrive(driveSpeed, driveCorrection + Math.signum(driveCorrection) * driveSpeed);
     System.out.println("turnpow: " + turnCorrection);
     drive.arcadeDrive(driveSpeed, turnCorrection + Math.signum(turnCorrection) *  DriveConstants.minTurn);   
   }

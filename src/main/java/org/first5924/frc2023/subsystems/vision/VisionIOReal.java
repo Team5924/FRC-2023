@@ -26,7 +26,7 @@ import org.photonvision.PhotonPoseEstimator;
 public class VisionIOReal implements VisionIO {
     PhotonCamera mCamera;
     PhotonPoseEstimator photonPoseEstimator;
-
+   
 
     public VisionIOReal() {
                 // Change the name of your camera here to whatever it is in the PhotonVision UI.
@@ -52,15 +52,14 @@ public class VisionIOReal implements VisionIO {
     public void updateInputs(VisionIOInputs inputs) {
         if (mCamera.getLatestResult().hasTargets()) {
             inputs.hasTarget =  mCamera.getLatestResult().hasTargets();
-            inputs.range = mCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
-                //VisionConstants.kCameraHeightMeters,
-                //VisionConstants.kTargetHeightMeters,
-                //VisionConstants.kCameraPitchRadians,
-                //Units.degreesToRadians(mCamera.getLatestResult().getBestTarget().getPitch()));
-            inputs.targetPitch = mCamera.getLatestResult().getBestTarget().getPitch();
+            inputs.yAngle = mCamera.getLatestResult().getBestTarget().getPitch();
             inputs.bestTargetID = mCamera.getLatestResult().getBestTarget().getFiducialId();
             inputs.numberOfTargets = mCamera.getLatestResult().getTargets().size();
             inputs.xAngle= mCamera.getLatestResult().getBestTarget().getYaw();
+            inputs.tilt= mCamera.getLatestResult().getBestTarget().getSkew();
+            inputs.xDistance= mCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX();
+            inputs.yDistance= mCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getY();
+            inputs.zDistance= mCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getZ();
         }
  }
 

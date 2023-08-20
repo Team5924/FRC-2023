@@ -13,11 +13,14 @@ public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
         public boolean hasTarget = false;
-        public Transform3d range = new Transform3d();
-        public double targetPitch = 0;
+        public double yAngle = 0;
         public double bestTargetID = 0;
         public double numberOfTargets = 0;
         public double xAngle = 0;
+        public double tilt = 0;
+        public double xDistance = 0;
+        public double yDistance = 0;
+        public double zDistance = 0;
     }
 
     /** Updates the set of loggable inputs. */
