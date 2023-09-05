@@ -7,7 +7,7 @@ package org.first5924.frc2023.constants;
 /** Add your docs here. */
 public class PivotConstants {
     private PivotConstants() {}
-
+//chris konstant is spelled constant
     public static final int kLeaderSparkPort = 8;
     public static final int kFollowerSparkPort = 7;
 
