@@ -62,9 +62,18 @@ public class DriveToPositionWithVision extends CommandBase {
       targetAngle = Math.atan((targetPosY+Units.inchesToMeters(108.185))*(targetPosY+Units.inchesToMeters(108.185))/(targetPosX-Units.inchesToMeters(15.8))*(targetPosX-Units.inchesToMeters(15.8)));
       targetDistance = Math.sqrt((targetPosX-Units.inchesToMeters(15.8))*(targetPosX-Units.inchesToMeters(15.8)) + targetPosY+Units.inchesToMeters(108.185)*targetPosY+Units.inchesToMeters(108.185));
     }
-      if (vision.getTagID() == 6) {
+    if (vision.getTagID() == 6) {
       targetAngle = Math.atan((targetPosY+Units.inchesToMeters(174.185))*(targetPosY+Units.inchesToMeters(174.185))/(targetPosX-Units.inchesToMeters(15.8))*(targetPosX-Units.inchesToMeters(15.8)));
       targetDistance = Math.sqrt((targetPosX-Units.inchesToMeters(15.8))*(targetPosX-Units.inchesToMeters(15.8)) + targetPosY+Units.inchesToMeters(174.185)*targetPosY+Units.inchesToMeters(174.185));
+    }
+    if (vision.getTagID() == 5) {
+      
+    }
+    if (vision.getTagID() == 4) {
+
+    }
+    if (vision.getTagID() == 3) {
+      
     }
 
 
@@ -77,9 +86,9 @@ public class DriveToPositionWithVision extends CommandBase {
 
     double turnCorrection = angleError * DriveConstants.kTurnP * -1;
     double driveCorrection = distanceError * 0.0254 * DriveConstants.kPDriveVel / 12;
-    drive.arcadeDrive(driveSpeed, driveCorrection + Math.signum(driveCorrection) * driveSpeed);
+    //drive.arcadeDrive(driveSpeed, driveCorrection + Math.signum(driveCorrection) * driveSpeed);
     System.out.println("turnpow: " + turnCorrection);
-    drive.arcadeDrive(driveSpeed, turnCorrection + Math.signum(turnCorrection) *  DriveConstants.minTurn);   
+    //drive.arcadeDrive(driveSpeed, turnCorrection + Math.signum(turnCorrection) *  DriveConstants.minTurn);   
   }
 
   // Called once the command ends or is interrupted.
