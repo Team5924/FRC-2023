@@ -32,7 +32,7 @@ public class ExtendAndRetractTelescope extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (mTelescope.getTelescopeExtensionInches()<= 5 && mTelescope.getTelescopeExtensionInches() >= 2) {
+    if (mTelescope.getTelescopeExtensionInches()<= TelescopeConstants.kMaxLength && mTelescope.getTelescopeExtensionInches() >= TelescopeConstants.kMinLength) {
       mTelescope.setPercent(MathUtil.applyDeadband(-mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier);
     }
   }
