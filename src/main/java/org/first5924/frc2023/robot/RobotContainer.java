@@ -12,6 +12,9 @@ import org.first5924.frc2023.commands.autonomous.routines.ThreePieceAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
+import org.first5924.frc2023.commands.drive.curvature.CurvatureDrive;
+import org.first5924.frc2023.commands.drive.DriveSystem;
+import org.first5924.frc2023.commands.drive.TankDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceHighOverClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceLowOverClimbAuto;
@@ -67,7 +70,7 @@ public class RobotContainer {
 
   private final SendableChooser<Alliance> mAllianceChooser = new SendableChooser<>();
   private final SendableChooser<AutoRoutines> mAutoChooser = new SendableChooser<>();
-
+  private final SendableChooser<DriveSystem> mDriveChooser = new SendableChooser<>();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (RobotConstants.kCurrentMode) {
@@ -105,6 +108,10 @@ public class RobotContainer {
     mAllianceChooser.setDefaultOption("Blue", Alliance.Blue);
     mAllianceChooser.addOption("Red", Alliance.Red);
 
+    mDriveChooser.setDefaultOption("Arcade Drive", DriveSystem.ArcadeDrive);
+    mDriveChooser.addOption("Curvature Drive", DriveSystem.CurvatureDrive);
+    mDriveChooser.addOption("Tank Drive (For weirdos like Quinn)", DriveSystem.TankDrive);
+
     mAutoChooser.setDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
     mAutoChooser.addOption("One Piece Low Over Climb", AutoRoutines.onePieceLowOverClimb);
     mAutoChooser.addOption("One Piece High Over Climb", AutoRoutines.onePieceHighOverClimb);
@@ -116,6 +123,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Alliance Chooser", mAllianceChooser);
     SmartDashboard.putData("Auto Chooser", mAutoChooser);
+    SmartDashboard.putData("Drive System Chooser", mDriveChooser);
 
     // Configure the trigger bindings
     configureBindings();
@@ -132,9 +140,25 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Driver Left Stick and Driver Right Stick
-    mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+
+    //mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
     // Driver Right Bumper
     mDriverController.rightBumper().whileTrue(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
+
+    //mDrive.setDefaultCommand((DriveSystem)mDriveChooser.getSelected());
+    switch (mDriveChooser.getSelected()) {
+      case TankDrive:
+      mDrive.setDefaultCommand(new TankDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+        break;
+      case ArcadeDrive:
+      mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+        break;
+      case CurvatureDrive:
+      mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+        break;
+      default: mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+        break;
+    }
 
     // Operator Left Stick
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));

@@ -116,6 +116,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     io.setPercent(leftPercent, rightPercent);
   }
+  
+  public void tankDrive(double leftPercent, double rightPercent){
+    io.setPercent(leftPercent, rightPercent);
+  }
 
   public void turnInPlace(double xSpeed, double zRotation) {
     double leftPercent = xSpeed + zRotation;

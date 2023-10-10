@@ -23,6 +23,7 @@ public class ArcadeDrive extends CommandBase {
     mDrive = drive;
     mLeftJoystickY = leftJoystickY;
     mRightJoystickX = rightJoystickX;
+    
     mMultiplier = 1;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(mDrive);

@@ -2,23 +2,25 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.first5924.frc2023.commands.grabber;
+package org.first5924.frc2023.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import org.first5924.frc2023.subsystems.grabber.GrabberSubsystem;
+import java.util.function.DoubleSupplier;
 
-public class Flutter extends CommandBase {
-  private final GrabberSubsystem mGrabber;
-  private boolean wait = true;
-  private final double timeBetweenSwitch = 100;
-  private double switchAt = System.currentTimeMillis() + timeBetweenSwitch;
+import org.first5924.frc2023.subsystems.drive.DriveSubsystem;
 
-  /** Creates a new Flutter. */
-  public Flutter(GrabberSubsystem grabber) {
-    mGrabber = grabber;
+public class TankDrive extends CommandBase {
+  private final DriveSubsystem mDrive;
+  private final DoubleSupplier mLeftJoystickY;
+  private final DoubleSupplier mRightJoystickY;
+  /** Creates a new TankDrive. */
+  public TankDrive(DriveSubsystem drive, DoubleSupplier leftJoystickY, DoubleSupplier rightJoystickY) {
+    mDrive = drive;
+    mLeftJoystickY = leftJoystickY;
+    mRightJoystickY = rightJoystickY;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(grabber);
+    addRequirements(mDrive);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +30,7 @@ public class Flutter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mGrabber.runGrabber(0.5);
+    mDrive.tankDrive(mLeftJoystickY.getAsDouble(), mRightJoystickY.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
