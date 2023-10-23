@@ -20,7 +20,7 @@ import org.first5924.frc2023.commands.autonomous.routines.OnePieceHighOverClimbA
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceLowOverClimbAuto;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
-import org.first5924.frc2023.commands.grabber.Flutter;
+import org.first5924.frc2023.commands.grabber.SlowGrab;
 import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.commands.grabber.StopGrabber;
 import org.first5924.frc2023.constants.OIConstants;
@@ -68,6 +68,7 @@ public class RobotContainer {
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
+  private final SendableChooser<Boolean> mSoftStopChooser = new SendableChooser<>();
   private final SendableChooser<Alliance> mAllianceChooser = new SendableChooser<>();
   private final SendableChooser<AutoRoutines> mAutoChooser = new SendableChooser<>();
   private final SendableChooser<DriveSystem> mDriveChooser = new SendableChooser<>();
@@ -108,6 +109,9 @@ public class RobotContainer {
     mAllianceChooser.setDefaultOption("Blue", Alliance.Blue);
     mAllianceChooser.addOption("Red", Alliance.Red);
 
+    mSoftStopChooser.setDefaultOption("Soft Stop Off", false);
+    mSoftStopChooser.addOption("Soft Stop On", true);
+
     mDriveChooser.setDefaultOption("Arcade Drive", DriveSystem.ArcadeDrive);
     mDriveChooser.addOption("Curvature Drive", DriveSystem.CurvatureDrive);
     mDriveChooser.addOption("Tank Drive (For weirdos like Quinn)", DriveSystem.TankDrive);
@@ -124,6 +128,7 @@ public class RobotContainer {
     SmartDashboard.putData("Alliance Chooser", mAllianceChooser);
     SmartDashboard.putData("Auto Chooser", mAutoChooser);
     SmartDashboard.putData("Drive System Chooser", mDriveChooser);
+    
 
     // Configure the trigger bindings
     configureBindings();
@@ -131,7 +136,7 @@ public class RobotContainer {
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} construcitor with an arbitrary
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
    * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
@@ -161,7 +166,7 @@ public class RobotContainer {
     }
 
     // Operator Left Stick
-    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY));
+    mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY, mSoftStopChooser.getSelected()));
     // Operator Right Stick
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     // Operator Left Trigger
@@ -173,7 +178,7 @@ public class RobotContainer {
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new StopGrabber(mGrabber));
 
-    mGrabber.setDefaultCommand(new Flutter(mGrabber));
+    mGrabber.setDefaultCommand(new SlowGrab(mGrabber));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
