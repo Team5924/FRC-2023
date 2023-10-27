@@ -13,14 +13,13 @@ import org.first5924.frc2023.commands.autonomous.routines.TwoPieceCableAuto;
 import org.first5924.frc2023.commands.autonomous.routines.TwoPieceClimbAuto;
 import org.first5924.frc2023.commands.drive.arcade.ArcadeDrive;
 import org.first5924.frc2023.commands.drive.curvature.CurvatureDrive;
-import org.first5924.frc2023.commands.drive.DriveSystem;
-import org.first5924.frc2023.commands.drive.TankDrive;
+import org.first5924.frc2023.commands.drive.tank.TankDrive;
 import org.first5924.frc2023.commands.autonomous.routines.NothingAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceHighOverClimbAuto;
 import org.first5924.frc2023.commands.autonomous.routines.OnePieceLowOverClimbAuto;
 import org.first5924.frc2023.commands.telescope.ExtendAndRetractTelescope;
 import org.first5924.frc2023.commands.pivot.RotatePivot;
-import org.first5924.frc2023.commands.grabber.SlowGrab;
+import org.first5924.frc2023.commands.grabber.SlowGrabber;
 import org.first5924.frc2023.commands.grabber.RunGrabber;
 import org.first5924.frc2023.commands.grabber.StopGrabber;
 import org.first5924.frc2023.constants.OIConstants;
@@ -52,9 +51,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -66,13 +68,22 @@ public class RobotContainer {
   // private final LightsSubsystem mLights;
 
   private final CommandXboxController mDriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  private final CommandXboxController mOperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  private final CommandXboxController mOperatorController = new CommandXboxController(
+      OIConstants.kOperatorControllerPort);
+
+  private static final String kArcadeDrive = "Arcade Drive";
+  private static final String kTankDrive = "Tank Drive";
+  private static final String kCurvatureDrive = "Curvature Drive";
+  private String mGetDriveChooser;
 
   private final SendableChooser<Boolean> mSoftStopChooser = new SendableChooser<>();
   private final SendableChooser<Alliance> mAllianceChooser = new SendableChooser<>();
   private final SendableChooser<AutoRoutines> mAutoChooser = new SendableChooser<>();
-  private final SendableChooser<DriveSystem> mDriveChooser = new SendableChooser<>();
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final SendableChooser<String> mDriveChooser = new SendableChooser<>();
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     switch (RobotConstants.kCurrentMode) {
       // Real robot, instantiate hardware IO implementations
@@ -87,20 +98,28 @@ public class RobotContainer {
 
       // Sim robot, instantiate physics sim IO implementations
       case SIM:
-        mDrive = new DriveSubsystem(new DriveIO() {});
-        mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
-        mPivot = new PivotSubsystem(new PivotIO() {});
-        mGrabber = new GrabberSubsystem(new GrabberIO() {});
+        mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
+        });
+        mPivot = new PivotSubsystem(new PivotIO() {
+        });
+        mGrabber = new GrabberSubsystem(new GrabberIO() {
+        });
         // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
 
       // Replayed robot, disable IO implementations
       default:
-        mDrive = new DriveSubsystem(new DriveIO() {});
-        mTelescope = new TelescopeSubsystem(new TelescopeIO() {});
-        mPivot = new PivotSubsystem(new PivotIO() {});
-        mGrabber = new GrabberSubsystem(new GrabberIO() {});
+        mDrive = new DriveSubsystem(new DriveIO() {
+        });
+        mTelescope = new TelescopeSubsystem(new TelescopeIO() {
+        });
+        mPivot = new PivotSubsystem(new PivotIO() {
+        });
+        mGrabber = new GrabberSubsystem(new GrabberIO() {
+        });
         // mVision = new VisionSubsystem(new VisionIO() {});
         // mLights = new LightsSubsystem(new LightsIO() {});
         break;
@@ -112,9 +131,9 @@ public class RobotContainer {
     mSoftStopChooser.setDefaultOption("Soft Stop Off", false);
     mSoftStopChooser.addOption("Soft Stop On", true);
 
-    mDriveChooser.setDefaultOption("Arcade Drive", DriveSystem.ArcadeDrive);
-    mDriveChooser.addOption("Curvature Drive", DriveSystem.CurvatureDrive);
-    mDriveChooser.addOption("Tank Drive (For weirdos like Quinn)", DriveSystem.TankDrive);
+    mDriveChooser.setDefaultOption("Arcade Drive", kArcadeDrive);
+    mDriveChooser.addOption("Curvature Drive", kCurvatureDrive);
+    mDriveChooser.addOption("Tank Drive (For weirdos like Quinn)", kTankDrive);
 
     mAutoChooser.setDefaultOption("One Piece Over Climb", AutoRoutines.onePieceOverClimb);
     mAutoChooser.addOption("One Piece Low Over Climb", AutoRoutines.onePieceLowOverClimb);
@@ -128,58 +147,72 @@ public class RobotContainer {
     SmartDashboard.putData("Alliance Chooser", mAllianceChooser);
     SmartDashboard.putData("Auto Chooser", mAutoChooser);
     SmartDashboard.putData("Drive System Chooser", mDriveChooser);
-    
 
     // Configure the trigger bindings
     configureBindings();
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} construcitor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} construcitor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
     // Driver Left Stick and Driver Right Stick
 
-    //mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
+    // mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY,
+    // mDriverController::getRightX));
     // Driver Right Bumper
-    mDriverController.rightBumper().whileTrue(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX, 0.25));
-
-    //mDrive.setDefaultCommand((DriveSystem)mDriveChooser.getSelected());
-    switch (mDriveChooser.getSelected()) {
-      case TankDrive:
-      mDrive.setDefaultCommand(new TankDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+    // mDriverController.rightBumper().whileTrue(new ArcadeDrive(mDrive,
+    // mDriverController::getLeftY, mDriverController::getRightX, 0.25));
+    // mDrive.setDefaultCommand((DriveSystem)mDriveChooser.getSelected());
+    mGetDriveChooser = mDriveChooser.getSelected();
+    switch (mGetDriveChooser) {
+      case kTankDrive:
+        System.out.println("TANK");
+        mDrive.setDefaultCommand(new TankDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
         break;
-      case ArcadeDrive:
-      mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+      case kArcadeDrive:
+        System.out.println("PACMAN");
+        mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
         break;
-      case CurvatureDrive:
-      mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+      case kCurvatureDrive:
+        System.out.println("CURVY;)");
+        mDrive.setDefaultCommand(new CurvatureDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightX));
         break;
-      default: mDrive.setDefaultCommand(new ArcadeDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+      default:
+        mDrive.setDefaultCommand(new TankDrive(mDrive, mDriverController::getLeftY, mDriverController::getRightY));
+        System.out.println("default :(");
         break;
     }
 
+    // mDrive.setDefaultCommand(new TankDrive(mDrive, mDriverController::getLeftY,
+    // mDriverController::getRightY));
     // Operator Left Stick
     mPivot.setDefaultCommand(new RotatePivot(mPivot, mOperatorController::getLeftY, mSoftStopChooser.getSelected()));
     // Operator Right Stick
     mTelescope.setDefaultCommand(new ExtendAndRetractTelescope(mTelescope, mOperatorController::getRightY));
     // Operator Left Trigger
-    mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -0.15));
+    mOperatorController.leftTrigger().whileTrue(new RunGrabber(mGrabber, -1));
     // Operator Right Trigger
-    mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 0.8));
+    mOperatorController.rightTrigger().whileTrue(new RunGrabber(mGrabber, 1));
     // Operator A
     mOperatorController.a().whileTrue(new RunGrabber(mGrabber, -1));
     // Operator Left Bumper
     mOperatorController.leftBumper().whileTrue(new StopGrabber(mGrabber));
 
-    mGrabber.setDefaultCommand(new SlowGrab(mGrabber));
+    mGrabber.setDefaultCommand(new SlowGrabber(mGrabber));
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

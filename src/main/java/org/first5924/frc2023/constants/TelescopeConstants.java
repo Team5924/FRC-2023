@@ -24,7 +24,7 @@ public class TelescopeConstants {
     public static final double kMiddleGridCube = 2.25;
     public static final double kMiddleGridCone = 21.25;
     public static final double kTopGridCube = 21.25;
-    public static final double kMaxLength =33.25;
-    public static final double kMinLength =2.7;
+    public static final double kMaxLength =19;
+    public static final double kMinLength =3;
     
 }

@@ -27,19 +27,28 @@ public class ExtendAndRetractTelescope extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (mTelescope.getTelescopeExtensionInches()<= TelescopeConstants.kMaxLength && mTelescope.getTelescopeExtensionInches() >= TelescopeConstants.kMinLength) {
-      mTelescope.setPercent(MathUtil.applyDeadband(-mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband) * TelescopeConstants.kSpeedMultiplier);
+    if (mTelescope.getTelescopeExtensionInches() <= TelescopeConstants.kMaxLength
+        && mTelescope.getTelescopeExtensionInches() >= TelescopeConstants.kMinLength) {
+      mTelescope.setPercent(MathUtil.applyDeadband(-mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband)
+          * TelescopeConstants.kSpeedMultiplier);
+    } else if (Math.signum(mTelescope.getTelescopeExtensionInches() - 3) == Math.signum(mJoystickY.getAsDouble())) {
+      mTelescope.setPercent(MathUtil.applyDeadband(-mJoystickY.getAsDouble(), OIConstants.kOperatorJoystickDeadband)
+          * TelescopeConstants.kSpeedMultiplier);
+    } else {
+      mTelescope.setPercent(0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
