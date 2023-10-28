@@ -37,7 +37,7 @@ public class OnePieceOverClimbAuto extends SequentialCommandGroup {
       new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
-        new RunGrabber(grabber, -0.2)
+        new RunGrabber(grabber, 0.2)
       ),
       new ParallelDeadlineGroup(
         new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 2.35),

@@ -42,7 +42,7 @@ public class OnePieceHighOverClimbAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
-        new RunGrabber(grabber, -1)
+        new RunGrabber(grabber, 1)
       ),
       new ParallelDeadlineGroup(
         new AutoDrivePercent(drive, -AutoConstants.kChargeStationDriveSpeed, -AutoConstants.kChargeStationDriveSpeed, 2.35),

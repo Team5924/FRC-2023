@@ -33,7 +33,7 @@ public class OnePieceStationaryAuto extends SequentialCommandGroup {
       new AutoSetPivot(pivot, 53),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
-        new RunGrabber(grabber, -0.2)
+        new RunGrabber(grabber, 0.2)
       ),
       new AutoSetPivot(pivot, PivotConstants.kStartingDegrees)
     );
