@@ -30,7 +30,7 @@ public class OnePieceStationaryAuto extends SequentialCommandGroup {
         pivot.setEncoderFromPivotDegrees(PivotConstants.kStartingDegrees);
         telescope.setEncoderFromTelescopeExtensionInches(TelescopeConstants.kStartingExtensionInches);
       }),
-      new AutoSetPivot(pivot, 53),
+      new AutoSetPivot(pivot, -53),
       new ParallelDeadlineGroup(
         new WaitCommand(0.55),
         new RunGrabber(grabber, 0.2)

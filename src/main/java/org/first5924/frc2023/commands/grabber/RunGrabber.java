@@ -14,7 +14,7 @@ public class RunGrabber extends CommandBase {
 
   /** Creates a new Grab.
    * @param grabber The grabber subsystem.
-   * @param speed The speed of the grabber from [-1, 1]. Positive is intaking, negative is outtaking.
+   * @param speed The speed of the grabber from [-1, 1]. Positive is outtaking, negative is intaking.
   */
   public RunGrabber(GrabberSubsystem grabber, double speed) {
     mGrabber = grabber;
